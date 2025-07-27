@@ -32,6 +32,9 @@ body {
 
 
 
+
+
+
 /* Header section */
 .header-section {
   text-align: center;
@@ -97,6 +100,14 @@ body {
   height: 150px;
   object-fit: cover;
   border-radius: 8px;
+}
+
+.image{
+  width: 200px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px; 
+  margin: left;
 }
 
 /* Footer */

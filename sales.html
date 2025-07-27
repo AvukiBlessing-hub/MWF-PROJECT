@@ -1,12 +1,163 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Furniture Sales Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+            background-image: url(img/background.jpg);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .sales-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+        }
+
+        .sales-table th,
+        .sales-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .sales-table th {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .sales-table tr:hover {
+            background-color: #0c0808c1;
+        }
+
+        .product-img {
+            width: 80px;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        .buy-btn {
+            padding: 8px 12px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color orange;
+        }
+
+        .buy-btn:hover {
+            background-color: orange;
+        }
+
+        @media (max-width: 600px) {
+            .sales-table thead {
+                display: none;
+            }
+
+            .sales-table,
+            .sales-table tbody,
+            .sales-table tr,
+            .sales-table td {
+                display: block;
+                width: 100%;
+            }
+
+            .sales-table tr {
+                margin-bottom: 15px;
+                background-color: orange;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            }
+
+            .sales-table td {
+                text-align: right;
+                padding-left: 50%;
+                position: relative;
+            }
+
+            .sales-table td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 15px;
+                width: 45%;
+                padding-left: 15px;
+                font-weight: bold;
+                text-align: left;
+            }
+        }
+    </style>
 </head>
+
 <body>
-    
+ <nav>
+        <ul>
+            <a href="index.html" style="color: orange;">Home</a>
+            <a href="login.html" style="color: orange;">login</a>
+            <a href="dashboard.html" style="color: orange;">Dashboard</a>
+            <a href="user.html" style="color: orange;">User</a>
+            <a href="sales.html" style="color: orange;">Sales</a>
+            <a href="customer.html" style="color: orange;">Customer</a>
+
+
+
+
+
+
+
+
+
+
+    <h1 style="color: orange;">Furniture Sales</h1>
+
+    <table class="sales-table">
+        <thead>
+            <tr>
+
+                <th>Image</th>
+                <th>Product Name</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Buy</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td data-label="Image"><img src="img/wooden chair.jpg" alt="Chair" class="product-img" /></td>
+                <td data-label="Product Name">Modern Chair</td>
+                <td data-label="Description">Comfortable and stylish chair for your living room.</td>
+                <td data-label="Price">shs690,000</td>
+                <td data-label="Buy"><button class="buy-btn">Buy Now</button></td>
+            </tr>
+            <tr>
+                <td data-label="image"><img src="img/wooden table.jpg" alt="Table" class="product-img" /></td>
+                <td data-label="Product Name">Wooden Table</td>
+                <td data-label="Description">Solid oak dining table, seats six people.</td>
+                <td data-label="Price">shs760,000</td>
+                <td data-label="Buy"><button class="buy-btn">Buy Now</button></td>
+            </tr>
+            <tr>
+                <td data-label="Image"><img src="img/sales sofa.jpg" alt="Sofa" class="product-img" /></td>
+                <td data-label="Product Name">Luxury Sofa</td>
+                <td data-label="Description">3-seater leather sofa with premium comfort.</td>
+                <td data-label="Price">shs880,000</td>
+                <td data-label="Buy"><button class="buy-btn">Buy Now</button></td>
+            </tr>
+        </tbody>
+    </table>
+
 </body>
+
 </html>
