@@ -1,12 +1,36 @@
 // ======== Simple client-side "auth" (demo only) ========
 const GATE_KEY = "wf_manager_auth";
-const MANAGER_CODE = "manager123"; // demo value
+
+// No need for MANAGER_CODE anymore
 
 const gateEl = document.getElementById("gate");
 const appEl = document.getElementById("app");
 const loginBtn = document.getElementById("loginBtn");
 const logoutBtn = document.getElementById("logoutBtn");
 const gateMsg = document.getElementById("gateMsg");
+
+// Always allow login
+loginBtn.addEventListener("click", () => {
+  localStorage.setItem(GATE_KEY, "true"); // store a flag
+  gateEl.style.display = "none";
+  appEl.style.display = "block";
+  gateMsg.textContent = "Login successful!";
+});
+
+// Logout
+logoutBtn.addEventListener("click", () => {
+  localStorage.removeItem(GATE_KEY);
+  appEl.style.display = "none";
+  gateEl.style.display = "block";
+  gateMsg.textContent = "Logged out.";
+});
+
+// Auto-login check
+if (localStorage.getItem(GATE_KEY)) {
+  gateEl.style.display = "none";
+  appEl.style.display = "block";
+}
+
 
 function showApp() {
   gateEl.classList.add("hidden");
