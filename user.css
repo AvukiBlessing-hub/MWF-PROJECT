@@ -1,0 +1,114 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #f7f7f7;
+  margin: 0;
+  padding: 20px;
+  background-color: rgb(255, 221, 227);
+}
+
+h1 {
+  text-align: center;
+  color: #3e2c1c;
+}
+
+.team {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.card {
+  background: rgb(202, 120, 134);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.role {
+  font-weight: bold;
+  margin: 8px 0;
+  color: #444;
+}
+
+.status {
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  display: inline-block;
+}
+
+.active {
+  background: white;
+  color: black;
+}
+
+.inactive {
+  background: white;
+  color: black;
+}
+
+.message {
+  margin-top: 12px;
+  font-size: 14px;
+  background: #edf2f7;
+  border-left: 4px solid #2b6cb0;
+  padding: 8px;
+  border-radius: 6px;
+  display: none;
+}
+
+/* Manager Section */
+.manager-section {
+  margin-top: 40px;
+  background: papayawhip;
+  border: 2px solid black;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.manager-section h2 {
+  color: black;
+  margin-bottom: 15px;
+}
+
+textarea, select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+}
+
+textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+button {
+  background: #3e2c1c;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+button:hover {
+  background: black;
+}
+nav{
+  padding: 30px;
+  text-align: right;
+  font: bold;
+}
+nav a{
+  margin: 20px;
+  text-decoration: none;
+  font-size: larger;
+  font-weight: bolder;
+  color:black
+}

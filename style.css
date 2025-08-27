@@ -8,51 +8,73 @@ body {
 
 /* Navbar */
 .navbar {
-  background-color: rgba(255, 165, 0, 0.9);
+  background-color: plum;
   padding: 1em;
   text-align: center;
 }
+
 .navbar ul {
   list-style: none;
   margin: 0;
   padding: 0;
 }
+
 .navbar li {
   display: inline;
   margin: 0 15px;
 }
+
 .navbar a {
   color: white;
   text-decoration: none;
   font-weight: bold;
 }
-.navbar a:hover  {
-    color: rgb(255, 81, 0);
+
+.navbar a:hover {
+  color: rgb(255, 81, 0);
 }
+
 /* Header section */
 .header-section {
   text-align: center;
   padding: 60px 20px;
-  background-color: rgba(255,255,255,0.8);
+  margin-left: 30px;
+
+ /* max-width: 800px; */
+  margin:  auto;
+  text-align: center;
+  background: palevioletred;
+  padding: 25px;
+  padding-bottom: 50px;
+  padding-top: 50px;
+  padding-left: 25px;
+  padding-right: 25px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+
 }
+
 .login-btn {
   display: inline-block;
   padding: 10px 30px;
   border-radius: 30px;
-  background-color: orange;
+  background-color: black;
   color: white;
   text-decoration: none;
   font-weight: bold;
+
 }
+
 .login-btn a:hover {
-    color: rgb(255, 81, 0);
+  color: rgb(255, 81, 0);
 }
 
 /* Middle section */
 .middle-section {
-  background-color: orange;
+  background-color: pink;
   padding: 50px 20px;
 }
+
 .card {
   display: flex;
   align-items: center;
@@ -61,34 +83,40 @@ body {
   max-height: 2000px;
   max-width: 2000px;
 }
+
 .card img {
   width: 40%;
   border-radius: 10px;
 }
+
 .card p {
   flex: 1;
   font-size: 18px;
 }
+
 .card.reverse {
   flex-direction: row-reverse;
 }
 
 /* Gallery */
 .gallery-section {
-  background-color: rgba(255,255,255,0.85);
+  background-color: palevioletred;
   padding: 40px 20px;
 }
+
 .center-text {
   text-align: center;
   margin-bottom: 20px;
   font-size: 20px;
 }
+
 .gallery {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
   justify-content: center;
 }
+
 .gallery img {
   width: 200px;
   height: 150px;
@@ -96,11 +124,11 @@ body {
   border-radius: 8px;
 }
 
-.image{
+.image {
   width: 200px;
   height: 150px;
   object-fit: cover;
-  border-radius: 8px; 
+  border-radius: 8px;
   margin: left;
 }
 
@@ -111,23 +139,27 @@ body {
   padding: 20px;
   text-align: center;
 }
+
 .contact-icon {
   display: inline-block;
-  background-color: orange;
+  background-color: plum;
   border-radius: 50%;
   padding: 10px;
   font-size: 24px;
 }
+
 .contact-icon a:hover {
-    color: rgb(255, 81, 0);
+  color: rgb(255, 81, 0);
 }
+
 .footer-links a {
   display: inline-block;
   margin: 10px;
-  color: orange;
+  color: plum;
   text-decoration: none;
   transition: box-shadow 0.3s ease;
 }
+
 .footer-links a:hover {
-  box-shadow: 0 0 10px orange;
+  box-shadow: 0 0 10px plum;
 }

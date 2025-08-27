@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>MWF Inventory & Sales</title>
+  <link rel="stylesheet" href="inventory.css">
+</head>
+
+<body>
+<nav>
+  <a href="admindashboard.html">Dashboard</a>
+  <a href="user.html">Users</a>
+  <a href="index.html">Welcome</a>
+  </nav>
+
+  <header>
+    <h1>Mayondo Wood & Furniture Ltd</h1>
+    <button id="themeToggle">MWF Theme</button>
+  </header>
+
+  <main>
+    <section id="stockSection">
+      <h2>Stock Management</h2>
+      <form id="stockForm">
+        <input type="text" id="productName" placeholder="Product Name" required>
+        <input type="text" id="productType" placeholder="Type (wood/furniture)" required>
+        <input type="number" id="costPrice" placeholder="Cost Price" required>
+        <input type="number" id="sellingPrice" placeholder="Selling Price" required>
+        <input type="number" id="quantity" placeholder="Quantity" required>
+        <input type="text" id="supplierName" placeholder="Supplier Name" required>
+        <input type="text" id="color" placeholder="Color (optional)">
+        <input type="text" id="measurements" placeholder="Measurements (optional)">
+        <button type="submit">Add to Stock</button>
+      </form>
+      <table id="stockTable">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Type</th>
+            <th>Cost</th>
+            <th>Price</th>
+            <th>Qty</th>
+            <th>Supplier</th>
+            <th>Color</th>
+            <th>Measurements</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <button id="exportStock">Export Stock (CSV)</button>
+    </section>
+
+    <section id="salesSection">
+      <h2>Sales & Receipts</h2>
+      <form id="salesForm">
+        <input type="text" id="customerName" placeholder="Customer Name" required>
+        <select id="salesProduct" required></select>
+        <input type="number" id="salesQuantity" placeholder="Quantity" required>
+        <label>
+          <input type="checkbox" id="transport"> Include Transport (+5%)
+        </label>
+        <select id="paymentType" required>
+          <option value="cash">Cash</option>
+          <option value="cheque">Cheque</option>
+          <option value="overdraft">Bank Overdraft</option>
+        </select>
+        <input type="text" id="salesAgent" placeholder="Sales Agent Name" required>
+        <button type="submit">Record Sale</button>
+      </form>
+      <div id="receipt"></div>
+      <table id="salesTable">
+        <thead>
+          <tr>
+            <th>Customer</th>
+            <th>Product</th>
+            <th>Qty</th>
+            <th>Total</th>
+            <th>Payment</th>
+            <th>Agent</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <button id="exportSales">Export Sales (CSV)</button>
+    </section>
+
+    <section id="reportsSection">
+      <h2>Reports</h2>
+      <button id="generateStockReport">Generate Stock Report</button>
+      <button id="generateSalesReport">Generate Sales Report</button>
+      <div id="reportOutput"></div>
+    </section>
+  </main>
+
+  <script src="inventory.js"></script>
+</body>
+
+</html>

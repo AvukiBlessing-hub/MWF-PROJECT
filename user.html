@@ -1,216 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>User Management</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-image: url(background.jpg);
-            margin: 0;
-            padding: 20px;
-
-        }
-
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: orange;
-        }
-
-        .user-table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: #fff;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            overflow: hidden;
-
-        }
-
-        .user-table thead {
-            background-color: orange;
-            /* Brown header */
-            color: #fff;
-
-        }
-
-        .user-table th,
-        .user-table td {
-            padding: 12px 15px;
-            text-align: left;
-        }
-
-        .user-table tbody tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        .role {
-            font-weight: bold;
-            text-transform: capitalize;
-        }
-
-        .status-active {
-            color: green;
-            font-weight: bold;
-        }
-
-        .status-inactive {
-            color: red;
-            font-weight: bold;
-        }
-
-        .action-buttons button {
-            padding: 6px 12px;
-            margin-right: 5px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .edit-btn {
-            background-color: #4caf;
-            color: white;
-        }
-
-        .delete-btn {
-            background-color: #f44336;
-            color: white;
-        }
-
-        @media (max-width: 600px) {
-            .user-table thead {
-                display: none;
-            }
-
-            .user-table,
-            .user-table tbody,
-            .user-table tr,
-            .user-table td {
-                display: block;
-                width: 100%;
-            }
-
-            .user-table tr {
-                margin-bottom: 15px;
-                border-bottom: 1px solid #ccc;
-            }
-
-            .user-table td {
-                text-align: right;
-                padding-left: 50%;
-                position: relative;
-            }
-
-            .user-table td::before {
-                content: attr(data-label);
-                position: absolute;
-                left: 15px;
-                width: 45%;
-                padding-left: 10px;
-                font-weight: bold;
-                text-align: left;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wood & Furniture Company Dashboard</title>
+  <link rel="stylesheet" href="user.css">
 </head>
-
 <body>
-    <nav>
-        <ul>
-            <a href="index.html" style="color: orange;">Home</a>
-            <a href="login.html" style="color: orange;">login</a>
-            <a href="dashboard.html" style="color: orange;">Dashboard</a>
-            <a href="user.html" style="color: orange;">User</a>
-            <a href="sales.html" style="color: orange;">Sales</a>
-            <a href="customer.html" style="color: orange;">Customer</a>
 
+  <!-- Navigation Menu -->
+   <nav>
+    <a href="admindashboard.html">Dashboard</a>
+    <a href="iventory.html">Inventory</a>
+    <a href="index.html">Welcome</a>
+  </nav>
 
+  <h1>MWF TEAM MEMBERS</h1>
 
-        </ul>
-    </nav>
+  <!-- Team Section -->
+  <div class="team">
+    <div class="card" data-name="John Doe">
+      <h3 style="color: plum;">Isaac Ali</h3>
+      <p class="role">Manager</p>
+      <span class="status active">Active</span>
+      <div class="message"></div>
+    </div>
 
-    <h2>User Management</h2>
+    <div class="card" data-name="Avuki Blessing">
+      <h3 style="color: plum;">Alice Smith</h3>
+      <p class="role">Attendant</p>
+      <span class="status active">Active</span>
+      <div class="message"></div>
+    </div>
 
-    <table class="user-table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td data-label="Name">Victor Lee</td>
-                <td data-label="Email">vivtorlee@gmail.com</td>
-                <td data-label="Role" class="role">Administrator</td>
-                <td data-label="Status" class="status-active">Active</td>
-                <td data-label="Actions" class="action-buttons">
-                    <button class="edit-btn">Edit</button>
-                    <button class="delete-btn">Delete</button>
-                </td>
-            </tr>
-            <tr>
-                <td data-label="Name">Isaac Ali</td>
-                <td data-label="Email">isaacali@gmail.com</td>
-                <td data-label="Role" class="role">Store Manager</td>
-                <td data-label="Status" class="status-active">Active</td>
-                <td data-label="Actions" class="action-buttons">
-                    <button class="edit-btn">Edit</button>
-                    <button class="delete-btn">Delete</button>
-                </td>
-            </tr>
-            <tr>
-                <br><br>
-                <td data-label="Name">Avuki Blessing</td>
-                <td data-label="Email">avukiblessing@gmail.com</td>
-                <td data-label="Role" class="role">Attendant</td>
-                <td data-label="Status" class="status-inactive">Inactive</td>
-                <td data-label="Actions" class="action-buttons">
-                    <button class="edit-btn">Edit</button>
-                    <button class="delete-btn">Delete</button>
-                </td>
-            </tr>
-            <br><br>
+    <div class="card" data-name="Michael Lee">
+      <h3 style="color: plum;">Victor Lee</h3>
+      <p class="role">Attendant</p>
+      <span class="status inactive">Inactive</span>
+      <div class="message"></div>
+    </div>
 
-            <td data-label="Name">Grace Mathew</td>
-            <td data-label="Email">gracemathew@gmail.com</td>
-            <td data-label="Role" class="role">Sales Manager</td>
-            <td data-label="Status" class="status-active">Active</td>
-            <td data-label="Actions" class="action-buttons">
-                <button class="edit-btn">Edit</button>
-                <button class="delete-btn">Delete</button>
+    <div class="card" data-name="Susan Green">
+      <h3 style="color: plum;">Susan Hadia</h3>
+      <p class="role">Attendant</p>
+      <span class="status active">Active</span>
+      <div class="message"></div>
+    </div>
 
-            </td>
-            </tr>
-            <br><br>
-            <td data-label="Name">Verina Denis</td>
-            <td data-label="Email">verinadenis@gmail.com</td>
-            <td data-label="Role" class="role">marketing personel</td>
-            <td data-label="Status" class="status-active">Active</td>
-            <td data-label="Actions" class="action-buttons">
-                <button class="edit-btn">Edit</button>
-                <button class="delete-btn">Delete</button>
-            </td>
-            </tr>>
-            <br><br>
-            <td data-label="Name">Malish Moses</td>
-            <td data-label="Email">malishmoses@gmail.com</td>
-            <td data-label="Role" class="role">sales officer</td>
-            <td data-label="Status" class="status-inactive">Inactive</td>
-            <td data-label="Actions" class="action-buttons">
-                <button class="edit-btn">Edit</button>
-                <button class="delete-btn">Delete</button>
+    <div class="card" data-name="David Brown">
+      <h3 style="color: plum;">David Baraka</h3>
+      <p class="role">Attendant</p>
+      <span class="status active">Active</span>
+      <div class="message"></div>
+    </div>
 
-        </tbody>
-    </table>
+    <div class="card" data-name="Emma Wilson">
+      <h3 style="color: plum;">Emma Wilson</h3>
+      <p class="role">Attendant</p>
+      <span class="status inactive">Inactive</span>
+      <div class="message"></div>
+    </div>
 
+    <div class="card" data-name="James White">
+      <h3 style="color: plum;">James Mugume</h3>
+      <p class="role">Attendant</p>
+      <span class="status active">Active</span>
+      <div class="message"></div>
+    </div>
+
+    <div class="card" data-name="Linda Johnson">
+      <h3 style="color: plum;">Linda Ochan</h3>
+      <p class="role">Attendant</p>
+      <span class="status active">Active</span>
+      <div class="message"></div>
+    </div>
+
+    <div class="card" data-name="Robert King">
+      <h3 style="color: plum;">Robert Okello</h3>
+      <p class="role">Attendant</p>
+      <span class="status inactive">Inactive</span>
+      <div class="message"></div>
+    </div>
+  </div>
+
+  <!-- Manager Section -->
+  <div class="manager-section" id="managerSection">
+    <h2 style="color: plum;">Annonucment</h2>
+
+    <label for="recipient">Send To:</label>
+    <select id="recipient">
+      <option value="all">All Employees</option>
+      <option value="Alice Smith">Avuki Blessing</option>
+      <option value="Michael Lee">Victor Lee</option>
+      <option value="Susan Green">Susan Hadia</option>
+      <option value="David Brown">David Baraka</option>
+      <option value="Emma Wilson">Emma Wilson</option>
+      <option value="James White">James Mugume</option>
+      <option value="Linda Johnson">Linda Ochan</option>
+      <option value="Robert King">Robert Okello</option>
+    </select>
+
+    <textarea id="messageBox" placeholder="Write a message (warning, info, encouragement)..."></textarea>
+    <button onclick="sendMessage()">Send</button>
+  </div>
+
+  <script src="user.js"></script>
 </body>
-
 </html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MWF MANAGER' DASHBOARD</title>
+    <link rel="stylesheet" href="admindashboard.css" />
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <nav>
+    <a href="admindashboard.html">Dashboard</a>
+    <a href="iventory.html">Inventory</a>
+    <a href="user.html">Users</a>
+    </nav>
+   
+        <!-- Simple Manager Login Gate -->
+        <div id="gate" class="gate">
+            <div class="gate-card">
+                <h2>Manager Access</h2>
+                <p class="muted">Enter the manager code to continue</p>
+                <input id="managerCode" type="password" placeholder="manager code" />
+                <button id="loginBtn">Login</button>
+                <p id="gateMsg" class="gate-msg"></p>
+                <p class="tiny-note">
+                    Only the manager is allowed to login here.
+                </p>
+            </div>
+        </div>
+
+        <!-- DASHBOARD -->
+        <div id="app" class="container hidden">
+            <header class="header">
+                <div class="brand">
+                    <span class="logo">MWF</span>
+                    <div>
+                        <h1>MWF MANAGER'DASHBOARD</h1>
+                        <p class="muted">Private dashboard for manager only</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button id="refreshBtn" class="secondary">Refresh Data</button>
+                    <button id="logoutBtn" class="ghost">Logout</button>
+                </div>
+            </header>
+
+            <!-- KPIs -->
+            <section class="kpis">
+                <div class="kpi-card">
+                    <p class="kpi-label">Available Stock</p>
+                    <h2 id="kpiStock">—</h2>
+                </div>
+                <div class="kpi-card">
+                    <p class="kpi-label">New Orders</p>
+                    <h2 id="kpiNewOrders">—</h2>
+                </div>
+                <div class="kpi-card">
+                    <p class="kpi-label">Pending Deliveries</p>
+                    <h2 id="kpiPending">—</h2>
+                </div>
+                <div class="kpi-card">
+                    <p class="kpi-label">Customer Feedback</p>
+                    <h2 id="kpiFeedback">—</h2>
+                </div>
+                <div class="kpi-card">
+                    <p class="kpi-label">Inventory Alerts</p>
+                    <h2 id="kpiAlerts">—</h2>
+                </div>
+                <div class="kpi-card">
+                    <p class="kpi-label">Top Sale Product</p>
+                    <h2 id="kpiTopProduct">—</h2>
+                </div>
+            </section>
+
+            <!-- Main content -->
+            <section class="content-grid">
+                <!-- Demand Chart -->
+                <div class="panel">
+                    <div class="panel-head">
+                        <h3>Monthly Demand by Product (Jan–Dec)</h3>
+                        <p class="muted">Current month onward highlighted</p>
+                    </div>
+                    <canvas id="demandChart" height="120"></canvas>
+                </div>
+
+                <!-- Inventory Alerts List -->
+                <div class="panel">
+                    <div class="panel-head">
+                        <h3>Inventory Alerts</h3>
+                        <p class="muted">Low-stock items that need attention</p>
+                    </div>
+                    <ul id="alertList" class="list"></ul>
+                </div>
+            </section>
+
+            <!-- Recent Orders / Feedback (demo tables) -->
+            <section class="content-grid">
+                <div class="panel">
+                    <div class="panel-head">
+                        <h3>New Orders (Latest)</h3>
+                    </div>
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Order #</th>
+                                    <th>Product</th>
+                                    <th>Qty</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ordersTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-head">
+                        <h3>Customer Feedback</h3>
+                    </div>
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Customer</th>
+                                    <th>Product</th>
+                                    <th>Rating</th>
+                                    <th>Comment</th>
+                                </tr>
+                            </thead>
+                            <tbody id="feedbackTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <script src="admindashboard.js"></script>
+</body>
+
+</html>
