@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MWF Delivery Page</title>
+    <link rel="stylesheet" href="delivery.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Delivery Management</h1>
+
+        <label>Customer Name</label>
+        <input type="text" id="customerName" placeholder="Enter customer name">
+
+        <label>Delivery Address</label>
+        <input type="text" id="customerAddress" placeholder="Enter delivery address">
+
+        <label>Product Name</label>
+        <input type="text" id="productName" placeholder="e.g. Timber, Sofa">
+
+        <label>Quantity</label>
+        <input type="number" id="quantity" placeholder="Enter quantity">
+
+        <label>Payment Method</label>
+        <select id="paymentType">
+            <option value="">-- Select Payment --</option>
+            <option value="cash">Cash</option>
+            <option value="cheque">Cheque</option>
+            <option value="overdraft">Bank Overdraft</option>
+        </select>
+
+        <label>Base Price</label>
+        <input type="number" id="basePrice" placeholder="Enter base price">
+
+        <div class="checkbox">
+            <input type="checkbox" id="transport">
+            <label for="transport">Add 5% Transport Fee</label>
+        </div>
+
+        <p class="total" id="totalPrice">Total: 0.00</p>
+
+        <label>Delivery Status</label>
+        <select id="deliveryStatus">
+            <option value="pending">Pending</option>
+            <option value="dispatched">Dispatched</option>
+            <option value="delivered">Delivered</option>
+        </select>
+
+        <button onclick="processDelivery()">Save Delivery</button>
+
+        <p class="status" id="statusMessage"></p>
+    </div>
+
+    <script src="delivery.js"></script>
+</body>
+
+</html>

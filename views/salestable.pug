@@ -1,0 +1,41 @@
+meta(charset="UTF-8")
+meta(name="viewport", content="width=device-width,initial-scale=1")
+title Sales Table
+link(rel="stylesheet", href="/public/CSS/salestable.css")
+h2 Sales Table
+table#salesTable
+  thead
+    tr
+        th Date
+        th Product
+        th Type
+        th Quality
+        th Quantity
+        th Cost Price
+        th Total Amount
+        th delete 
+        th update 
+      if currentUser.role === "manager"
+      
+    tbody
+        tr
+        td
+            input(type="date")
+        td
+            input(type="text", placeholder="Product Name")
+        td
+            input(type="text", placeholder="Type")
+        td
+            input(type="text", placeholder="Quality")
+        td
+            input.quantity(type="number", min="0")
+        td
+            input.cost(type="number", min="0")
+        td
+            input.total(type="number", readonly)
+        td
+            input(type="text", placeholder="Notes")
+        if currentUser.role === "manager"
+br
+button#addRowBtn Add Row
+script(src="salestable.js")

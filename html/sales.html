@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MWF Ltd - Sales Page</title>
+    <link rel="stylesheet" href="/css/sales.css">
+</head>
+
+<body>
+    <header>
+        <h1>MWF Ltd - Sales Entry</h1>
+    </header>
+
+    <main>
+        <section class="sales-form">
+            <h2>Record a Sale</h2>
+            <form id="salesForm">
+                <label>Product</label>
+                <select id="product" required>
+                    <option value="">-- Select Product --</option>
+                    <option value="Chairs">Chairs</option>
+                    <option value="Beds">Beds</option>
+                    <option value="Wooden Table">Wooden Table</option>
+                    <option value="Timber">Timber</option>
+                    <option value="Poles">Poles</option>
+                    <option value="Office Chair">Office Chair</option>
+                </select>
+
+                <label>Type</label>
+                <select id="type" required>
+                    <option value="Wood">Wood</option>
+                    <option value="Furniture">Furniture</option>
+                </select>
+
+                <label>Quality</label>
+                <input type="text" id="quality" required>
+
+                <label>Quantity</label>
+                <input type="number" id="quantity" min="1" value="1" required>
+
+                <label>Cost Price (per unit)</label>
+                <input type="number" id="costPrice" min="0" required>
+
+                <label>Total Amount</label>
+                <input type="text" id="totalAmount" readonly>
+
+                <label>Sales Agent</label>
+                <input type="text" id="agent" required>
+
+                <button type="submit">Add Sale</button>
+            </form>
+        </section>
+    </main>
+
+    <script src="sales.js"></script>
+</body>
+
+</html>

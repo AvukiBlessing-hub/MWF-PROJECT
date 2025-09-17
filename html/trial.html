@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MWF Dashboard</title>
+    <link rel="stylesheet" href="trial.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>MWF Dashboard</h1>
+
+        <!-- KPI Summary -->
+        <div class="kpi-container">
+            <div class="kpi-card">
+                <h2>Total Sales</h2>
+                <p id="total-sales">Loading...</p>
+            </div>
+            <div class="kpi-card">
+                <h2>Total Stock Items</h2>
+                <p id="total-stock">Loading...</p>
+            </div>
+            <div class="kpi-card">
+                <h2>Low Stock Items</h2>
+                <p id="low-stock">Loading...</p>
+            </div>
+            <div class="kpi-card">
+                <h2>Pending Deliveries</h2>
+                <p id="pending-deliveries">Loading...</p>
+            </div>
+        </div>
+
+        <!-- Quick Access Links -->
+        <div class="quick-links">
+            <button id="sales-page">Go to Sales</button>
+            <button id="stock-page">Go to Stock</button>
+            <button id="reports-page">Go to Reports</button>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="card">
+            <h2>Recent Activity</h2>
+            <table id="activity-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Action</th>
+                        <th>User</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Backend data will populate here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="trial.js"></script>
+</body>
+
+</html>

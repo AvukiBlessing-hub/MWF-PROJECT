@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MWF Ltd - Add User</title>
+    <link rel="stylesheet" href="users.css">
+</head>
+<body>
+    <header>
+        <h1>MWF Ltd - Add User</h1>
+    </header>
+
+    <main>
+        <section class="user-form">
+            <h2>Add User</h2>
+            <form id="userForm">
+                <label>Name</label>
+                <input type="text" id="name" required>
+
+                <label>Email</label>
+                <input type="email" id="email" required>
+
+                <label>Role</label>
+                <select id="role" required>
+                    <option value="Sales Agent">Sales Agent</option>
+                    <option value="Manager">Manager</option>
+                    <option value="Warehouse Staff">Attendant</option>
+                </select>
+
+                <button type="submit">Save User</button>
+            </form>
+        </section>
+    </main>
+
+    <script src="users.js"></script>
+</body>
+</html>
