@@ -1,0 +1,34 @@
+meta(charset="UTF-8")
+meta(name="viewport", content="width=device-width,initial-scale=1")
+title Signup Page
+link(rel="stylesheet", href="/CSS/signup.css")
+.container
+  h2 Create an Account
+  form(action="/signup", method="post")
+    //  Full Name 
+    label(for="fullname") Full Name
+    input#fullname(type="text", placeholder)
+    #nameError.error
+    //  Email 
+    label(for="email") Email Address
+    input#email(type="email", placeholder)
+    #emailError.error
+    //  Username 
+    label(for="username") Username
+    input#username(type="text", placeholder)
+    //  Password 
+    label(for="password") Password
+    input#password(type="password", placeholder)
+    #passError.error
+    //  Role 
+    label(for="role") Role
+    select#role(name="role", required)
+      option(value) Select Role
+      option(value="manager") Manager
+      option(value="attendant") Attendant
+    //  Submit 
+    button(type="submit") Sign Up
+  p
+    | Already have an account? 
+    a(href="signin.html") Sign in
+script(src="signup.js")

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery Table</title>
+    <link rel="stylesheet" href="/public/CSS/deliverytable.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Delivery Management</h1>
+
+        <table id="deliveryTable">
+            <thead>
+                <tr>
+                    <th>Customer Name</th>
+                    <th>Delivery Address</th>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Payment Method</th>
+                    <th>Base Price</th>
+                    <th>Transport Fee</th>
+                    <th>Total Price</th>
+                    <th>Delivery Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Rows will be added dynamically -->
+            </tbody>
+        </table>
+
+        <button onclick="addSampleDelivery()">Add Sample Delivery</button>
+    </div>
+
+    <script src="/public/JS/delivery.js"></script>
+</body>
+
+</html>

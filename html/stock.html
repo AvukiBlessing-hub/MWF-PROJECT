@@ -1,142 +1,94 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Stock Entry</title>
-    <link rel="stylesheet" href="stock.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Registration</title>
+    <link rel="stylesheet" href="/public/css/stock.css">
 </head>
 
 <body>
-    <div class="container">
-        <header>
-            <div class="brand">
-                <div class="logo">M</div>
-                <div>
-                    <h1>stock entry Page</h1>
-                </div>
-            </div>
-        </header>
+    <div class="form-container">
 
-        <form id="stockForm" class="card" autocomplete="off" novalidate>
-            <div class="grid">
-                <!-- Product Info -->
-                <div>
-                    <label for="productName">Product Name </label>
-                    <input id="productName" name="productName" type="text" required
-                        placeholder="" />
-                </div>
+        <h2>Stock Registration Form</h2>
+        <form action="#" method="post">
 
-                <div>
-                    <label for="productType">Product Type *</label>
-                    <select id="productType" name="productType" required>
-                        <option value="">-- select type --</option>
-                        <option>Timber (Hardwood)</option>
-                        <option>Timber (Softwood)</option>
-                        <option>Pole</option>
-                        <option>Finished Furniture</option>
-                        <option>Raw Material</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label for="supplierName">Supplier Name </label>
-                    <input id="supplierName" name="supplierName" type="text" required
-                        placeholder="" />
-                </div>
-
-                <div>
-                    <label for="dateReceived">Date Received </label>
-                    <input id="dateReceived" name="dateReceived" type="date" required />
-                </div>
-
-                <div>
-                    <label for="quantity">Quantity Received </label>
-                    <input id="quantity" name="quantity" type="number" min="0" step="1" required
-                        placeholder="" />
-                </div>
-
-                <div>
-                    <label for="unitCost">Unit Cost Price (UGX)  </label>
-                    <input id="unitCost" name="unitCost" type="number" min="0" step="0.01" required
-                        placeholder="" />
-                </div>
-
-                <div>
-                    <label for="unitPrice">Unit Selling Price (UGX)</label>
-                    <input id="unitPrice" name="unitPrice" type="number" min="0" step="0.01" required
-                        placeholder="" />
-                </div>
-
-                <div>
-                    <label for="totalCost">Total Cost (auto-calculated)</label>
-                    <div class="row calc">
-                        <div class="total" id="totalCost">UGX 0.00</div>
-                        <button type="button" class="secondary" id="calcBtn">Calculate</button>
-                    </div>
-                </div>
-
-                <div class="full">
-                    <label for="quality">Quality Description </label>
-                    <textarea id="quality" name="quality" required
-                        placeholder=""></textarea>
-                </div>
-
-                <div>
-                    <label for="color">Color (optional)</label>
-                    <input id="color" name="color" type="text" placeholder="e.g., Natural / Reddish" />
-                </div>
-
-                <div>
-                    <label for="measurements">Measurements  (optional)</label>
-                    <input id="measurements" name="measurements" type="text" placeholder="" />
-                </div>
-
-                <div>
-                    <label for="storage">Storage Location </label>
-                    <select id="storage" name="storage" required>
-                        <option value="">-- select location --</option>
-                        <option>Showroom</option>
-                        <option>Warehouse</option>
-                        <option>Workshop</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label for="remarks">Remarks</label>
-                    <input id="remarks" name="remarks" type="text" placeholder="e.g., 2 damaged planks" />
-                </div>
-
-                <div>
-                    <label for="recordedBy">Recorded By </label>
-                    <input id="recordedBy" name="recordedBy" type="text" required placeholder="Attendant name" />
-                </div>
-
-                <div>
-                    <label for="approvedBy">Approved By (Manager) </label>
-                    <input id="approvedBy" name="approvedBy" type="text" required placeholder="Manager name" />
-                </div>
+            <!-- Product Name -->
+            <div class="form-group">
+                <label for="product">Product Name</label>
+                <select id="product" name="product" required>
+                    <option value="">-- Select Product --</option>
+                    <option value="sofa">Sofa</option>
+                    <option value="dining-table">Dining Table</option>
+                    <option value="bed">Bed</option>
+                    <option value="chair">Chair</option>
+                    <option value="timber">Timber</option>
+                    <option value="table">Table</option>
+                    <option value="other">Other</option>
+                </select>
             </div>
 
-            <div class="actions">
-                <button id="saveBtn" type="submit">Save Stock Entry</button>
-                <button id="resetBtn" type="button" class="secondary">Reset Form</button>
-                <button id="exportBtn" type="button" class="secondary">Export Last as JSON</button>
+            <!-- Product Type -->
+            <div class="form-group">
+                <label for="productType">Product Type</label>
+                <select id="productType" name="productType" required>
+                    <option value="">-- Select Type --</option>
+                    <option value="furniture">Furniture</option>
+                    <option value="wood">Wood</option>
+                    <option value="raw-material">Raw Material</option>
+                    <option value="other">Other</option>
+                </select>
             </div>
 
-            <div class="note">
-                <strong>Note:</strong> All stock must be recorded by the manager before available for sale. Fields
-                marked * are required.
+            <!-- Quantity -->
+            <div class="form-group">
+                <label for="quantity">Quantity</label>
+                <input type="number" id="quantity" name="quantity" min="1" required placeholder="Enter quantity">
             </div>
+
+            <!-- Quality -->
+            <div class="form-group">
+                <label for="quality">Quality</label>
+                <select id="quality" name="quality" required>
+                    <option value="">-- Select Quality --</option>
+                    <option value="high">High</option>
+                    <option value="medium">Medium</option>
+                    <option value="low">Low</option>
+                </select>
+            </div>
+
+            <!-- Unit Price -->
+            <div class="form-group">
+                <label for="price">Unit Cost Price (shs)</label>
+                <input type="number" id="price" name="price" min="1" step="0.01" required
+                    placeholder="">
+            </div>
+
+            <!-- Unit Selling Price -->
+            <div class="form-group">
+                <label for="sellingPrice">Unit Selling Price (shs)</label>
+                <input type="number" id="sellingPrice" name="sellingPrice" min="1" step="0.01" required
+                    placeholder="">
+            </div>
+
+            <!-- Supplier -->
+            <div class="form-group">
+                <label for="supplier">Supplier Name</label>
+                <input type="text" id="supplier" name="supplier" minlength="3" required
+                    placeholder="">
+            </div>
+
+            <!-- Date -->
+            <div class="form-group">
+                <label for="date">Date of Stock</label>
+                <input type="date" id="date" name="date" required>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn">Add Stock</button>
         </form>
-        <footer>
-        </footer>
-
-        <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
     </div>
-
-    <script src="stock.js"></script>
 </body>
 
 </html>

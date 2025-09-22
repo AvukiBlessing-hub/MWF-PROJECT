@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { ensureauthenticated, ensuremanager } = require("../middleware/auth");
 
-const stockModels = require("../models/stockModels");
+const stockModel = require("../models/stockModel");
 
 // Stock page
 router.get("/stock", ensureauthenticated, ensuremanager, (req, res) => {
@@ -11,7 +11,7 @@ router.get("/stock", ensureauthenticated, ensuremanager, (req, res) => {
 
 router.post("/stock", async (req, res) => {
   try {
-    const stock = new stockModels(req.body);
+    const stock = new stockModel(req.body);
     console.log(req.body);
     await stock.save();
     res.redirect("/stocklist");
@@ -24,7 +24,7 @@ router.post("/stock", async (req, res) => {
 // Get stock list
 router.get("/stocklist", async (req, res) => {
   try {
-    let items = await stockModels.find().sort({ $natural: -1 });
+    let items = await stockModel.find().sort({ $natural: -1 });
     res.render("stocktable", { items });
   } catch (error) {
     console.error("Error fetching items", error.message);
@@ -40,7 +40,7 @@ router.get("/dashboard", ensureauthenticated, ensuremanager, (req, res) => {
 // Edit stock
 router.get("/editstock/:id", async (req, res) => {
   try {
-    const product = await stockModels.findById(req.params.id);
+    const product = await stockModel.findById(req.params.id);
     if (!product) {
       return res.status(404).send("Product not found");
     }
@@ -53,7 +53,7 @@ router.get("/editstock/:id", async (req, res) => {
 
 router.put("/editstock/:id", async (req, res) => {
   try {
-    const product = await stockModels.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const product = await stockModel.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!product) {
       return res.status(404).send("Product not found");
     }
@@ -67,7 +67,7 @@ router.put("/editstock/:id", async (req, res) => {
 // Delete stock
 router.post("/deletestock", ensureauthenticated, async (req, res) => {
   try {
-    await stockModels.deleteOne({ _id: req.body.id });
+    await stockModel.deleteOne({ _id: req.body.id });
     res.redirect("back");
   } catch (error) {
     console.log(error.message);

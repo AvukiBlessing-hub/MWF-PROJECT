@@ -1,69 +1,56 @@
 body {
     font-family: Arial, sans-serif;
-    background: url(image/office.jpg);
+    background: url(../image/lates.jpg);
     margin: 0;
     padding: 0;
+}
+
+.container {
+    width: 450px;
+    margin: 30px auto;
+    background: gray;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
     color: #333;
 }
 
-header {
-    background: #2d3436;
-    color: #fff;
-    padding: 0;
-    text-align: center;
-}
-
-main {
-    max-width: 1000px;
-    margin: 5px auto;
-    padding: 0;
-}
-
-h2 {
-    margin-bottom: 15px;
-    color: #2c3e50;
-}
-
-.sales-form {
-    background: pink;
-    padding: 5px;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-form {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-}
-
-form label {
-    grid-column: span 2;
+label {
+    display: block;
+    margin-top: 12px;
     font-weight: bold;
+    color: white;
 }
 
-form input,
-form select,
-form button {
-    padding: 0;
+input,
+select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 6px;
     border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 14px;
+    border-radius: 5px;
 }
 
-form input[readonly] {
-    background: #f1f1f1;
+.checkbox {
+    margin-top: 15px;
 }
 
-form button {
-    grid-column: span 2;
-    background: #2d3436;
-    color: #fff;
+.btn {
+    margin-top: 20px;
+    width: 100%;
+    padding: 10px;
+    background: peru;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
     cursor: pointer;
-    transition: background 0.3s;
 }
 
-form button:hover {
-    background: #f39c12;
+.btn:hover {
+    background: pink;
 }

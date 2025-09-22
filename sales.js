@@ -1,54 +1,41 @@
-const form = document.getElementById('salesForm');
-const quantityInput = document.getElementById('quantity');
-const costInput = document.getElementById('costPrice');
-const totalField = document.getElementById('totalAmount');
+const productTypeEl = document.getElementById("productType");
+const productNameEl = document.getElementById("productName");
+const quantityEl = document.getElementById("quantity");
+const costPriceEl = document.getElementById("costPrice");
+const transportEl = document.getElementById("transport");
+const totalPriceEl = document.getElementById("totalPrice");
 
-// Load existing sales or start with empty array
-let salesData = JSON.parse(localStorage.getItem('salesData')) || [];
+// Product options
+const products = {
+    wood: ["Timber", "Poles", "Hardwood", "Softwood"],
+    furniture: ["Beds", "Sofas", "Dining Tables", "Cupboards", "Drawers", "Office Furniture"]
+};
 
-// Auto-calculate total amount
+// Update product dropdown based on type
+productTypeEl.addEventListener("change", () => {
+    const type = productTypeEl.value;
+    productNameEl.innerHTML = '<option value="">-- Select Product --</option>';
+    if (products[type]) {
+        products[type].forEach(p => {
+            const option = document.createElement("option");
+            option.value = p.toLowerCase().replace(/\s+/g, "-");
+            option.textContent = p;
+            productNameEl.appendChild(option);
+        });
+    }
+});
+
+// Calculate total price
 function calculateTotal() {
-    const qty = parseFloat(quantityInput.value) || 1;
-    const cost = parseFloat(costInput.value) || 0;
-    totalField.value = (qty * cost).toFixed(2);
+    const qty = parseFloat(quantityEl.value) || 0;
+    const cost = parseFloat(costPriceEl.value) || 0;
+    let total = qty * cost;
+    if (transportEl.checked) {
+        total *= 1.05;
+    }
+    totalPriceEl.value = total.toFixed(2);
 }
 
-// Calculate total whenever quantity or cost changes
-quantityInput.addEventListener('input', calculateTotal);
-costInput.addEventListener('input', calculateTotal);
-
-// Handle form submission
-form.addEventListener('submit', (e) => {
-    e.preventDefault();
-
-    const sale = {
-        product: document.getElementById('product').value,
-        type: document.getElementById('type').value,
-        quality: document.getElementById('quality').value,
-        quantity: parseFloat(quantityInput.value),
-        costPrice: parseFloat(costInput.value),
-        total: parseFloat(totalField.value),
-        agent: document.getElementById('agent').value,
-        date: new Date().toLocaleString()
-    };
-
-    // Save sale
-    salesData.push(sale);
-    localStorage.setItem('salesData', JSON.stringify(salesData));
-
-    // Optional: Update dashboard counters if dashboard is open in another tab
-    window.dispatchEvent(new Event('storage'));
-
-    alert(`Sale Recorded:\n
-Product: ${sale.product}
-Type: ${sale.type}
-Quantity: ${sale.quantity}
-Cost Price: ${sale.costPrice}
-Total Amount: ${sale.total}
-Agent: ${sale.agent}`);
-
-    // Reset form
-    form.reset();
-    totalField.value = '';
-    quantityInput.value = 1; // reset to 1
-});
+quantityEl.addEventListener("input", calculateTotal);
+costPriceEl.addEventListener("input", calculateTotal);
+transportEl.addEventListener("change", calculateTotal);

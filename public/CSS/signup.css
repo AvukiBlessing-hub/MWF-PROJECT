@@ -1,80 +1,92 @@
+/* Container styling */
 body {
     font-family: Arial, sans-serif;
-    background: #f4f4f9;
+    background: #f0f2f5;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
-    background: url(image/office.jpg);
+    background: url(../image/lates.jpg);
 }
 
 .container {
-    background: darkgray;
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    width: 350px;
+    background: gray;
+    padding: 30px 40px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 400px;
 }
 
 h2 {
     text-align: center;
     margin-bottom: 20px;
-    color: #333;
 }
 
-label {
+/* Form styling */
+form label {
     display: block;
-    margin-bottom: 6px;
+    margin-bottom: 5px;
     font-weight: bold;
 }
 
-input {
+form input,
+form select {
     width: 100%;
     padding: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
     border: 1px solid #ccc;
-    border-radius: 6px;
+    box-sizing: border-box;
     font-size: 14px;
 }
 
-input:focus {
-    border-color: #007bff;
-    outline: none;
+form select {
+    appearance: none; /* remove default arrow style on some browsers */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background: #fff url("data:image/svg+xml,%3Csvg fill='gray' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3C/svg%3E") no-repeat right 10px center;
+    background-size: 16px;
 }
 
+/* Button styling */
+form button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    background: black;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+form button:hover {
+    background:plum ;
+}
+
+/* Error messages */
 .error {
     color: red;
     font-size: 12px;
+    margin-top: -10px;
     margin-bottom: 10px;
 }
 
-button {
-    width: 100%;
-    padding: 12px;
-    background: #007bff;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-button:hover {
-    background: #0056b3;
-}
-
+/* Link styling */
 p {
     text-align: center;
-    margin-top: 12px;
+    margin-top: 15px;
     font-size: 14px;
 }
 
-a {
-    color: #007bff;
+p a {
+    color: white;
     text-decoration: none;
 }
 
-a:hover {
+p a:hover {
     text-decoration: underline;
 }

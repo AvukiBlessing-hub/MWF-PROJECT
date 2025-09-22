@@ -3,11 +3,12 @@ body {
   background: #f9fafb;
   margin: 0;
   padding: 0;
+  background: url(../image/lates.jpg);
 }
 .container {
   max-width: 700px;
   margin: 30px auto;
-  background: #fff;
+  background: gray;
   padding: 20px 30px;
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
@@ -21,7 +22,7 @@ label {
   display: block;
   margin-top: 12px;
   font-weight: bold;
-  color: #444;
+  color: white;
 }
 input, select {
   width: 100%;
@@ -40,21 +41,21 @@ input, select {
   margin-top: 15px;
   font-size: 1.2em;
   font-weight: bold;
-  color: #006400;
+  color: black;
 }
 button {
   margin-top: 20px;
   padding: 10px;
   width: 100%;
-  background: #2563eb;
-  color: #fff;
+  background: peru;
+  color: black;
   border: none;
   border-radius: 6px;
   font-size: 1em;
   cursor: pointer;
 }
 button:hover {
-  background: #1e40af;
+  background: plum;
 }
 .status {
   margin-top: 15px;

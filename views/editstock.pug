@@ -1,0 +1,58 @@
+meta(charset="UTF-8")
+meta(name="viewport", content="width=device-width,initial-scale=1")
+title Stock Registration
+link(rel="stylesheet", href="/public/css/stock.css")
+.form-container
+  h2 Stock Registration Form
+  form(action=`/editstock/${item._id}?._method=PUT", method="post`)
+    //  Product Name 
+    .form-group
+      label(for="product") Product Name
+      select#product(name="product", required)
+        option(value) -- Select Product --
+        option(value="sofa") Sofa
+        option(value="dining-table") Dining Table
+        option(value="bed") Bed
+        option(value="chair") Chair
+        option(value="timber") Timber
+        option(value="table") Table
+        option(value="other") Other
+    //  Product Type 
+    .form-group
+      label(for="productType") Product Type
+      select#productType(name="productType", required)
+        option(value) -- Select Type --
+        option(value="furniture") Furniture
+        option(value="wood") Wood
+        option(value="raw-material") Raw Material
+        option(value="other") Other
+    //  Quantity 
+    .form-group
+      label(for="quantity") Quantity
+      input#quantity(type="number", name="quantity", min="1", required, placeholder="Enter quantity")
+    //  Quality 
+    .form-group
+      label(for="quality") Quality
+      select#quality(name="quality", required)
+        option(value) -- Select Quality --
+        option(value="high") High
+        option(value="medium") Medium
+        option(value="low") Low
+    //  Unit Price 
+    .form-group
+      label(for="price") Unit Cost Price (shs)
+      input#price(type="number", name="price", min="1", step="0.01", required, placeholder)
+    //  Unit Selling Price 
+    .form-group
+      label(for="sellingPrice") Unit Selling Price (shs)
+      input#sellingPrice(type="number", name="sellingPrice", min="1", step="0.01", required, placeholder)
+    //  Supplier 
+    .form-group
+      label(for="supplier") Supplier Name
+      input#supplier(type="text", name="supplier", minlength="3", required, placeholder)
+    //  Date 
+    .form-group
+      label(for="date") Date of Stock
+      input#date(type="date", name="date", required)
+    //  Submit Button 
+    button.btn(type="submit") update stock 

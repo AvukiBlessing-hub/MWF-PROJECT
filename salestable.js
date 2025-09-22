@@ -1,20 +1,36 @@
-function calculateTotal(row) {
-  const quantity = row.querySelector('.quantity').value;
-  const cost = row.querySelector('.cost').value;
-  const total = row.querySelector('.total');
-  total.value = (quantity && cost) ? (quantity * cost).toFixed(2) : '';
-}
+// This file is ready for backend integration.
+// For now, it just waits for your data.
 
-document.getElementById('salesTable').addEventListener('input', function(e) {
-  if (e.target.classList.contains('quantity') || e.target.classList.contains('cost')) {
-    const row = e.target.closest('tr');
-    calculateTotal(row);
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("Sales table is ready. Fetch data from backend here later.");
+
+  // Example function you can connect to Node.js later
+  async function loadSalesData() {
+    try {
+      // Replace "/api/sales" with your real backend endpoint later
+      const response = await fetch("/api/sales");
+      const data = await response.json();
+
+      const tableBody = document.querySelector("#salesTable tbody");
+      tableBody.innerHTML = "";
+
+      data.forEach(sale => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${sale.productType}</td>
+          <td>${sale.productName}</td>
+          <td>${sale.quantity}</td>
+          <td>${sale.quality}</td>
+          <td>$${sale.costPrice.toFixed(2)}</td>
+          <td>$${(sale.quantity * sale.costPrice).toFixed(2)}</td>
+        `;
+        tableBody.appendChild(row);
+      });
+    } catch (err) {
+      console.error("Error fetching sales data:", err);
+    }
   }
-});
 
-document.getElementById('addRowBtn').addEventListener('click', function() {
-  const table = document.getElementById('salesTable').querySelector('tbody');
-  const newRow = table.rows[0].cloneNode(true);
-  newRow.querySelectorAll('input').forEach(input => input.value = '');
-  table.appendChild(newRow);
+  // You can call loadSalesData() when backend is ready
+  // loadSalesData();
 });

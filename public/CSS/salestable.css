@@ -1,45 +1,41 @@
 body {
-  font-family: Arial, sans-serif;
-  margin: 30px;
-  background-color: #f4f4f4;
+    font-family: Arial, sans-serif;
+    background: url(../image/lates.jpg);
+    padding: 20px;
 }
 
-h2 {
-  color: #333;
+.container {
+    max-width: 1000px;
+    margin: auto;
+    background: gray;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: white ;
 }
 
 table {
-  width: 100%;
-  border-collapse: collapse;
-  background-color: white;
+    width: 100%;
+    border-collapse: collapse;
 }
 
-th, td {
-  padding: 10px;
-  text-align: left;
-  border: 1px solid #ccc;
+table th,
+table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+    
 }
 
-th {
-  background-color: black;
-  color: white;
+table th {
+    background: #f0f0f0;
 }
 
-input {
-  width: 100%;
-  padding: 5px;
-  box-sizing: border-box;
-}
-
-button {
-  padding: 10px 20px;
-  background-color: #007BFF;
-  color: white;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-button:hover {
-  background-color: #0056b3;
+tr:nth-child(even) {
+    background: #fafafa;
 }

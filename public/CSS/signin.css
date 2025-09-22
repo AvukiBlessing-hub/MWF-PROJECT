@@ -6,11 +6,11 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
-    background: url(image/office.jpg);
+    background: url(../image/lates.jpg);
 }
 
 .container {
-    background: plum;
+    background:gray;
     padding: 2rem;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -20,7 +20,7 @@ body {
 h2 {
     text-align: center;
     margin-bottom: 20px;
-    color: #333;
+    color: white;
 }
 
 label {
@@ -39,7 +39,7 @@ input {
 }
 
 input:focus {
-    border-color: #007bff;
+    border-color: plum;
     outline: none;
 }
 
@@ -52,7 +52,7 @@ input:focus {
 button {
     width: 100%;
     padding: 12px;
-    background: #007bff;
+    background: black;
     color: white;
     border: none;
     border-radius: 6px;
@@ -61,7 +61,7 @@ button {
 }
 
 button:hover {
-    background: #0056b3;
+    background: white;
 }
 
 p {
@@ -71,7 +71,7 @@ p {
 }
 
 a {
-    color: #007bff;
+    color: white;
     text-decoration: none;
 }
 

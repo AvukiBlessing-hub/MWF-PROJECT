@@ -10,18 +10,18 @@ const moment = require("moment");
 
 
 //import routes
-require
+
 const classRoutes = require("./routes/classRoutes");
 const authRoutes = require("./routes/authRoutes");
-const stockRoute = require("./routes/stockRoute");
-const userModels = require("./models/userModels");
+const stockRoutes = require("./routes/stockRoutes");
+const userModel = require("./models/userModel");
 2.//Instantiations
 const app = express();
 
-const port =4500; // you can change the port here always
+const port =5000; // you can change the port here always
 
 3.//Configurations   // setting up mongo connection
-console.log("MONGODB_URL from env:", process.env.MONGODB_URL);
+console.log("MONGODB_URI from env:", process.env.MONGODB_URI);
 mongoose.connect(process.env.MONGODB_URI, {
   // useNewUrlParser: true,
   // useUnifiedTopology: true
@@ -46,7 +46,6 @@ app.set("views", path.join(__dirname, "views"));
 // 4 Middleware
 // app.use(express.static('public'));
 app.use(express.static(path.join(__dirname, "public")));
-app.use("/public/puloads", express.static(__dirname + "/public/puloads"))
 app.use(express.urlencoded({ extended: true }));
 // express session config
 app.use(expressSession({
@@ -61,9 +60,9 @@ app.use(passport.initialize());
 app.use(passport.session())
 
 // authenticate with passport local strategy
-passport.use(userModels.createStrategy());
-passport.serializeUser(userModels.serializeUser());
-passport.deserializeUser(userModels.deserializeUser());
+passport.use(userModel.createStrategy());
+passport.serializeUser(userModel.serializeUser());
+passport.deserializeUser(userModel.deserializeUser());
 
 
 
@@ -93,7 +92,7 @@ app.use((req, res, next) => {
 //using imported routes
 // app.use('/',classRoutes)
 app.use('/',authRoutes);
-app.use('/',stockRoute)
+app.use('/',stockRoutes)
 
 
 

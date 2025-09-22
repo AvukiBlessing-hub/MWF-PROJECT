@@ -58,13 +58,13 @@ router.post("/index", (req, res) => {
   res.send("Manager registered successfully!");
 });
 
-router.get("/manager", (req, res) => {
+router.get("/signup", (req, res) => {
   res.sendFile(path.join(__dirname, '/../html/manager.html'));
 });
 
-router.post("/manager", (req, res) => {
+router.post("/signup", (req, res) => {
   console.log(req.body);
-  res.send("Manager data received.");
+  res.send("signup data received.");
 });
 
 module.exports = router;

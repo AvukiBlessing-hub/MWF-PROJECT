@@ -1,0 +1,78 @@
+body {
+  font-family: Arial, sans-serif;
+  background: url(../image/lates.jpg);
+  margin: 0;
+  padding: 20px;
+}
+
+.table-container {
+  max-width: 1000px;
+  margin: auto;
+  background: gray;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: black;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  background-color: black;
+  /* warm orange header */
+  color: white;
+}
+
+th,
+td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid #ccc;
+}
+
+tr:nth-child(even) {
+  background-color: #f6f6f6;
+}
+
+tr:hover {
+  background-color: peru;
+  /* light highlight */
+}
+
+@media (max-width: 800px) {
+
+  table,
+  thead,
+  tbody,
+  th,
+  td,
+  tr {
+    display: block;
+  }
+
+  th {
+    display: none;
+  }
+
+  td {
+    padding: 10px;
+    position: relative;
+    border: none;
+    border-bottom: 1px solid #ccc;
+  }
+
+  td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    display: inline-block;
+    width: 120px;
+  }
+}
