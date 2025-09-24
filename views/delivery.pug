@@ -1,0 +1,35 @@
+meta(charset="UTF-8")
+meta(name="viewport", content="width=device-width,initial-scale=1")
+title MWF Delivery Page
+link(rel="stylesheet", href="/public/CSS/delivery.css")
+.container
+  h1 Delivery Management
+  form(action="/delivery", method="post")
+  label Customer Name
+  input#customerName(type="text", placeholder)
+  label Delivery Address
+  input#customerAddress(type="text", placeholder)
+  label Product Name
+  input#productName(type="text", placeholder)
+  label Quantity
+  input#quantity(type="number", placeholder)
+  label Payment Method
+  select#paymentType
+    option(value) -- Select Payment --
+    option(value="cash") Cash
+    option(value="cheque") Cheque
+    option(value="overdraft") Bank Overdraft
+  label Base Price
+  input#basePrice(type="number", placeholder)
+  .checkbox
+    input#transport(type="checkbox")
+    label(for="transport") Add 5% Transport Fee
+  p.total#totalPrice Total:
+  label Delivery Status
+  select#deliveryStatus
+    option(value="pending") Pending
+    option(value="dispatched") Dispatched
+    option(value="delivered") Delivered
+  button(onclick="processDelivery()") Save Delivery
+  p.status#statusMessage
+script(src="delivery.js")

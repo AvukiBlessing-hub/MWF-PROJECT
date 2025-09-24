@@ -2,74 +2,67 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 const UserModel = require("../models/userModel");
-const stockModel = require("../models/stockModel");
 
-//getting athe manager form
+// GET /signup - render signup page
 router.get("/signup", (req, res) => {
-    res.render("signup", { title: "signup Page" });
+    res.render("signup", { title: "Sign Up Page" });
 });
 
-// GET: Show all users from MongoDB
+// POST /signup - register new user
+router.post("/signup", (req, res) => {
+    const { fullname, email, role, password } = req.body;
+
+    if (!email || !password) {
+        return res.status(400).send("Email and password are required");
+    }
+
+    const newUser = new UserModel({ fullname, email, role });
+
+    // Use callback style for reliable redirect
+    UserModel.register(newUser, password, (err, user) => {
+        if (err) {
+            console.error("Error registering user:", err.message);
+            return res.status(500).send("Error registering user");
+        }
+        console.log("User registered:", email);
+        res.redirect("/signin"); //  redirect works
+    });
+});
+
+// GET /signin - render login page
+router.get("/signin", (req, res) => {
+    res.render("signin", { title: "Login Page" });
+});
+
+// POST /signin - login user
+router.post(
+    "/signin",
+    passport.authenticate("local", { failureRedirect: "/signin" }),
+    (req, res) => {
+        // Redirect based on role
+        if (req.user.role === "manager") return res.redirect("/dashboard");
+        if (req.user.role === "Attendant") return res.redirect("/addsale");
+        return res.render("nonUser");
+    }
+);
+
+// GET /logout - log out user
+router.get("/logout", (req, res, next) => {
+    req.logout(err => {
+        if (err) return next(err);
+        res.redirect("/signin");
+    });
+});
+
+// GET /userlist - show all users
 router.get("/userlist", async (req, res) => {
     try {
-        const users = await UserModel.find().lean(); // fixed typo UserModelserModel -> UserModel
-        res.render("userList", { user: users }); // pass users to Pug
+        const users = await UserModel.find().lean();
+        res.render("userList", { user: users });
     } catch (err) {
         console.error("Error fetching users:", err);
         res.status(500).send("Server error");
     }
 });
 
-router.post("/signup", async (req, res) => {
-    try {
-        let existingUser = await UserModel.findOne({ email: req.body.email });
-        if (existingUser) {
-            return res.status(400).send("User already exists")
-        } else {
-            const user = new UserModel(req.body);
-            await UserModel.register(user, req.body.password, (error) => {
-                if (error) {
-                    throw error;
-                }
-                console.log(req.body);
-                return res.redirect("/signin"); //  redirect only after successful registration
-            })
-        }
-    } catch (error) {
-        res.status(400).send("Something went wrong, please try again")
-    }
-})
-
-router.get("/signin", (req, res) => {
-    res.render("signin", { title: "signin Page" });
-});
-
-// router.post(
-//     "/signin",
-//     passport.authenticate("local", { failureRedirect: "/signin" }),
-//     (req, res) => {
-//         req.session.user = req.user;
-
-//         if (req.user.role === "manager") {
-//             return res.redirect("/dashboard");
-//         } else if (req.user.role === "Attendent") {
-//             res.redirect("/addsale")
-//         } else (res.render("nonUser"))
-//     });
-
-router.get("/layout", (req, res) => {
-    if (req.session) {
-        req.session.destroy((error) => {
-            if (error) {
-                return res.status(500).send("Error loggingout")
-            }
-            res.redirect("/")
-        })
-    }
-});
-//   router.post("/layout", (req,res)=>{
-//     req.logout((error)
-// )
-//   }
-// )
 module.exports = router;

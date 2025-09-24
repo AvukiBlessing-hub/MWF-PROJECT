@@ -1,3 +1,4 @@
+// Get references to elements
 const productTypeEl = document.getElementById("productType");
 const productNameEl = document.getElementById("productName");
 const quantityEl = document.getElementById("quantity");
@@ -30,12 +31,17 @@ function calculateTotal() {
     const qty = parseFloat(quantityEl.value) || 0;
     const cost = parseFloat(costPriceEl.value) || 0;
     let total = qty * cost;
+
+    // Add 5% transport fee if checked
     if (transportEl.checked) {
         total *= 1.05;
     }
+
+    // Update total input
     totalPriceEl.value = total.toFixed(2);
 }
 
+// Add event listeners
 quantityEl.addEventListener("input", calculateTotal);
 costPriceEl.addEventListener("input", calculateTotal);
 transportEl.addEventListener("change", calculateTotal);

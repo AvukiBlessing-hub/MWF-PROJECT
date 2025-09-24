@@ -37,5 +37,41 @@ table th {
 }
 
 tr:nth-child(even) {
-    background: #fafafa;
+    background: black;
+}
+.navbar{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: black;
+    padding:  12px 20px;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  }
+
+  .navbar ul {
+    list-style:  none;
+    margin: 0;
+    padding: flex;
+    gap: 20px;
+  }
+  .navbar ul li {
+    display: inline;
+}
+
+.navbar ul li a {
+    color: #ecf0f1;            /* light gray text */
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+    padding: 8px 14px;
+    border-radius: 6px;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.navbar ul li a:hover {
+    background-color: #34495e; /* hover effect */
+    color: #ffffff;
+
 }

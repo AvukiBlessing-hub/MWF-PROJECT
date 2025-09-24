@@ -1,0 +1,17 @@
+const Sales = require('../models/salesModel');
+const Delivery = require('../models/deliveryModel');
+const Stock = require('../models/stockModel');
+
+router.get('/report', async (req, res) => {
+  try {
+    const sales = await Sales.find({}).lean();
+    const deliveries = await Delivery.find({}).lean();
+    const stock = await Stock.find({}).lean();
+
+    // Combine or calculate totals here
+    res.render('reportPage', { sales, deliveries, stock });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error loading report");
+  }
+});

@@ -1,39 +1,42 @@
 const mongoose = require('mongoose');
+
 const stockSchema = new mongoose.Schema({
   product: {
     type: String,
-    required:true,
-    // trim: true,
+    required: true,
+    trim: true,
   },
   productType: {
     type: String,
-    required:true,
-    // trim: true,
+    required: true,
+    trim: true,
   },
   quantity: {
     type: String,
-    required:true,
-    unique: true,
+    required: true,
     trim: true,
   },
-    price: {
+  quality: {
     type: String,
-    required:true,
-    },
-    sellingPrice : {
+    required: true,
+    trim: true,
+  },
+  price: {
     type: String,
-    required:true,
-    },
-    supplier: {
-        type: String,
-        reqired:  true,
-    },
-
-    date: {
-        type: String,
-        reqired:  true,
-    },
-
+    required: true,
+  },
+  sellingPrice: {
+    type: String,
+    required: true,
+  },
+  supplier: {
+    type: String,
+    required: true,
+  },
+  date: {
+    type: String,
+    required: true,
+  },
 });
 
-module.exports = mongoose.model('stockmodels', stockSchema);
+module.exports = mongoose.model('StockModel', stockSchema);

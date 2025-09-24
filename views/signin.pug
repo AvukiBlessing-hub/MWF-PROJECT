@@ -1,22 +1,29 @@
-meta(charset="UTF-8")
-meta(name="viewport", content="width=device-width,initial-scale=1")
-title Login Page
-link(rel="stylesheet", href="/CSS/signin.css")
-form(action='/signin' method='post')
-.container
-  h2 Login here
-  form#loginForm
-    //  Username 
-    label Username
-    input#username(type="text", placeholder)
-    #userError.error
-    //  Password 
-    label Password
-    input#password(type="password", placeholder)
-    #passError.error
-    //  Submit 
-    button(type="submit") Login
-  p
-    | Do not have an account? 
-    a(href="signup.html") Sign up
-script(src="signin.js")
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1")
+    title Login Page
+    link(rel="stylesheet", href="/CSS/signin.css")
+  body
+    .container
+      h2 Login here
+      form#loginForm(action="/signin", method="POST")
+        // Username (login via email)
+        label(for="email") Email
+        input#email(type="email", name="email", placeholder="", required)
+        #userError.error
+
+        // Password
+        label(for="password") Password
+        input#password(type="password", name="password", placeholder="", required)
+        #passError.error
+
+        // Submit
+        button(type="submit") Login
+
+      p
+        | Do not have an account? 
+        a(href="/signup") Sign up
+
+    script(src="signin.js")

@@ -1,24 +1,24 @@
 // ensure user is authenticated
-exports.ensureauthenticated= (req,res,next)=>{
-    if(req.session.user){
-        return next()
+// ensure user is logged in
+exports.ensureauthenticated = (req, res, next) => {
+    if (req.isAuthenticated()) {
+        return next();
     }
-    res.redirect('/login')
+    res.redirect('/signin');
 };
 
-// ensure user is a sales agent
-exports.ensureAgent= (req,res,next)=>{
-    if(req.session.user && req.session.user.role==="Attendant"){
-        return next()
+// ensure user is an Attendant
+exports.ensureAgent = (req, res, next) => {
+    if (req.isAuthenticated() && req.user.role === "Attendant") {
+        return next();
     }
-    res.redirect('/')
+    res.redirect('/');
 };
 
-// ensure the user is a manager
-
-exports.ensuremanager= (req,res,next)=>{
-    if(req.session.user && req.session.user.role==="manager"){
-        return next()
+// ensure user is a Manager
+exports.ensuremanager = (req, res, next) => {
+    if (req.isAuthenticated() && req.user.role === "manager") {
+        return next();
     }
-    res.redirect('/')
+    res.redirect('/');
 };

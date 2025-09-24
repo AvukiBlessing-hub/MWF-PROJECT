@@ -1,34 +1,72 @@
 meta(charset="UTF-8")
 meta(name="viewport", content="width=device-width,initial-scale=1")
-title Signup Page
-link(rel="stylesheet", href="/CSS/signup.css")
-.container
-  h2 Create an Account
-  form(action="/signup", method="post")
-    //  Full Name 
-    label(for="fullname") Full Name
-    input#fullname(type="text", placeholder)
-    #nameError.error
-    //  Email 
-    label(for="email") Email Address
-    input#email(type="email", placeholder)
-    #emailError.error
-    //  Username 
-    label(for="username") Username
-    input#username(type="text", placeholder)
-    //  Password 
-    label(for="password") Password
-    input#password(type="password", placeholder)
-    #passError.error
-    //  Role 
-    label(for="role") Role
-    select#role(name="role", required)
-      option(value) Select Role
-      option(value="manager") Manager
-      option(value="attendant") Attendant
-    //  Submit 
-    button(type="submit") Sign Up
-  p
-    | Already have an account? 
-    a(href="signin.html") Sign in
-script(src="signup.js")
+title Stock Registration
+link(rel="stylesheet", href="/public/css/stock.css")
+//  Navigation Bar 
+nav.navbar
+  ul
+    li
+      a(href="/stock") Stock 
+    li
+      a(href="/stocklist") Stock Table  
+    li
+      a(href="/delivery") Delivery
+    li
+      a(href="/deliverytable") Delivery Table  
+.form-container
+  form(action="stock", method="post")
+    //  Product Name 
+    .form-group
+      label(for="product") Product Name
+      select#product(name="product", required)
+        option(value) -- Select Product --
+        option(value="sofa") Sofa
+        option(value="dining-table") Dining Table
+        option(value="bed") Bed
+        option(value="chair") Chair
+        option(value="timber") Timber
+        option(value="table") Table
+        option(value="other") Other
+    //  Product Type 
+    .form-group
+      label(for="productType") Product Type
+      select#productType(name="productType", required)
+        option(value) -- Select Type --
+        option(value="furniture") Furniture
+        option(value="wood") Wood
+        option(value="raw-material") Raw Material
+        option(value="other") Other
+    //  Quantity 
+    .form-group
+      label(for="quantity") Quantity
+      input#quantity(type="number", name="quantity", min="1", required, placeholder="Enter quantity")
+    //  Quality 
+    .form-group
+      label(for="quality") Quality
+      select#quality(name="quality", required)
+        option(value) -- Select Quality --
+        option(value="high") High
+        option(value="medium") Medium
+        option(value="low") Low
+    //  Price 
+    .form-group
+      label(for="price") Unit cost Price (shs)
+      input#price(type="number", name="price", min="1", step="0.01", required, placeholder="Enter price per unit")
+    //  Unit Selling Price 
+    .form-group
+      label(for="sellingPrice") Unit Selling Price (shs)
+      input#sellingPrice(type="number", name="sellingPrice", min="1", step="0.01", required, placeholder)
+    //  Supplier 
+    .form-group
+      label(for="supplier") Supplier Name
+      input#supplier(type="text", name="supplier", minlength="3", required, placeholder="Enter supplier name")
+    //  Supplier 
+    .form-group
+      label(for="supplier") Supplier contact
+      input#supplier(type="text", name="supplier", minlength="3", required, placeholder="Enter supplier name")
+    //  Date 
+    .form-group
+      label(for="date") Date of Stock
+      input#date(type="date", name="date", required)
+    //  Submit Button 
+    button.btn(type="submit") Add Stock

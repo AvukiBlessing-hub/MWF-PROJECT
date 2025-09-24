@@ -1,10 +1,10 @@
 meta(charset="UTF-8")
 meta(name="viewport", content="width=device-width,initial-scale=1")
 title Stock Registration
-link(rel="stylesheet", href="/public/css/stock.css")
+link(rel="stylesheet", href="/css/stock.css")
 .form-container
   h2 Stock Registration Form
-  form(action=`/editstock/${item._id}?._method=PUT", method="post`)
+  form(action="/editstock/${item._id}?._method=PUT", method="post")
     //  Product Name 
     .form-group
       label(for="product") Product Name
@@ -55,4 +55,4 @@ link(rel="stylesheet", href="/public/css/stock.css")
       label(for="date") Date of Stock
       input#date(type="date", name="date", required)
     //  Submit Button 
-    button.btn(type="submit") update stock 
+    button.btn(type="submit") Add Stock

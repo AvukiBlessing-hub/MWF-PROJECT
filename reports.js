@@ -1,64 +1,49 @@
-// reports.js - Backend-ready, no dummy data
+async function loadReport(type) {
+    const reportTitle = document.getElementById('report-title');
+    const reportTable = document.getElementById('report-table');
+    const reportHeaders = document.getElementById('report-headers');
+    const reportBody = document.getElementById('report-body');
 
-// Get references to KPI elements
-const totalSalesEl = document.getElementById('total-sales');
-const transportRevenueEl = document.getElementById('transport-revenue');
-const lowStockEl = document.getElementById('low-stock');
+    reportTitle.textContent = type.charAt(0).toUpperCase() + type.slice(1) + " Report";
 
-// Tables
-const salesTableBody = document.querySelector('#sales-table tbody');
-const stockTableBody = document.querySelector('#stock-table tbody');
+    // Clear old data
+    reportHeaders.innerHTML = "";
+    reportBody.innerHTML = "";
 
-// Function to populate KPI (to be called after fetching from backend)
-function updateKPIs({ totalSales, transportRevenue, lowStockCount }) {
-    totalSalesEl.textContent = `UGX ${totalSales.toLocaleString()}`;
-    transportRevenueEl.textContent = `UGX ${transportRevenue.toLocaleString()}`;
-    lowStockEl.textContent = lowStockCount;
+    try {
+        // Fetch data from your Node.js backend (example: /api/sales, /api/stock, /api/delivery)
+        const res = await fetch(`/api/${type}`);
+        const data = await res.json();
+
+        if (data.length === 0) {
+            reportBody.innerHTML = "<tr><td colspan='5'>No data available</td></tr>";
+            reportTable.classList.remove("hidden");
+            return;
+        }
+
+        // Generate headers dynamically
+        const keys = Object.keys(data[0]);
+        keys.forEach(key => {
+            const th = document.createElement("th");
+            th.textContent = key.toUpperCase();
+            reportHeaders.appendChild(th);
+        });
+
+        // Fill table body
+        data.forEach(row => {
+            const tr = document.createElement("tr");
+            keys.forEach(key => {
+                const td = document.createElement("td");
+                td.textContent = row[key];
+                tr.appendChild(td);
+            });
+            reportBody.appendChild(tr);
+        });
+
+        reportTable.classList.remove("hidden");
+    } catch (err) {
+        console.error("Error fetching report:", err);
+        reportBody.innerHTML = "<tr><td colspan='5'>Error loading data</td></tr>";
+        reportTable.classList.remove("hidden");
+    }
 }
-
-// Function to populate sales table
-function populateSalesTable(sales) {
-    salesTableBody.innerHTML = '';
-    sales.forEach(sale => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${sale.date}</td>
-            <td>${sale.customer}</td>
-            <td>${sale.product}</td>
-            <td>${sale.quantity}</td>
-            <td>UGX ${sale.unitPrice.toLocaleString()}</td>
-            <td>UGX ${sale.total.toLocaleString()}</td>
-            <td>${sale.paymentType}</td>
-            <td>${sale.salesAgent}</td>
-            <td>${sale.transport ? 'Yes' : 'No'}</td>
-        `;
-        salesTableBody.appendChild(row);
-    });
-}
-
-// Function to populate stock table
-function populateStockTable(stock) {
-    stockTableBody.innerHTML = '';
-    stock.forEach(item => {
-        const row = document.createElement('tr');
-        if (item.quantity < 10) row.classList.add('low-stock');
-        row.innerHTML = `
-            <td>${item.name}</td>
-            <td>${item.quantity}</td>
-            <td>UGX ${item.cost.toLocaleString()}</td>
-            <td>UGX ${item.price.toLocaleString()}</td>
-        `;
-        stockTableBody.appendChild(row);
-    });
-}
-
-// Filter button handler (will fetch data from backend in real system)
-document.getElementById('apply-filters').addEventListener('click', () => {
-    // Example: fetchReports({ from: ..., to: ..., paymentType: ..., salesAgent: ... });
-    console.log('Filters applied! Backend fetch to be implemented.');
-});
-
-// Example usage:
-// updateKPIs({ totalSales: 0, transportRevenue: 0, lowStockCount: 0 });
-// populateSalesTable([]);
-// populateStockTable([]);

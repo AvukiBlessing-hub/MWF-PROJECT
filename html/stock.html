@@ -9,9 +9,18 @@
 </head>
 
 <body>
-    <div class="form-container">
+     <!-- Navigation Bar -->
+    <nav class="navbar">
+        <ul>
+            <li><a href="stock.html">Stock</a></li>
+            <li><a href="stocktable.html">Stock Table</a></li>
+            <li><a href="delivery.html">Delivery</a></li>
+            <li><a href="deliverytable.html">Delivery Table</a></li>
+        </ul>
+    </nav>
 
-        <h2>Stock Registration Form</h2>
+   
+    <div class="form-container">
         <form action="#" method="post">
 
             <!-- Product Name -->
@@ -28,7 +37,6 @@
                     <option value="other">Other</option>
                 </select>
             </div>
-
             <!-- Product Type -->
             <div class="form-group">
                 <label for="productType">Product Type</label>
@@ -41,12 +49,12 @@
                 </select>
             </div>
 
+
             <!-- Quantity -->
             <div class="form-group">
                 <label for="quantity">Quantity</label>
                 <input type="number" id="quantity" name="quantity" min="1" required placeholder="Enter quantity">
             </div>
-
             <!-- Quality -->
             <div class="form-group">
                 <label for="quality">Quality</label>
@@ -58,26 +66,32 @@
                 </select>
             </div>
 
-            <!-- Unit Price -->
+            <!-- Price -->
             <div class="form-group">
-                <label for="price">Unit Cost Price (shs)</label>
+                <label for="price">Unit cost Price (shs)</label>
                 <input type="number" id="price" name="price" min="1" step="0.01" required
-                    placeholder="">
+                    placeholder="Enter price per unit">
             </div>
-
             <!-- Unit Selling Price -->
             <div class="form-group">
                 <label for="sellingPrice">Unit Selling Price (shs)</label>
-                <input type="number" id="sellingPrice" name="sellingPrice" min="1" step="0.01" required
-                    placeholder="">
+                <input type="number" id="sellingPrice" name="sellingPrice" min="1" step="0.01" required placeholder="">
             </div>
+
 
             <!-- Supplier -->
             <div class="form-group">
                 <label for="supplier">Supplier Name</label>
                 <input type="text" id="supplier" name="supplier" minlength="3" required
-                    placeholder="">
+                    placeholder="Enter supplier name">
             </div>
+            <!-- Supplier -->
+            <div class="form-group">
+                <label for="supplier">Supplier contact</label>
+                <input type="text" id="supplier" name="supplier" minlength="3" required
+                    placeholder="Enter supplier name">
+            </div>
+
 
             <!-- Date -->
             <div class="form-group">
