@@ -1,0 +1,64 @@
+meta(charset="UTF-8")
+meta(name="viewport", content="width=device-width,initial-scale=1")
+title MWF Sales Page
+link(rel="stylesheet", href="/CSS/sales.css")
+//  Navigation Bar 
+nav.navbar
+  ul
+    li
+      a(href="stock.html") Stock
+    li
+      a(href="stocktable.html") Stock Table
+    li
+      a(href="delivery.html") Delivery
+    li
+      a(href="deliverytable.html") Delivery Table
+.container
+  h1 Record a Sale
+  form(action="/sales", method="POST")
+    //  Customer Name 
+    label(for="customerName") Customer Name
+    input#customerName(type="text", name="customerName", required)
+    //  Product Type 
+    label(for="productType") Product Type
+    select#productType(name="productType", required)
+      option(value) -- Select Type --
+      option(value="wood") Wood
+      option(value="furniture") Furniture
+    //  Product Name 
+    label(for="productName") Product Name
+    select#productName(name="productName", required)
+      option(value) -- Select Product --
+      option(value="sofa") Sofa
+      option(value="dining-table") Dining Table
+      option(value="bed") Bed
+      option(value="chair") Chair
+      option(value="timber") Timber
+      option(value="table") Table
+      option(value="other") Other
+    //  Quantity 
+    label(for="quantity") Quantity
+    input#quantity(type="number", name="quantity", min="1", required)
+    //  Quality 
+    label(for="quality") Quality
+    select#quality(name="quality", required)
+      option(value) -- Select Quality --
+      option(value="high") High
+      option(value="medium") Medium
+      option(value="low") Low
+    //  Cost Price 
+    label(for="costPrice") Cost Price (per unit)
+    input#costPrice(type="number", name="costPrice", min="0", step="0.01", required)
+    //  Transport Fee 
+    .checkbox
+      input#transport(type="checkbox", name="transport")
+      label(for="transport") Add 5% Transport Fee
+    //  Sales Agent Name 
+    label(for="salesAgent") Sales Agent
+    input#salesAgent(type="text", name="salesAgent", required)
+    //  Total Price 
+    label(for="totalPrice") Total Price
+    input#totalPrice(type="text", name="totalPrice", readonly)
+    //  Submit 
+    button.btn(type="submit") ➕ Add Sale
+script(src="/public/sales.js")

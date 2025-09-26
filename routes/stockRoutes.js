@@ -1,8 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const { ensureauthenticated, ensuremanager } = require("../middleware/auth");
+const moment = require("moment");
 
 const stockModel = require("../models/stockModel");
+
 
 // Stock page
 router.get("/stock", ensureauthenticated, ensuremanager, (req, res) => {
@@ -25,12 +27,13 @@ router.post("/stock", async (req, res) => {
 router.get("/stocklist", async (req, res) => {
   try {
     let items = await stockModel.find().sort({ $natural: -1 });
-    res.render("stocktable", { items });
+    res.render("stocktable", { items, moment }); // <-- pass moment here
   } catch (error) {
     console.error("Error fetching items", error.message);
     res.status(400).send("Unable to get data from the database.");
   }
 });
+
 
 // Dashboard
 router.get("/dashboard", ensureauthenticated, ensuremanager, (req, res) => {
@@ -51,7 +54,7 @@ router.get("/editstock/:id", async (req, res) => {
   }
 });
 
-router.put("/editstock/:id", async (req, res) => {
+router.post("/editstock/:id", async (req, res) => {
   try {
     const product = await stockModel.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!product) {
@@ -68,7 +71,7 @@ router.put("/editstock/:id", async (req, res) => {
 router.post("/deletestock", ensureauthenticated, async (req, res) => {
   try {
     await stockModel.deleteOne({ _id: req.body.id });
-    res.redirect("back");
+    res.redirect("deletestock");
   } catch (error) {
     console.log(error.message);
     res.status(400).send("Unable to delete item from the database.");

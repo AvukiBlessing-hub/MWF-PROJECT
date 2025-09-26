@@ -9,7 +9,7 @@
 </head>
 
 <body>
-     <!-- Navigation Bar -->
+    <!-- Navigation Bar -->
     <nav class="navbar">
         <ul>
             <li><a href="stock.html">Stock</a></li>
@@ -19,7 +19,6 @@
         </ul>
     </nav>
 
-   
     <div class="container">
         <h1>Record a Sale</h1>
 
@@ -66,17 +65,19 @@
             <label for="costPrice">Cost Price (per unit)</label>
             <input type="number" id="costPrice" name="costPrice" min="0" step="0.01" required>
 
-             <!-- Transport Fee -->
+            <!-- Transport Fee -->
             <div class="checkbox">
                 <input type="checkbox" id="transport" name="transport">
                 <label for="transport">Add 5% Transport Fee</label>
             </div>
 
+            <!-- Sales Agent Name -->
+            <label for="salesAgent">Sales Agent</label>
+            <input type="text" id="salesAgent" name="salesAgent" required>
+
             <!-- Total Price -->
             <label for="totalPrice">Total Price</label>
             <input type="text" id="totalPrice" name="totalPrice" readonly>
-
-           
 
             <!-- Submit -->
             <button type="submit" class="btn">➕ Add Sale</button>

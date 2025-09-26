@@ -1,35 +1,55 @@
 meta(charset="UTF-8")
 meta(name="viewport", content="width=device-width,initial-scale=1")
 title MWF Delivery Page
-link(rel="stylesheet", href="/public/CSS/delivery.css")
+link(rel="stylesheet", href="/CSS/delivery.css")
+
+// Navigation Bar 
+nav.navbar
+  ul
+    li
+      a(href="stock.html") Stock
+    li
+      a(href="stocktable.html") Stocklist 
+    li
+      a(href="delivery.html") Delivery
+    li
+      a(href="deliverytable.html") Deliverylist 
+
 .container
   h1 Delivery Management
-  form(action="/delivery", method="post")
-  label Customer Name
-  input#customerName(type="text", placeholder)
-  label Delivery Address
-  input#customerAddress(type="text", placeholder)
-  label Product Name
-  input#productName(type="text", placeholder)
-  label Quantity
-  input#quantity(type="number", placeholder)
-  label Payment Method
-  select#paymentType
-    option(value) -- Select Payment --
-    option(value="cash") Cash
-    option(value="cheque") Cheque
-    option(value="overdraft") Bank Overdraft
-  label Base Price
-  input#basePrice(type="number", placeholder)
-  .checkbox
-    input#transport(type="checkbox")
-    label(for="transport") Add 5% Transport Fee
-  p.total#totalPrice Total:
-  label Delivery Status
-  select#deliveryStatus
-    option(value="pending") Pending
-    option(value="dispatched") Dispatched
-    option(value="delivered") Delivered
-  button(onclick="processDelivery()") Save Delivery
-  p.status#statusMessage
-script(src="delivery.js")
+  form(action="/delivery", method="POST")
+    label Customer Name
+    input#customerName(type="text", name="customerName", required)
+
+    label Delivery Address
+    input#customerAddress(type="text", name="customerAddress", required)
+
+    label Product Name
+    input#productName(type="text", name="productName", required)
+
+    label Quantity
+    input#quantity(type="number", name="quantity", required)
+
+    label Payment Method
+    select#paymentType(name="paymentType", required)
+      option(value) -- Select Payment --
+      option(value="cash") Cash
+      option(value="cheque") Cheque
+      option(value="overdraft") Bank Overdraft
+
+    label Base Price
+    input#basePrice(type="number", name="basePrice", required)
+
+    .checkbox
+      input#transport(type="checkbox", name="transport")
+      label(for="transport") Add 5% Transport Fee
+
+    label Delivery Status
+    select#deliveryStatus(name="deliveryStatus")
+      option(value="pending") Pending
+      option(value="dispatched") Dispatched
+      option(value="delivered") Delivered
+
+    button(type="submit") Save Delivery
+
+script(src="/js/delivery.js")

@@ -4,7 +4,7 @@ title Stock Registration
 link(rel="stylesheet", href="/css/stock.css")
 .form-container
   h2 Stock Registration Form
-  form(action="/editstock/${item._id}?._method=PUT", method="post")
+  form(action=`/editstock/${product ._id}?_method=PUT`, method="post")
     //  Product Name 
     .form-group
       label(for="product") Product Name
@@ -16,7 +16,7 @@ link(rel="stylesheet", href="/css/stock.css")
         option(value="chair") Chair
         option(value="timber") Timber
         option(value="table") Table
-        option(value="other") Other
+        option(value="other") Other   
     //  Product Type 
     .form-group
       label(for="productType") Product Type

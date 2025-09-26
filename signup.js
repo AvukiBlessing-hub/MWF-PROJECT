@@ -1,12 +1,5 @@
-const form = document.getElementById('signupForm');
-const fullname = document.getElementById('fullname');
-const email = document.getElementById('email');
-const password = document.getElementById('password');
-const nameError = document.getElementById('nameError');
-const emailError = document.getElementById('emailError');
-const passError = document.getElementById('passError');
-
 form.addEventListener('submit', function (e) {
+    // Prevent default only temporarily
     e.preventDefault();
     let valid = true;
 
@@ -21,9 +14,9 @@ form.addEventListener('submit', function (e) {
 
     // Validate Email with regex
     const emailValue = email.value.trim();
-    const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(emailValue)) {
-        // emailError.textContent = "Please enter a valid email address.";
+        emailError.textContent = "Please enter a valid email address.";
         valid = false;
     } else {
         emailError.textContent = "";
@@ -37,8 +30,8 @@ form.addEventListener('submit', function (e) {
         passError.textContent = "";
     }
 
+    // If valid, submit the form to backend
     if (valid) {
-        alert("Signup successful!");
-        form.reset();
+        form.submit(); // <-- let the browser send the request to Express
     }
 });

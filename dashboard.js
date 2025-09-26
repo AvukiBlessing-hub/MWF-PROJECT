@@ -1,90 +1,102 @@
-// Sample sales data (replace with data from your sales page dynamically)
+const apiBase = '/api'; // adjust if needed
 
-let salesData = [
-    { date: '2025-09-01', amount: 200 },
-    { date: '2025-09-02', amount: 450 },
-    { date: '2025-09-03', amount: 300 },
-];
-
-
-//  load data
-
-
-// Sample stock data (replace with your stock page dynamically)
-let stock1Data = [
-    { product: 'Bed', type: 'Furniture', quality: 'High', quantity: 10, cost: 150 },
-    { product: 'Sofa', type: 'Furniture', quality: 'Medium', quantity: 5, cost: 250 },
-    { product: 'Table', type: 'Furniture', quality: 'High', quantity: 8, cost: 100 },
-];
-
-// Function to calculate total sales
-function updateTotalSales() {
-    let total = salesData.reduce((sum, sale) => sum + sale.amount, 0);
-    document.getElementById('totalSales').innerText = `$${total}`;
+async function fetchData(endpoint) {
+  try {
+    const res = await fetch(apiBase + endpoint);
+    if (!res.ok) throw new Error(res.statusText);
+    return await res.json();
+  } catch (e) {
+    console.error('Error loading', endpoint, e);
+    return [];
+  }
 }
 
-// Function to calculate total stock
-function updateTotalStock() {
-    let totalQty = stockData.reduce((sum, item) => sum + item.quantity, 0);
-    document.getElementById('totalStock').innerText = totalQty;
-}
-
-// Populate stock table
-function populateStockTable() {
-    const tbody = document.getElementById('stockTable').querySelector('tbody');
-    tbody.innerHTML = '';
-    stockData.forEach(item => {
-        let row = `<tr>
-            <td>${item.product}</td>
-            <td>${item.type}</td>
-            <td>${item.quality}</td>
-            <td>${item.quantity}</td>
-            <td>$${item.cost}</td>
-        </tr>`;
-        tbody.innerHTML += row;
+function renderTable(containerId, data, columns) {
+  const container = document.getElementById(containerId);
+  if (!data || data.length === 0) {
+    container.innerHTML = '<div class="empty">No data available</div>';
+    return;
+  }
+  let html = '<table><thead><tr>';
+  columns.forEach(col => html += `<th>${col.title}</th>`);
+  html += '</tr></thead><tbody>';
+  data.forEach(row => {
+    html += '<tr>';
+    columns.forEach(col => {
+      const value = row[col.key] || '';
+      html += `<td>${value}</td>`;
     });
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  container.innerHTML = html;
 }
 
-// Setup sales chart using Chart.js
-const ctx = document.getElementById('salesChart').getContext('2d');
-const salesChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: salesData.map(s => s.date),
-        datasets: [{
-            label: 'Sales Amount ($)',
-            data: salesData.map(s => s.amount),
-            backgroundColor: 'rgba(0, 123, 255, 0.2)',
-            borderColor: 'rgba(0, 123, 255, 1)',
-            borderWidth: 2,
-            fill: true,
-            tension: 0.3
-        }]
-    },
-    options: {
-        responsive: true,
-        plugins: {
-            legend: { display: false }
-        },
-        scales: {
-            y: { beginAtZero: true }
-        }
-    }
-});
+async function loadDashboard() {
+  // Metrics
+  const metrics = await fetchData('/metrics');
+  document.getElementById('stockValue').textContent =
+    metrics.totalStockValue ? `UGX ${metrics.totalStockValue}` : '—';
+  document.getElementById('salesToday').textContent =
+    metrics.totalSalesToday ? `UGX ${metrics.totalSalesToday}` : '—';
+  document.getElementById('pendingDeliveries').textContent =
+    metrics.pendingDeliveries ?? '—';
+  document.getElementById('lowStock').textContent =
+    metrics.lowStockCount ?? '—';
 
-// Function to update dashboard dynamically
-function updateDashboard() {
-    updateTotalSales();
-    updateTotalStock();
-    populateStockTable();
-    salesChart.data.labels = salesData.map(s => s.date);
-    salesChart.data.datasets[0].data = salesData.map(s => s.amount);
-    salesChart.update();
+  // Sales
+  const sales = await fetchData('/sales');
+  renderTable('salesTable', sales, [
+    {key: 'date', title: 'Date'},
+    {key: 'customerName', title: 'Customer'},
+    {key: 'productName', title: 'Product'},
+    {key: 'quantity', title: 'Qty'},
+    {key: 'totalPrice', title: 'Total'},
+    {key: 'paymentType', title: 'Payment'},
+    {key: 'salesAgent', title: 'Agent'}
+  ]);
+
+  // Stock
+  const stock = await fetchData('/stock');
+  renderTable('stockTable', stock, [
+    {key: 'productName', title: 'Product'},
+    {key: 'productType', title: 'Type'},
+    {key: 'quantity', title: 'Qty'},
+    {key: 'costPrice', title: 'Cost'},
+    {key: 'productPrice', title: 'Price'},
+    {key: 'supplierName', title: 'Supplier'}
+  ]);
+
+  // Deliveries
+  const deliveries = await fetchData('/deliveries');
+  renderTable('deliveryTable', deliveries, [
+    {key: 'scheduledAt', title: 'Due'},
+    {key: 'customerName', title: 'Customer'},
+    {key: 'status', title: 'Status'},
+    {key: 'assignedTo', title: 'Driver'}
+  ]);
+
+  // Receipts
+  const receipts = await fetchData('/receipts');
+  renderTable('receiptsTable', receipts, [
+    {key: 'receiptNo', title: 'Receipt'},
+    {key: 'amount', title: 'Amount'},
+    {key: 'paymentType', title: 'Payment'},
+    {key: 'date', title: 'Date'}
+  ]);
+
+  // Reports
+  const reports = await fetchData('/reports');
+  const reportsDiv = document.getElementById('reportsList');
+  if (!reports || reports.length === 0) {
+    reportsDiv.innerHTML = '<div class="empty">No reports available</div>';
+  } else {
+    reportsDiv.innerHTML = reports.map(r =>
+      `<div class="card"><strong>${r.name}</strong><br>
+      ${r.periodStart} — ${r.periodEnd}<br>
+      <a href="${r.url || '#'}">Download</a></div>`
+    ).join('');
+  }
 }
 
-// Initial load
-updateDashboard();
-
-// Example: dynamically adding a new sale
-// salesData.push({ date: '2025-09-04', amount: 500 });
-// updateDashboard();
+loadDashboard();

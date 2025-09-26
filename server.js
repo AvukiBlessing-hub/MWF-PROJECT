@@ -1,26 +1,30 @@
-1.//Dependencies
+// 1. Dependencies
 require("dotenv").config();
-const express = require('express');
+const express = require("express");
 const path = require("path");
-const mongoose = require('mongoose');
-const passport =require("passport");
-const expressSession =require("express-session");
+const mongoose = require("mongoose");
+const passport = require("passport");
+const expressSession = require("express-session");
 const MongoStore = require("connect-mongo");
+const methodOverride = require("method-override");
 const moment = require("moment");
 
-
-//import routes
-
+// import routes
 const classRoutes = require("./routes/classRoutes");
 const authRoutes = require("./routes/authRoutes");
 const stockRoutes = require("./routes/stockRoutes");
 const userModel = require("./models/userModel");
-2.//Instantiations
+const salesRoutes = require("./routes/salesRoutes");
+const deliveryRoutes = require("./routes/deliveryRoutes");
+
+
+// 2. Instantiations
 const app = express();
+const port = 5000; // you can change the port here always
 
-const port =5000; // you can change the port here always
 
-3.//Configurations   // setting up mongo connection
+// 3. Configurations
+app.locals.moment = moment;
 console.log("MONGODB_URI from env:", process.env.MONGODB_URI);
 mongoose.connect(process.env.MONGODB_URI, {
   // useNewUrlParser: true,
@@ -34,19 +38,15 @@ mongoose.connection
     console.log(`Connection error: ${err.message}`);
   });
 
-  // setting veiw engine to pug
+// setting veiw engine to pug
 app.set("view engine", "pug");
 app.set("views", path.join(__dirname, "views"));
 
-// // routing
-// app.get('/', (req,res) => {
-//     res.send('Homepage! Hello world.')
-//     })
 
-// 4 Middleware
-// app.use(express.static('public'));
+// 4. Middleware
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
+
 // express session config
 app.use(expressSession({
   secret: process.env.SESSION_SECRET,
@@ -64,54 +64,26 @@ passport.use(userModel.createStrategy());
 passport.serializeUser(userModel.serializeUser());
 passport.deserializeUser(userModel.deserializeUser());
 
-
-
-
-
-// // Simple request time logger
-// app.use((req, res, next) => {
-//    console.log("A new request received at " + Date.now());
-
-//    // This function call tells that more processing is
-//    // required for the current request and is in the next middleware
-// //    function/route handler.
-//    next();  
-// });
-
-
-// app.use((req, res, next) => {
-//   console.log('A new request received at ' + Date.now());
-//   next();
-// });
 app.use((req, res, next) => {
   console.log('A new request received at ' + Date.now());
   next();
 });
 
-5.//Routes
-//using imported routes
-// app.use('/',classRoutes)
-app.use('/',authRoutes);
-app.use('/',stockRoutes)
+
+// 5. Routes
+app.use('/', authRoutes);
+app.use('/', stockRoutes);
+app.use('/', salesRoutes);
+
+//  add delivery routes here
+app.use('/', deliveryRoutes);
 
 
-
-
-
-
-
-
-
-//non existing route
+// non existing route
 app.use((req,res)=>{
     res.status(404).send('Oops! Route not found')
 });
 
 
-
-
-
-//5 Bootstrapping Server
-// this should always be the last line in this file.
+// 6. Bootstrapping Server
 app.listen(port, () => console.log(`listening on port ${port}`));
-

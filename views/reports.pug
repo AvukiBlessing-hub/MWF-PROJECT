@@ -1,0 +1,37 @@
+meta(charset="UTF-8")
+meta(name="viewport", content="width=device-width,initial-scale=1")
+title MWF Reports
+link(rel="stylesheet", href="/CSS/reports.css")
+//  Navigation Bar 
+nav.navbar
+  ul
+    li
+      a(href="stock.html") Stock
+    li
+      a(href="stocktable.html") Stock Table
+    li
+      a(href="delivery.html") Delivery
+    li
+      a(href="deliverytable.html") Delivery Table
+br
+br
+header
+  h1 MWF Reports Dashboard
+  form(action="/addsale", method="POST")
+section#report-section
+  h2#report-title Select a Report
+  nav
+    button(onclick="loadReport(\'sales\')") Sales Report
+    br
+    br
+    button(onclick="loadReport(\'stock\')") Stock Report
+    br
+    br
+    button(onclick="loadReport(\'delivery\')") Delivery Report
+    br
+    br
+  table#report-table.hidden
+    thead
+      tr#report-headers
+    tbody#report-body
+script(src="/js/reports.js")

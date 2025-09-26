@@ -10,23 +10,22 @@ router.get("/signup", (req, res) => {
 
 // POST /signup - register new user
 router.post("/signup", (req, res) => {
-    const { fullname, email, role, password } = req.body;
+  const { fullname, email, role, password } = req.body;
+  console.log( "signup request body:", req.body); // Debug
 
-    if (!email || !password) {
-        return res.status(400).send("Email and password are required");
+  if (!email || !password || !role) {
+    return res.status(400).send("All fields are required");
+  }
+   const newUser = new UserModel({ fullname, email, role });
+
+  UserModel.register(newUser, password, (err, user) => {
+    if (err) {
+      console.error("Error registering user:", err);
+      return res.status(500).send("Error registering user");
     }
-
-    const newUser = new UserModel({ fullname, email, role });
-
-    // Use callback style for reliable redirect
-    UserModel.register(newUser, password, (err, user) => {
-        if (err) {
-            console.error("Error registering user:", err.message);
-            return res.status(500).send("Error registering user");
-        }
-        console.log("User registered:", email);
-        res.redirect("/signin"); //  redirect works
-    });
+    console.log("User registered:", email);
+    res.redirect("/signin");
+  });
 });
 
 // GET /signin - render login page
@@ -40,8 +39,8 @@ router.post(
     passport.authenticate("local", { failureRedirect: "/signin" }),
     (req, res) => {
         // Redirect based on role
-        if (req.user.role === "manager") return res.redirect("/dashboard");
-        if (req.user.role === "Attendant") return res.redirect("/addsale");
+        if (req.user.role === "manager") return res.redirect("/stock");
+        if (req.user.role === "Attendant") return res.redirect("/sales");
         return res.render("nonUser");
     }
 );

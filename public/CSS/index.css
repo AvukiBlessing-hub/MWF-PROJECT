@@ -4,7 +4,8 @@ body {
     background: #f4f4f4;
     text-align: center;
     font-size: larger;
-    background: url(../image/lates.jpg) no-repeat center/cover;
+    background: url(../image/me.jpg);
+   
     
 }
 
@@ -14,8 +15,9 @@ body {
     justify-content: center;
     align-items: center;
     
-    color: darkgoldenrod;
+    color: white;
 }
+ 
 
 /* .hero-content {
     background: rgba(183, 17, 17, 0.6);
@@ -50,7 +52,7 @@ p {
 }
 
 .btn.signup:hover {
-    background: #1e8449;
+    background: gray;
 }
 
 .btn.signin {
@@ -60,4 +62,33 @@ p {
 
 .btn.signin:hover {
     background: #1c5985;
+}
+
+/* Remove underline and make links look like buttons */
+a.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: bold;
+  text-decoration: none;   /* removes underline */
+  color: #fff;
+  transition: background 0.3s ease;
+}
+
+/* Sign up button */
+a.btn.signup {
+  background: gray;  /* green */
+}
+
+a.btn.signup:hover {
+  background: gray;
+}
+
+/* Sign in button */
+a.btn.signin {
+  background: peru;  /* blue */
+}
+
+a.btn.signin:hover {
+  background: peru;
 }

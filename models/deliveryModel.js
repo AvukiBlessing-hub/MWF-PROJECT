@@ -1,44 +1,45 @@
+// models/deliveryModel.js
 const mongoose = require('mongoose');
+
 const deliverySchema = new mongoose.Schema({
   customerName: {
     type: String,
-    required:true,
-    // trim: true,
+    required: true,
   },
   customerAddress: {
     type: String,
-    required:true,
-    // trim: true,
+    required: true,
   },
   productName: {
     type: String,
-    required:true,
-    unique: true,
+    required: true,
     trim: true,
   },
-   quantity : {
+  quantity: {
+    type: Number,
+    required: true,
+  },
+  paymentType: {
     type: String,
-    required:true,
-    },
-    paymentType : {
+    required: true,
+  },
+  basePrice: {
+    type: Number,
+    required: true,
+  },
+  transport: {
+    type: Boolean, // better as true/false
+    default: false,
+  },
+  totalPrice: {
+    type: Number,
+    required: true,
+  },
+  deliveryStatus: {
     type: String,
-    required:true,
-    },
-    basePrice: {
-        type: String,
-        reqired:  true,
-    },
+    enum: ["pending", "dispatched", "delivered"],
+    default: "pending",
+  },
+}, { timestamps: true });
 
-    transport: {
-        type: String,
-        reqired:  true,
-    },
-     totalPrice: {
-        type: String,
-        reqired:  true,
-    },
-
-
-});
-
-module.exports = mongoose.model('deliveryModel', deliverySchema);
+module.exports = mongoose.model('Delivery', deliverySchema);

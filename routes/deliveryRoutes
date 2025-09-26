@@ -1,17 +1,104 @@
-const Sales = require('../models/salesModel');
-const Delivery = require('../models/deliveryModel');
-const Stock = require('../models/stockModel');
+const express = require("express");
+const router = express.Router();
+const { ensureauthenticated, ensuremanager } = require("../middleware/auth");
+const moment = require("moment");
 
-router.get('/report', async (req, res) => {
+const deliveryModel = require("../models/deliveryModel");
+
+
+// Stock page
+router.get("/delivery", ensureauthenticated, ensuremanager, (req, res) => {
+  res.render("delivery", { title: "delivery Page" });
+});
+
+router.post("/delivery", async (req, res) => {
   try {
-    const sales = await Sales.find({}).lean();
-    const deliveries = await Delivery.find({}).lean();
-    const stock = await Stock.find({}).lean();
+    const { customerName, customerAddress, productName, quantity, paymentType, basePrice, transport, deliveryStatus } = req.body;
 
-    // Combine or calculate totals here
-    res.render('reportPage', { sales, deliveries, stock });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Error loading report");
+    // Convert values properly
+    const base = Number(basePrice) || 0;
+    const qty = Number(quantity) || 1;
+    const hasTransport = transport === "on" || transport === true;
+
+    // Calculate transport fee + total
+    const transportFee = hasTransport ? base * 0.05 : 0;
+    const totalPrice = (base + transportFee) * qty;
+
+    const delivery = new deliveryModel({
+      customerName,
+      customerAddress,
+      productName,
+      quantity: qty,
+      paymentType,
+      basePrice: base,
+      transport: hasTransport,
+      totalPrice,
+      deliveryStatus,
+    });
+
+    await delivery.save();
+    console.log("Delivery saved:", delivery);
+    res.redirect("/deliverylist");
+  } catch (error) {
+    console.error(" Error saving delivery:", error.message);
+    res.redirect("/delivery");
   }
 });
+
+// Get delivery list
+router.get("/deliverylist", async (req, res) => {
+  console.log("Get/deliverylist reached")
+  try {
+    let deliveries = await deliveryModel.find().sort({ $natural: -1 });
+    res.render("deliverylist", { deliveries, moment });
+  } catch (error) {
+    console.error("Error fetching items", error.message);
+    res.status(400).send("Unable to get data from the database.");
+  }
+});
+
+
+// Dashboard
+router.get("/dashboard", ensureauthenticated, ensuremanager, (req, res) => {
+  res.render("dashboard", { title: "Dashboard Page" });
+});
+
+// Edit delivery
+router.get("/editdelivery/:id", async (req, res) => {
+  try {
+    const product = await deliveryModel.findById(req.params.id);
+    if (!product) {
+      return res.status(404).send("delivery not found");
+    }
+    res.render("editdelivery", { product });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error loading edit form");
+  }
+});
+
+router.post("/editdelivery/:id", async (req, res) => {
+  try {
+    const product = await deliveryModel.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!product) {
+      return res.status(404).send("delivery not found");
+    }
+    res.redirect("/deliverylist");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error updating delivey");
+  }
+});
+
+// Delete delivery
+router.post("/deletedelivery", ensureauthenticated, async (req, res) => {
+  try {
+    await deliveryModel.deleteOne({ _id: req.body.id });
+    res.redirect("deletedelivery");
+  } catch (error) {
+    console.log(error.message);
+    res.status(400).send("Unable to delete item from the database.");
+  }
+});
+
+module.exports = router;

@@ -1,0 +1,33 @@
+meta(charset="UTF-8")
+meta(name="viewport", content="width=device-width,initial-scale=1")
+title Sales Table
+link(rel="stylesheet", href="CSS/salestable.css")
+//  Navigation Bar 
+nav.navbar
+  ul
+    li
+      a(href="stock.html") Stock
+    li
+      a(href="stocktable.html") Stocklist 
+    li
+      a(href="delivery.html") Delivery
+    li
+      a(href="deliverytable.html") Deliverylist 
+.container
+  h1 Sales Table
+  //  Sales Table 
+  table#salesTable
+    thead
+      tr
+        th Customer Name
+        th Product Type
+        th Product Name
+        th Quantity
+        th Quality
+        th Cost Price
+        th checkbox
+        th salesAgent
+        th Total Price
+    tbody
+      //  Data will be added here 
+script(src="/public/salestable.js")
