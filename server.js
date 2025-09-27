@@ -46,6 +46,7 @@ app.set("views", path.join(__dirname, "views"));
 // 4. Middleware
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride("_method"));
 
 // express session config
 app.use(expressSession({

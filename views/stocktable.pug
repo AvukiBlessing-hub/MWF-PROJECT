@@ -1,5 +1,5 @@
 meta(charset="UTF-8")
-meta(name="viewport", content="width=device-width,initial-scale=1")
+meta(name="viewport", content="width=device-width, initial-scale=1")
 title Stock Table
 link(rel="stylesheet", href="/css/stocktable.css")
 
@@ -9,7 +9,7 @@ nav.navbar
     li
       a(href="/stock") Stock
     li
-      a(href="/stocktable") Stocklist
+      a(href="/stocklist") Stocklist
     li
       a(href="/delivery") Delivery
     li
@@ -24,8 +24,8 @@ nav.navbar
         th Product Type
         th Quantity
         th Quality
-        th Unit Cost Price (shs)
-        th Unit Selling Price (shs)
+        th Cost Price (shs)
+        th Selling Price (shs)
         th Supplier Name
         th Date
         th Edit
@@ -34,20 +34,19 @@ nav.navbar
       if items && items.length
         each item in items
           tr
-            td #{item.product}
+            td #{item.productName}
             td #{item.productType}
             td #{item.quantity}
             td #{item.quality}
-            td #{item.price}
+            td #{item.costPrice}
             td #{item.sellingPrice}
-            td #{item.supplier}
-            td #{moment(item.date).format("DD-MM-YYYY")} 
+            td #{item.supplierName}
+            td #{moment(item.date).format("DD-MM-YYYY")}
             td
               a.btn.btn-warning(href=`/editstock/${item._id}`) Edit
             td
-              form(method='post', action='/deletestock')
-                input(type="hidden", name='id', value=item._id)
-                button.btn.btn-danger.btn-block(type='submit') Delete
+              form(method='post', action=`/deletestock/${item._id}`)
+                button.btn.btn-danger(type='submit') Delete
       else
         tr
           td(colspan="10", style="text-align:center") No stock available

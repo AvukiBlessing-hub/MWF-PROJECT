@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { ensureauthenticated, ensureAgent } = require("../middleware/auth");
 const salesModel = require("../models/SalesModel");
-const stockModel = require("../models/stockModel")
+const stockModel = require("../models/stockModel");
 
 // GET /addsale - Show sales form
 router.get("/addsale", ensureauthenticated, ensureAgent, async (req, res) => {
@@ -15,8 +15,8 @@ router.get("/addsale", ensureauthenticated, ensureAgent, async (req, res) => {
   }
 });
 
-// POST /sales - Save sale
-router.post("/sales", ensureauthenticated, ensureAgent, async (req, res) => {
+// POST /addsale - Save sale
+router.post("/addsale", ensureauthenticated, ensureAgent, async (req, res) => {
   try {
     const {
       customerName,
@@ -66,6 +66,18 @@ router.post("/sales", ensureauthenticated, ensureAgent, async (req, res) => {
   } catch (error) {
     console.error(error.message);
     res.redirect("/addsale");
+  }
+});
+
+//  ADD THIS ROUTE HERE
+router.get("/saleslist", ensureauthenticated, ensureAgent, async (req, res) => {
+  try {
+    const currentUser = req.session.user;
+    const sales = await salesModel.find().populate("salesAgent", "fullName");
+    res.render("salestable", { sales, currentUser });
+  } catch (error) {
+    console.error(error.message);
+    res.redirect("/");
   }
 });
 

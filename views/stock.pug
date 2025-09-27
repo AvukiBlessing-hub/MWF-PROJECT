@@ -8,7 +8,7 @@ link(rel="stylesheet", href="/css/stock.css")
     //  Product Name 
     .form-group
       label(for="product") Product Name
-      select#product(name="product", required)
+      select#productName(name="productName", required)
         option(value) -- Select Product --
         option(value="sofa") Sofa
         option(value="dining-table") Dining Table
@@ -16,7 +16,8 @@ link(rel="stylesheet", href="/css/stock.css")
         option(value="chair") Chair
         option(value="timber") Timber
         option(value="table") Table      
-        option(value="other") Other
+        option(value="poles") poles
+        option(value="Hardwood") Hardwood
     //  Product Type 
     .form-group
       label(for="productType") Product Type
@@ -24,8 +25,6 @@ link(rel="stylesheet", href="/css/stock.css")
         option(value) -- Select Type --
         option(value="furniture") Furniture
         option(value="wood") Wood
-        option(value="raw-material") Raw Material
-        option(value="other") Other
     //  Quantity 
     .form-group
       label(for="quantity") Quantity
@@ -40,16 +39,16 @@ link(rel="stylesheet", href="/css/stock.css")
         option(value="low") Low
     //  Unit Price 
     .form-group
-      label(for="price") Unit Cost Price (shs)
-      input#price(type="number", name="price", min="1", step="0.01", required, placeholder)
+      label(for="costPrice") Unit Cost Price (shs)
+      input#costPrice(type="number", name="costPrice", min="1", step="0.01", required, placeholder)
     //  Unit Selling Price 
     .form-group
       label(for="sellingPrice") Unit Selling Price (shs)
       input#sellingPrice(type="number", name="sellingPrice", min="1", step="0.01", required, placeholder)
     //  Supplier 
     .form-group
-      label(for="supplier") Supplier Name
-      input#supplier(type="text", name="supplier", minlength="3", required, placeholder)
+      label(for="supplierName") Supplier Name
+      input#supplierName(type="text", name="supplierName", minlength="3", required, placeholder)
     //  Date 
     .form-group
       label(for="date") Date of Stock

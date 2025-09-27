@@ -43,39 +43,56 @@ router.get("/dashboard", ensureauthenticated, ensuremanager, (req, res) => {
 // Edit stock
 router.get("/editstock/:id", async (req, res) => {
   try {
-    const product = await stockModel.findById(req.params.id);
-    if (!product) {
+    const item = await stockModel.findById(req.params.id);
+    if (!item) {
       return res.status(404).send("Product not found");
     }
-    res.render("editstock", { product });
+    res.render("editstock", { item });
   } catch (error) {
     console.error(error);
     res.status(500).send("Error loading edit form");
   }
 });
-
 router.post("/editstock/:id", async (req, res) => {
   try {
-    const product = await stockModel.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!product) {
-      return res.status(404).send("Product not found");
+    const updated = await stockModel.findByIdAndUpdate(
+      req.params.id,
+      {
+        productName: req.body.productName,
+        productType: req.body.productType,
+        quantity: req.body.quantity,
+        quality: req.body.quality,
+        costPrice: req.body.costPrice,
+        sellingPrice: req.body.sellingPrice,
+        supplierName: req.body.supplierName,
+        date: req.body.date
+      },
+      { new: true, runValidators: true } // runValidators ensures schema validation
+    );
+
+    if (!updated) {
+      return res.status(404).send("Stock item not found");
     }
+
     res.redirect("/stocklist");
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Error updating product");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error updating stock");
   }
 });
 
+
+
 // Delete stock
-router.post("/deletestock", ensureauthenticated, async (req, res) => {
+router.post("/deletestock/:id", ensureauthenticated, async (req, res) => {
   try {
-    await stockModel.deleteOne({ _id: req.body.id });
-    res.redirect("deletestock");
+    await stockModel.deleteOne({ _id: req.params.id });
+    res.redirect("/stocklist"); // go back to the stock list page
   } catch (error) {
     console.log(error.message);
     res.status(400).send("Unable to delete item from the database.");
   }
 });
+
 
 module.exports = router;

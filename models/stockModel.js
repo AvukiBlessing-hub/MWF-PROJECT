@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 
 const stockSchema = new mongoose.Schema({
-  product: {
+  productName: {
     type: String,
     required: true,
     trim: true
@@ -21,7 +21,7 @@ const stockSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
-  price: {
+  costPrice: {
     type: Number,
     required: true
   },
@@ -29,7 +29,7 @@ const stockSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
-  supplier: {
+  supplierName: {
     type: String,
     required: true
   },
