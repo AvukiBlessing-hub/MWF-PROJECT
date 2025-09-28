@@ -28,10 +28,10 @@ nav.navbar
         th Transport
         th Sales Agent
         th Total Price
-        if currentUser && currentUser.role === 'manager'
+        if currentUser && currentUser.role === 'Manager'
           th Edit
           th Delete
-        if currentUser && currentUser.role === 'salesAgent'
+        if currentUser && currentUser.role === 'Attendant'
           th Receipt
     tbody
       if items && items.length
@@ -44,20 +44,20 @@ nav.navbar
             td #{item.quality}
             td #{item.costPrice}
             td #{item.transportFee ? 'Yes' : 'No'}
-            td #{item.salesAgent.name}
+            td #{item.Attendant.name}
             td #{item.totalPrice}
-            if currentUser && currentUser.role === 'manager'
+            if currentUser && currentUser.role === 'Manager'
               td
                 a.btn.btn-warning(href=`/editsales/${item._id}`) Edit
               td
                 form(method='post', action=`/deletesales/${item._id}`)
                   button.btn.btn-danger(type='submit') Delete
-            if currentUser && currentUser.role === 'salesAgent'
+            if currentUser && currentUser.role === 'Attendant'
               td
                 a.btn.btn-info(href=`/salesreceipt/${item._id}`) Receipt
       else
         tr
-          td(colspan= currentUser && currentUser.role === 'manager' ? 11 : 10, style="text-align:center;") No sales available
+          td(colspan= currentUser && currentUser.role === 'Manager' ? 11 : 10, style="text-align:center;") No sales available
 
   p(style="text-align:center; margin-top:10px;")
     a(href="/addsales") Add More Sales

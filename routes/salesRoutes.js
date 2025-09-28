@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const { ensureAuthenticated, ensureAgent } = require("../middleware/auth");
+const { ensureAuthenticated, ensureAttendant: ensureAttendant } = require("../middleware/auth"); // <-- renamed here
 const salesModel = require("../models/salesModel");
 const stockModel = require("../models/stockModel");
 const moment = require("moment");
 
 // ================= Show Add Sales Page =================
-router.get("/sales", ensureAuthenticated, ensureAgent, async (req, res) => {
+router.get("/sales", ensureAuthenticated, ensureAttendant, async (req, res) => {
   try {
     const stocks = await stockModel.find();
     res.render("sales", { stocks });
@@ -17,7 +17,7 @@ router.get("/sales", ensureAuthenticated, ensureAgent, async (req, res) => {
 });
 
 // ================= Handle Sales Submission =================
-router.post("/sales", ensureAuthenticated, ensureAgent, async (req, res) => {
+router.post("/sales", ensureAuthenticated, ensureAttendant, async (req, res) => {
   try {
     const { stockId, customerName, quantity, costPrice, transportCheck, paymentMethod, quality } = req.body;
     if (!stockId) return res.status(400).send("No stock selected.");
@@ -36,7 +36,7 @@ router.post("/sales", ensureAuthenticated, ensureAgent, async (req, res) => {
       productType: stock.productType,
       productName: stock.productName,
       customerName,
-      salesAgent: req.user._id, // <-- use req.user
+      Attendant: req.user._id,
       quantity: qty,
       costPrice: price,
       totalPrice: total,
@@ -45,11 +45,11 @@ router.post("/sales", ensureAuthenticated, ensureAgent, async (req, res) => {
       quality,
     });
 
-    await sale.save();       // save to DB
-    stock.quantity -= qty;   
-    await stock.save();      // update stock in DB
+    await sale.save();
+    stock.quantity -= qty;
+    await stock.save();
 
-    res.redirect("/saleslist"); // redirect to sales list, it will show immediately
+    res.redirect("/saleslist");
   } catch (error) {
     console.error("Error processing sale:", error.message);
     res.redirect("/sales");
@@ -61,12 +61,11 @@ router.get("/saleslist", ensureAuthenticated, async (req, res) => {
   try {
     const currentUser = req.user;
 
-    // Match roles exactly as stored in DB
     let sales;
     if (currentUser.role === "Manager") {
-      sales = await salesModel.find().populate("salesAgent", "name");
+      sales = await salesModel.find().populate("Attendant", "name");
     } else if (currentUser.role === "Attendant") {
-      sales = await salesModel.find({ salesAgent: currentUser._id }).populate("salesAgent", "name");
+      sales = await salesModel.find({ Attendant: currentUser._id }).populate("Attendant", "name");
     } else {
       return res.status(403).send("Access denied.");
     }
@@ -78,13 +77,11 @@ router.get("/saleslist", ensureAuthenticated, async (req, res) => {
   }
 });
 
-
-
 // ================= Delete Sale =================
 router.post("/deletesales/:id", ensureAuthenticated, async (req, res) => {
   try {
-    const currentUser = req.user; // use req.user
-    if (currentUser.role !== "manager") return res.status(403).send("Access denied.");
+    const currentUser = req.user;
+    if (currentUser.role !== "Manager") return res.status(403).send("Access denied.");
 
     await salesModel.findByIdAndDelete(req.params.id);
     res.redirect("/saleslist");

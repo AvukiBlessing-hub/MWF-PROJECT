@@ -73,9 +73,9 @@ nav.navbar
       option(value="bank-overdraft", selected=item.paymentMethod === "bank-overdraft") Bank Overdraft
 
     // Sales Agent
-    label(for="salesAgent") Sales Agent
+    label(for="Attendant") Attendant 
     // You may want to make this readonly or hidden depending on role
-    input#salesAgent(type="text", name="salesAgent", value=item.salesAgent.name || '', required, minlength="3")
+    input#Attendant(type="text", name="Attendant", value=item.Attendant.name || '', required, minlength="3")
 
     // Total Price
     label(for="totalPrice") Total Price

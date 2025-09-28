@@ -38,8 +38,9 @@ router.post(
     "/signin",
     passport.authenticate("local", { failureRedirect: "/signin" }),
     (req, res) => {
+        console.log("Logged-in user role:", `"${req.user.role}"`);
         // Redirect based on role
-        if (req.user.role === "manager") return res.redirect("/stock");
+        if (req.user.role === "Manager") return res.redirect("/stock");
         if (req.user.role === "Attendant") return res.redirect("/sales");
         return res.render("nonUser");
     }

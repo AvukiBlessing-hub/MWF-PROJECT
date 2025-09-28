@@ -3,53 +3,54 @@ meta(name="viewport", content="width=device-width,initial-scale=1")
 title MWF Delivery Page
 link(rel="stylesheet", href="/CSS/delivery.css")
 
-// Navigation Bar 
+// Navigation Bar
 nav.navbar
   ul
     li
-      a(href="stock.html") Stock
+      a(href="/stock") Stock
     li
-      a(href="stocktable.html") Stocklist 
+      a(href="/stocktable") Stocklist
     li
-      a(href="delivery.html") Delivery
+      a(href="/delivery") Delivery
     li
-      a(href="deliverytable.html") Deliverylist 
+      a(href="/deliverylist") Deliverylist
 
 .container
   h1 Delivery Management
-  form(action="/delivery", method="POST")
+
+  form(action="/delivery", method="POST") 
     label Customer Name
-    input#customerName(type="text", name="customerName", required)
+    input(name="customerName", id="customerName", type="text", placeholder="Enter customer name", required)
 
     label Delivery Address
-    input#customerAddress(type="text", name="customerAddress", required)
+    input(name="customerAddress", id="customerAddress", type="text", placeholder="Enter address", required)
 
-    label Product Name
-    input#productName(type="text", name="productName", required)
+    label Product / Sale
+    select(name="saleId", required)   //  link to sale
+      each sale in sales
+        option(value=sale._id)= `${sale.productName} - ${sale.customerName}`
 
     label Quantity
-    input#quantity(type="number", name="quantity", required)
+    input(name="quantity", id="quantity", type="number", value=1, min=1, required)
 
     label Payment Method
-    select#paymentType(name="paymentType", required)
-      option(value) -- Select Payment --
+    select(name="paymentMethod", id="paymentType", required)
       option(value="cash") Cash
       option(value="cheque") Cheque
       option(value="overdraft") Bank Overdraft
 
-    label Base Price
-    input#basePrice(type="number", name="basePrice", required)
-
     .checkbox
-      input#transport(type="checkbox", name="transport")
+      input(type="checkbox", name="transport", id="transport")
       label(for="transport") Add 5% Transport Fee
 
     label Delivery Status
-    select#deliveryStatus(name="deliveryStatus")
+    select(name="deliveryStatus", id="deliveryStatus")
       option(value="pending") Pending
       option(value="dispatched") Dispatched
       option(value="delivered") Delivered
 
-    button(type="submit") Save Delivery
+    button(type="submit")  submit form
+
+  p.status#statusMessage
 
 script(src="/js/delivery.js")

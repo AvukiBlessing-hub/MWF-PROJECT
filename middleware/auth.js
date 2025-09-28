@@ -1,3 +1,5 @@
+// middleware/auth.js
+
 // Ensure user is logged in
 exports.ensureAuthenticated = (req, res, next) => {
   if (req.isAuthenticated()) return next();
@@ -5,13 +7,13 @@ exports.ensureAuthenticated = (req, res, next) => {
 };
 
 // Ensure user is an Attendant (sales agent)
-exports.ensureAgent = (req, res, next) => {
+exports.ensureAttendant = (req, res, next) => {
   if (req.isAuthenticated() && req.user.role === "Attendant") return next();
-  res.redirect("/"); // redirect if not an attendant
+  res.render("nonUser"); // show page if not authorized
 };
 
 // Ensure user is a Manager
 exports.ensureManager = (req, res, next) => {
   if (req.isAuthenticated() && req.user.role === "Manager") return next();
-  res.redirect("/"); // redirect if not a manager
+  res.render("nonUser"); // show page if not authorized
 };

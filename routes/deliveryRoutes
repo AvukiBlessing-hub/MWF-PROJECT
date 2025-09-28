@@ -1,104 +1,74 @@
+// routes/deliveryRoutes.js
 const express = require("express");
 const router = express.Router();
 const { ensureAuthenticated, ensureManager } = require("../middleware/auth");
 const moment = require("moment");
-
 const DeliveryModel = require("../models/deliveryModel");
+const SaleModel = require("../models/salesModel"); // import sales
 
 // ================= Show Delivery Page =================
-router.get("/delivery", ensureAuthenticated, ensureManager, (req, res) => {
-  res.render("delivery", { title: "Delivery Page" });
+router.get("/delivery", ensureAuthenticated, async (req, res) => {
+  try {
+    // Fetch only sales that have not been delivered yet
+    const sales = await SaleModel.find({}).sort({ paymentDate: -1 }).lean();
+
+    res.render("delivery", {
+      title: "Delivery Page",
+       sales,   // 👈 match pug variable
+      currentUser: req.user
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server error");
+  }
 });
 
 // ================= Handle Delivery Submission =================
-router.post("/delivery", ensureAuthenticated, ensureManager, async (req, res) => {
+router.post("/delivery", ensureAuthenticated, async (req, res) => {
   try {
-    const {
-      customerName,
-      customerAddress,
-      productName,
-      quantity,
-      paymentType,
-      basePrice,
-      transport,
-      deliveryStatus,
-    } = req.body;
+    const { saleId, deliveryStatus } = req.body;
 
-    const base = Number(basePrice) || 0;
-    const qty = Number(quantity) || 1;
-    const hasTransport = transport === "on" || transport === true;
+    // Check that the sale exists
+    const sale = await SaleModel.findById(saleId);
+    if (!sale) {
+      return res.status(400).send("Cannot create delivery: sale does not exist.");
+    }
 
-    const transportFee = hasTransport ? base * 0.05 : 0;
-    const totalPrice = (base + transportFee) * qty;
+    // Compute total price (could also include transport)
+    const transportFee = req.body.transport === "on" ? sale.costPrice * 0.05 : 0;
+    const totalPrice = (sale.costPrice + transportFee) * sale.quantity;
 
     const delivery = new DeliveryModel({
-      customerName,
-      customerAddress,
-      productName,
-      quantity: qty,
-      paymentType,
-      basePrice: base,
-      transport: hasTransport,
+      customerName: sale.customerName,
+      customerAddress: req.body.customerAddress,
+      productName: sale.productName,
+      quantity: sale.quantity,
+      paymentType: sale.paymentMethod,
+      basePrice: sale.costPrice,
+      transport: req.body.transport === "on",
       totalPrice,
       deliveryStatus,
     });
 
     await delivery.save();
-    console.log("Delivery saved:", delivery);
     res.redirect("/deliverylist");
   } catch (error) {
-    console.error("Error saving delivery:", error.message);
+    console.error(error);
     res.redirect("/delivery");
   }
 });
-
-// ================= Get Delivery List =================
-router.get("/deliverylist", ensureAuthenticated, ensureManager, async (req, res) => {
+router.get("/deliverylist", ensureAuthenticated, async (req, res) => {
   try {
-    const deliveries = await DeliveryModel.find().sort({ $natural: -1 });
-    res.render("deliverytable", { deliveries, moment });
-  } catch (error) {
-    console.error("Error fetching deliveries:", error.message);
-    res.status(400).send("Unable to get data from the database.");
-  }
-});
+    const deliveries = await DeliveryModel.find().sort({ createdAt: -1 }).lean();
 
-// ================= Dashboard =================
-router.get("/dashboard", ensureAuthenticated, ensureManager, (req, res) => {
-  res.render("dashboard", { title: "Dashboard Page" });
-});
-
-// ================= Edit Delivery =================
-router.get("/editdelivery/:id", ensureAuthenticated, ensureManager, async (req, res) => {
-  try {
-    const delivery = await DeliveryModel.findById(req.params.id);
-    if (!delivery) return res.status(404).send("Delivery not found");
-    res.render("editdelivery", { delivery });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Error loading edit form");
-  }
-});
-
-router.post("/editdelivery/:id", ensureAuthenticated, ensureManager, async (req, res) => {
-  try {
-    const updatedDelivery = await DeliveryModel.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!updatedDelivery) return res.status(404).send("Delivery not found");
-    res.redirect("/deliverylist");
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Error updating delivery");
-  }
-});
-
-// ================= Delete Delivery =================
-router.post("/deletedelivery", ensureAuthenticated, ensureManager, async (req, res) => {
-  try {
-    await DeliveryModel.deleteOne({ _id: req.body.id });
-    res.redirect("/deliverylist");
-  } catch (error) {
-    console.error(error.message);
-    res.status(400).send("Unable to delete delivery from the database.");
+    res.render("deliverytable", {
+      title: "Delivery List",
+      deliveries,     // all deliveries
+      currentUser: req.user
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server error");
   }
 });
 

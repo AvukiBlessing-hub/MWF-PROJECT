@@ -59,10 +59,9 @@ app.use((req, res, next) => {
 
 // Routes
 app.use("/", authRoutes);
-app.use("/", stockRoutes);
+app.use("/", stockRoutes);     
 app.use("/", salesRoutes);
 app.use("/", deliveryRoutes);
-
 // 404
 app.use((req, res) => {
   res.status(404).send("Oops! Route not found");
