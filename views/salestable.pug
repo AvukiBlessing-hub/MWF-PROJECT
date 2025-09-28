@@ -1,21 +1,21 @@
 meta(charset="UTF-8")
 meta(name="viewport", content="width=device-width,initial-scale=1")
 title Sales Table
-link(rel="stylesheet", href="CSS/salestable.css")
-//  Navigation Bar 
+link(rel="stylesheet", href="/CSS/salestable.css")
+
 nav.navbar
   ul
     li
-      a(href="stock.html") Stock
+      a(href="/stock") Stock
     li
-      a(href="stocktable.html") Stocklist 
+      a(href="/stocklist") Stock Table
     li
-      a(href="delivery.html") Delivery
+      a(href="/delivery") Delivery
     li
-      a(href="deliverytable.html") Deliverylist 
+      a(href="/deliverylist") Delivery Table
+
 .container
   h1 Sales Table
-  //  Sales Table 
   table#salesTable
     thead
       tr
@@ -25,9 +25,41 @@ nav.navbar
         th Quantity
         th Quality
         th Cost Price
-        th checkbox
-        th salesAgent
+        th Transport
+        th Sales Agent
         th Total Price
+        if currentUser && currentUser.role === 'manager'
+          th Edit
+          th Delete
+        if currentUser && currentUser.role === 'salesAgent'
+          th Receipt
     tbody
-      //  Data will be added here 
+      if items && items.length
+        each item in items
+          tr
+            td #{item.customerName}
+            td #{item.productType}
+            td #{item.productName}
+            td #{item.quantity}
+            td #{item.quality}
+            td #{item.costPrice}
+            td #{item.transportFee ? 'Yes' : 'No'}
+            td #{item.salesAgent.name}
+            td #{item.totalPrice}
+            if currentUser && currentUser.role === 'manager'
+              td
+                a.btn.btn-warning(href=`/editsales/${item._id}`) Edit
+              td
+                form(method='post', action=`/deletesales/${item._id}`)
+                  button.btn.btn-danger(type='submit') Delete
+            if currentUser && currentUser.role === 'salesAgent'
+              td
+                a.btn.btn-info(href=`/salesreceipt/${item._id}`) Receipt
+      else
+        tr
+          td(colspan= currentUser && currentUser.role === 'manager' ? 11 : 10, style="text-align:center;") No sales available
+
+  p(style="text-align:center; margin-top:10px;")
+    a(href="/addsales") Add More Sales
+
 script(src="/public/salestable.js")

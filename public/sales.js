@@ -3,7 +3,7 @@ const productTypeEl = document.getElementById("productType");
 const productNameEl = document.getElementById("productName");
 const quantityEl = document.getElementById("quantity");
 const costPriceEl = document.getElementById("costPrice");
-const transportEl = document.getElementById("transport");
+const transportEl = document.getElementById("transportCheck");
 const totalPriceEl = document.getElementById("totalPrice");
 
 // Product options
@@ -19,11 +19,15 @@ productTypeEl.addEventListener("change", () => {
     if (products[type]) {
         products[type].forEach(p => {
             const option = document.createElement("option");
-            option.value = p.toLowerCase().replace(/\s+/g, "-");
+            option.value = p; // Use exact product name matching backend data
             option.textContent = p;
             productNameEl.appendChild(option);
         });
     }
+    // Reset other inputs on product type change
+    quantityEl.value = "";
+    costPriceEl.value = "";
+    totalPriceEl.value = "";
 });
 
 // Calculate total price
@@ -38,10 +42,17 @@ function calculateTotal() {
     }
 
     // Update total input
-    totalPriceEl.value = total.toFixed(2);
+    if (total > 0) {
+      totalPriceEl.value = total.toFixed(2);
+    } else {
+      totalPriceEl.value = "";
+    }
 }
 
 // Add event listeners
 quantityEl.addEventListener("input", calculateTotal);
 costPriceEl.addEventListener("input", calculateTotal);
 transportEl.addEventListener("change", calculateTotal);
+
+// Optional: initial call to set total in case inputs prefilled
+calculateTotal();

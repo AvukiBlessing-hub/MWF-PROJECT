@@ -2,63 +2,77 @@ meta(charset="UTF-8")
 meta(name="viewport", content="width=device-width,initial-scale=1")
 title MWF Sales Page
 link(rel="stylesheet", href="/CSS/sales.css")
-//  Navigation Bar 
+
 nav.navbar
   ul
     li
-      a(href="stock.html") Stock
+      a(href="/stock") Stock
     li
-      a(href="stocktable.html") Stock Table
+      a(href="/stocklist") Stock Table
     li
-      a(href="delivery.html") Delivery
+      a(href="/delivery") Delivery
     li
-      a(href="deliverytable.html") Delivery Table
+      a(href="/deliverylist") Delivery Table
+
 .container
   h1 Record a Sale
   form(action="/sales", method="POST")
-    //  Customer Name 
+    // Customer Name
     label(for="customerName") Customer Name
     input#customerName(type="text", name="customerName", required)
-    //  Product Type 
+
+    // Product Type
     label(for="productType") Product Type
     select#productType(name="productType", required)
       option(value) -- Select Type --
       option(value="wood") Wood
       option(value="furniture") Furniture
-    //  Product Name 
-    label(for="productName") Product Name
-    select#productName(name="productName", required)
+
+    // Product Name (from stock)
+    label(for="stockId") Product
+    select#stockId(name="stockId", required)
       option(value) -- Select Product --
-      option(value="sofa") Sofa
-      option(value="dining-table") Dining Table
-      option(value="bed") Bed
-      option(value="chair") Chair
-      option(value="timber") Timber
-      option(value="table") Table
-      option(value="other") Other
-    //  Quantity 
+      each stock in stocks
+        option(value=stock._id) #{stock.productName} (Available: #{stock.quantity})
+
+    // Quantity
     label(for="quantity") Quantity
     input#quantity(type="number", name="quantity", min="1", required)
-    //  Quality 
+
+    // Quality
     label(for="quality") Quality
     select#quality(name="quality", required)
       option(value) -- Select Quality --
       option(value="high") High
       option(value="medium") Medium
       option(value="low") Low
-    //  Cost Price 
+
+    // Cost Price
     label(for="costPrice") Cost Price (per unit)
     input#costPrice(type="number", name="costPrice", min="0", step="0.01", required)
-    //  Transport Fee 
+
+    // Transport Fee
     .checkbox
-      input#transport(type="checkbox", name="transport")
-      label(for="transport") Add 5% Transport Fee
-    //  Sales Agent Name 
+      input#transportCheck(type="checkbox", name="transportCheck")
+      label(for="transportCheck") Add 5% Transport Fee
+
+    // Payment Method
+    label(for="paymentMethod") Payment Method
+    select#paymentMethod(name="paymentMethod", required)
+      option(value) -- Select Payment Method --
+      option(value="cash") Cash
+      option(value="cheque") Cheque
+      option(value="bank-overdraft") Bank Overdraft
+
+    // Sales Agent
     label(for="salesAgent") Sales Agent
     input#salesAgent(type="text", name="salesAgent", required)
-    //  Total Price 
-    label(for="totalPrice") Total Price
-    input#totalPrice(type="text", name="totalPrice", readonly)
-    //  Submit 
+
+    // Total Price
+    //label(for="totalPrice") Total Price
+    //input#totalPrice(type="text", name="totalPrice", readonly)
+
+    // Submit
     button.btn(type="submit") ➕ Add Sale
-script(src="/public/sales.js")
+
+script(src="/js/sales.js")

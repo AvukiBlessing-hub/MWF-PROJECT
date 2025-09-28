@@ -1,83 +1,96 @@
 const express = require("express");
 const router = express.Router();
-const { ensureauthenticated, ensureAgent } = require("../middleware/auth");
-const salesModel = require("../models/SalesModel");
+const { ensureAuthenticated, ensureAgent } = require("../middleware/auth");
+const salesModel = require("../models/salesModel");
 const stockModel = require("../models/stockModel");
+const moment = require("moment");
 
-// GET /addsale - Show sales form
-router.get("/addsale", ensureauthenticated, ensureAgent, async (req, res) => {
+// ================= Show Add Sales Page =================
+router.get("/sales", ensureAuthenticated, ensureAgent, async (req, res) => {
   try {
-    const stock = await stockModel.find(); // optional: for dropdown
-    res.render("sales", { title: "Sales Page", stock });
+    const stocks = await stockModel.find();
+    res.render("sales", { stocks });
+  } catch (error) {
+    console.error("Error loading add sales page:", error.message);
+    res.redirect("/");
+  }
+});
+
+// ================= Handle Sales Submission =================
+router.post("/sales", ensureAuthenticated, ensureAgent, async (req, res) => {
+  try {
+    const { stockId, customerName, quantity, costPrice, transportCheck, paymentMethod, quality } = req.body;
+    if (!stockId) return res.status(400).send("No stock selected.");
+
+    const qty = Number(quantity);
+    const price = Number(costPrice);
+
+    const stock = await stockModel.findById(stockId);
+    if (!stock) return res.status(400).send(`No stock found for ID: ${stockId}`);
+    if (stock.quantity < qty) return res.status(400).send(`Insufficient stock. Only ${stock.quantity} available.`);
+
+    let total = price * qty;
+    if (transportCheck) total *= 1.05;
+
+    const sale = new salesModel({
+      productType: stock.productType,
+      productName: stock.productName,
+      customerName,
+      salesAgent: req.user._id, // <-- use req.user
+      quantity: qty,
+      costPrice: price,
+      totalPrice: total,
+      transportFee: !!transportCheck,
+      paymentMethod,
+      quality,
+    });
+
+    await sale.save();       // save to DB
+    stock.quantity -= qty;   
+    await stock.save();      // update stock in DB
+
+    res.redirect("/saleslist"); // redirect to sales list, it will show immediately
+  } catch (error) {
+    console.error("Error processing sale:", error.message);
+    res.redirect("/sales");
+  }
+});
+
+// ================= Sales List (for agents and managers) =================
+router.get("/saleslist", ensureAuthenticated, async (req, res) => {
+  try {
+    const currentUser = req.user;
+
+    // Match roles exactly as stored in DB
+    let sales;
+    if (currentUser.role === "Manager") {
+      sales = await salesModel.find().populate("salesAgent", "name");
+    } else if (currentUser.role === "Attendant") {
+      sales = await salesModel.find({ salesAgent: currentUser._id }).populate("salesAgent", "name");
+    } else {
+      return res.status(403).send("Access denied.");
+    }
+
+    res.render("salestable", { items: sales, currentUser, moment });
   } catch (error) {
     console.error(error.message);
     res.redirect("/");
   }
 });
 
-// POST /addsale - Save sale
-router.post("/addsale", ensureauthenticated, ensureAgent, async (req, res) => {
+
+
+// ================= Delete Sale =================
+router.post("/deletesales/:id", ensureAuthenticated, async (req, res) => {
   try {
-    const {
-      customerName,
-      productType,
-      productName,
-      quantity,
-      quality,
-      costPrice,
-      transport,
-      paymentMethod,
-      paymentDate
-    } = req.body;
+    const currentUser = req.user; // use req.user
+    if (currentUser.role !== "manager") return res.status(403).send("Access denied.");
 
-    const userId = req.session.user._id;
-
-    const stock = await stockModel.findOne({ productType, productName });
-    if (!stock) return res.status(400).send("Stock not found");
-
-    if (stock.quantity < Number(quantity)) {
-      return res.status(400).send(`Insufficient stock, only ${stock.quantity} available`);
-    }
-
-    const transportFee = transport === "on" || transport === "true";
-    let total = Number(costPrice) * Number(quantity);
-    if (transportFee) total *= 1.05;
-
-    const sale = new salesModel({
-      customerName,
-      productType,
-      productName,
-      quantity: Number(quantity),
-      quality,
-      costPrice: Number(costPrice),
-      transportFee,
-      totalPrice: total,
-      salesAgent: userId,
-      paymentMethod,
-      paymentDate: paymentDate || Date.now()
-    });
-
-    await sale.save();
-
-    stock.quantity -= Number(quantity);
-    await stock.save();
-
+    await salesModel.findByIdAndDelete(req.params.id);
     res.redirect("/saleslist");
   } catch (error) {
     console.error(error.message);
-    res.redirect("/addsale");
-  }
-});
-
-//  ADD THIS ROUTE HERE
-router.get("/saleslist", ensureauthenticated, ensureAgent, async (req, res) => {
-  try {
-    const currentUser = req.session.user;
-    const sales = await salesModel.find().populate("salesAgent", "fullName");
-    res.render("salestable", { sales, currentUser });
-  } catch (error) {
-    console.error(error.message);
-    res.redirect("/");
+    res.status(400).send("Unable to delete sale.");
   }
 });
 
