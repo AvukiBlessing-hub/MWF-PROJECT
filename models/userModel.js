@@ -12,15 +12,16 @@ const signupSchema = new mongoose.Schema({
     unique: true,
     trim: true,
   },
-    role: {    
+  role: {    
     type: String,
     required: true,
   },
 });
 
 // Tell passport-local-mongoose to use email instead of username
- signupSchema.plugin(passportLocalMongoose,{
+signupSchema.plugin(passportLocalMongoose, {
   usernameField: "email",
 });
 
-module.exports = mongoose.model("UserModel", signupSchema);
+// **Export as "User" to match SalesSchema ref**
+module.exports = mongoose.models.User || mongoose.model("User", signupSchema);

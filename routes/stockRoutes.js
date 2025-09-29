@@ -8,7 +8,7 @@ const stockModel = require("../models/stockModel");
 // ================= Stock page =================
 router.get("/stock", ensureAuthenticated, ensureManager, (req, res) => {
   res.render("stock", { title: "Stock Page" });
-});
+}); 
 
 // ================= Add Stock =================
 router.post("/stock", async (req, res) => {

@@ -1,0 +1,61 @@
+body {
+  font-family: Arial, sans-serif;
+  background:url(../image/lates.jpg) ;
+  padding: 20px;
+}
+
+.receipt-container {
+  max-width: 700px;
+  margin: 0 auto;
+  background-color: gray;
+  padding: 25px 30px;
+  border-radius: 8px;
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+}
+
+h1 {
+  text-align: center;
+  color: white;
+  margin-bottom: 20px;
+}
+
+.company-info, .receipt-info, .footer {
+  text-align: left;
+  margin-bottom: 15px;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid #ccc;
+  margin: 15px 0;
+}
+
+.receipt-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.receipt-table th, .receipt-table td {
+  border: 1px solid #ccc;
+  padding: 8px 10px;
+  text-align: center;
+}
+
+.receipt-table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.footer p {
+  text-align: center;
+  font-size: 0.9em;
+  color: white;
+}
+
+@media print {
+  .print-btn {
+    display: none;
+  }
+}
+
