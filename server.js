@@ -15,11 +15,13 @@ const salesRoutes = require("./routes/salesRoutes");
 const deliveryRoutes = require("./routes/deliveryRoutes");
 const userModel = require("./models/userModel");
 
+ 
 const app = express();
 const port = 5000;
 
 // Mongoose config
-app.locals.moment = moment;
+app.locals.moment = moment; // <-- make moment available in all templates
+
 mongoose.connect(process.env.MONGODB_URI);
 mongoose.connection
   .on("open", () => console.log("Mongoose connection open"))
@@ -32,7 +34,7 @@ app.set("views", path.join(__dirname, "views"));
 // Middleware
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
-app.use(methodOverride("_method"));
+app.use(methodOverride("_method")); // <-- ensure PUT/DELETE works
 
 // Session
 app.use(
@@ -62,6 +64,7 @@ app.use("/", authRoutes);
 app.use("/", stockRoutes);     
 app.use("/", salesRoutes);
 app.use("/", deliveryRoutes);
+
 // 404
 app.use((req, res) => {
   res.status(404).send("Oops! Route not found");

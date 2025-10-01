@@ -2,10 +2,11 @@ meta(charset="UTF-8")
 meta(name="viewport", content="width=device-width,initial-scale=1")
 title Stock Registration
 link(rel="stylesheet", href="/css/stock.css")
+
 .form-container
   h2 Stock Registration Form
   form(action="/stock", method="post")
-    //  Product Name 
+    // Product Name 
     .form-group
       label(for="product") Product Name
       select#productName(name="productName", required)
@@ -16,42 +17,60 @@ link(rel="stylesheet", href="/css/stock.css")
         option(value="chair") Chair
         option(value="timber") Timber
         option(value="table") Table      
-        option(value="poles") poles
+        option(value="poles") Poles
         option(value="Hardwood") Hardwood
-    //  Product Type 
+
+    // Product Type 
     .form-group
       label(for="productType") Product Type
       select#productType(name="productType", required)
         option(value) -- Select Type --
         option(value="furniture") Furniture
         option(value="wood") Wood
-    //  Quantity 
+
+    // Total Quantity 
     .form-group
-      label(for="quantity") Quantity
-      input#quantity(type="number", name="quantity", min="1", required, placeholder="Enter quantity")
-    //  Quality 
+      label(for="totalQuantity") total Quantity
+      input#quantity1(type="number", name="totalQuantity1", min="1", required, placeholder="Enter quantity")
+
+    // Available Quantity 
+    .form-group
+      label(for="avaliableQuantity") avalibleQuantity
+      input#quantity(type="number", name="avalibleQuantity", min="1", required, placeholder="Enter quantity")
+
+    // Quality 
     .form-group
       label(for="quality") Quality
       select#quality(name="quality", required)
-        option(value) -- Select Quality --
+        option(value="") -- Select Quality --
         option(value="high") High
         option(value="medium") Medium
         option(value="low") Low
-    //  Unit Price 
+
+    // Unit Cost Price
     .form-group
       label(for="costPrice") Unit Cost Price (shs)
-      input#costPrice(type="number", name="costPrice", min="1", step="0.01", required, placeholder)
-    //  Unit Selling Price 
+      input#price(type="number", name="costPrice", min="1", step="0.01", required, placeholder="Enter cost price")
+
+    // Unit Selling Price 
     .form-group
       label(for="sellingPrice") Unit Selling Price (shs)
-      input#sellingPrice(type="number", name="sellingPrice", min="1", step="0.01", required, placeholder)
-    //  Supplier 
+      input#sellingPrice(type="number", name="sellingPrice", min="1", step="0.01", required, placeholder="Enter Selling Price")
+
+    // Supplier 
     .form-group
       label(for="supplierName") Supplier Name
-      input#supplierName(type="text", name="supplierName", minlength="3", required, placeholder)
-    //  Date 
+      input#supplierName(type="text", name="supplierName", required, placeholder="Enter the Supplier's Name")
+
+    // Supplier Contact
+    .form-group
+      label(for="supplierContact") Supplier Contact
+      input#supplierContact(type="text", name="supplierContact", required, placeholder="Enter Supplier Contact")
+
+    // Date 
     .form-group
       label(for="date") Date of Stock
       input#date(type="date", name="date", required)
-    //  Submit Button 
+
+    // Submit Button 
     button.btn(type="submit") Add Stock

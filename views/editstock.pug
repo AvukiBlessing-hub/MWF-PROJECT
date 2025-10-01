@@ -12,12 +12,12 @@ link(rel="stylesheet", href="/css/stock.css")
     .form-group
       label(for="productName") Product Name
       select#productName(name="productName", required)
-        option(value="" disabled selected)= item.productName || "Select Product name"
-        option(value="Sofa", selected=item.productName==="Sofa") Sofa
-        option(value="diningTable", selected=item.productName==="diningTable") Dining Table
-        option(value="bed", selected=item.productName==="Bed") Bed
+        option(value) -- Select Product --
+        option(value="sofa", selected=item.productName==="sofa") Sofa
+        option(value="dining-table", selected=item.productName==="dining-table") Dining Table
+        option(value="bed", selected=item.productName==="bed") Bed
         option(value="chair", selected=item.productName==="chair") Chair
-        option(value="timber", selected=item.productName==="Timber") Timber
+        option(value="timber", selected=item.productName==="timber") Timber
         option(value="table", selected=item.productName==="table") Table
         option(value="poles", selected=item.productName==="poles") Poles 
         option(value="Hardwood", selected=item.productName==="Hardwood") Hardwood
@@ -26,20 +26,25 @@ link(rel="stylesheet", href="/css/stock.css")
     .form-group
       label(for="productType") Product Type
       select#productType(name="productType", required)
-        option(value="" disabled selected)= item.productType || "Select Product Type"
+        option(value) -- Select Type --
         option(value="furniture", selected=item.productType==="furniture") Furniture
         option(value="wood", selected=item.productType==="wood") Wood
-    
-    // Quantity 
+
+    // Total Quantity 
     .form-group
-      label(for="quantity") Quantity
-      input#quantity(type="number", name="quantity", value=item.quantity, min="1", required, placeholder="Enter quantity")
+      label(for="totalQuantity1") Quantity
+      input#quantity1(type="number", name="totalQuantity1", value=item.totalQuantity1, min="1", required, placeholder="Enter quantity")
+    
+    // Available Quantity 
+    .form-group
+      label(for="availableQuantity") Quantity
+      input#quantity(type="number", name="availableQuantity", value=item.availableQuantity, min="1", required, placeholder="Enter quantity")
     
     // Quality 
     .form-group
       label(for="quality") Quality
       select#quality(name="quality", required)
-        option(value="" disabled selected)= item.quality || "Select Quality"
+        option(value="") -- Select Quality --
         option(value="high", selected=item.quality==="high") High
         option(value="medium", selected=item.quality==="medium") Medium
         option(value="low", selected=item.quality==="low") Low
@@ -47,17 +52,22 @@ link(rel="stylesheet", href="/css/stock.css")
     // Unit Cost Price
     .form-group
       label(for="costPrice") Unit Cost Price (shs)
-      input#price(type="number", name="costPrice", value=item.costPrice, min="1", step="0.01", required, placeholder)
-    
+      input#price(type="number", name="costPrice", value=item.costPrice, min="1", step="0.01", required, placeholder="Enter cost price")
+  
     // Unit Selling Price 
     .form-group
       label(for="sellingPrice") Unit Selling Price (shs)
-      input#sellingPrice(type="number", name="sellingPrice", value=item.sellingPrice, min="1", step="0.01", required, placeholder)
-    
+      input#sellingPrice(type="number", name="sellingPrice", value=item.sellingPrice, min="1", step="0.01", required, placeholder="Enter selling price")
+ 
     // Supplier 
     .form-group
       label(for="supplierName") Supplier Name
-      input#supplier(type="text", name="supplierName", value=item.supplierName, minlength="3", required, placeholder)
+      input#supplierName(type="text", name="supplierName", value=item.supplierName, required, placeholder="Enter the Supplier's Name")
+
+    // Supplier Contact
+    .form-group
+      label(for="supplierContact") Supplier Contact
+      input#supplierContact(type="text", name="supplierContact", value=item.supplierContact, required, placeholder="Enter Supplier Contact")
     
     // Date 
     .form-group

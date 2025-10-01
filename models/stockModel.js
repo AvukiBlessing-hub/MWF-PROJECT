@@ -12,7 +12,11 @@ const stockSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
-  quantity: {
+  totalQuantity: {
+    type: Number,
+    required: true
+  },
+  availableQuantity: {
     type: Number,
     required: true
   },
@@ -31,7 +35,11 @@ const stockSchema = new mongoose.Schema({
   },
   supplierName: {
     type: String,
-    required: true
+    required: false
+  },
+  supplierContact: {
+    type: String,
+    required: false
   },
   date: {
     type: Date,

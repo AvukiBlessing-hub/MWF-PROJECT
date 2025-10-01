@@ -14,6 +14,8 @@ nav.navbar
       a(href="/delivery") Delivery
     li
       a(href="/deliverylist") Deliverylist
+        li
+      a(href="/stockHistory") Stock history 
 
 .form-container
   h2 Stock Table
@@ -22,11 +24,13 @@ nav.navbar
       tr
         th Product Name
         th Product Type
-        th Quantity
+        th Total Quantity
+        th Available Quantity
         th Quality
         th Cost Price (shs)
         th Selling Price (shs)
         th Supplier Name
+        th Supplier Contact
         th Date
         th Edit
         th Delete
@@ -36,11 +40,13 @@ nav.navbar
           tr
             td #{item.productName}
             td #{item.productType}
-            td #{item.quantity}
+            td #{item.totalQuantity}
+            td #{item.availableQuantity}
             td #{item.quality}
             td #{item.costPrice}
             td #{item.sellingPrice}
             td #{item.supplierName}
+            td #{item.supplierContact}
             td #{moment(item.date).format("DD-MM-YYYY")}
             td
               a.btn.btn-warning(href=`/editstock/${item._id}`) Edit
