@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager Dashboard</title>
+    <link rel="stylesheet" href="/public/CSS/dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+    <script src="/public/js/dashboard.js" defer></script>
+</head>
+
+<body>
+    <header>
+        <h1>Manager Dashboard</h1>
+    </header>
+
+    <!-- Cards -->
+    <div class="cards-container">
+        <div class="card" onclick="location.href='/saleslist'">
+            <h3>Total Sales</h3>
+            <p id="total-sales">Loading...</p>
+        </div>
+        <div class="card" onclick="location.href='/saleslist'">
+            <h3>Total Revenue</h3>
+            <p id="total-revenue">Loading...</p>
+        </div>
+        <div class="card" onclick="location.href='/stocklist'">
+            <h3>Stock Available</h3>
+            <p id="stock-available">Loading...</p>
+        </div>
+        <div class="card alert-card">
+            <h3>Stock Alerts</h3>
+            <ul id="stock-alerts">
+                <!-- Alerts will be injected here dynamically -->
+            </ul>
+        </div>
+        <!--  New card for Pending Deliveries -->
+        <div class="card" onclick="location.href='/deliveries'">
+            <h3>Pending Deliveries</h3>
+            <p id="pending-deliveries">Loading...</p>
+        </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="charts-container">
+        <div class="chart">
+            <h3>Most Sold Products</h3>
+            <canvas id="pieChart" width="400" height="400"></canvas>
+        </div>
+        <div class="chart">
+            <h3>Daily Sales Revenue</h3>
+            <canvas id="lineChart" width="800" height="400"></canvas>
+        </div>
+    </div>
+</body>
+
+</html>

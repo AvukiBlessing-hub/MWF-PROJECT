@@ -1,102 +1,41 @@
-const apiBase = '/api'; // adjust if needed
-
-async function fetchData(endpoint) {
-  try {
-    const res = await fetch(apiBase + endpoint);
-    if (!res.ok) throw new Error(res.statusText);
-    return await res.json();
-  } catch (e) {
-    console.error('Error loading', endpoint, e);
-    return [];
+// Pie Chart: Most Sold Products
+const pieCtx = document.getElementById('pieChart').getContext('2d');
+const pieChart = new Chart(pieCtx, {
+  type: 'pie',
+  data: {
+    labels: ['Product A', 'Product B', 'Product C', 'Product D'],
+    datasets: [{
+      label: 'Most Sold Products',
+      data: [50, 30, 20, 15],
+      backgroundColor: ['#FF6384','#36A2EB','#FFCE56','#4BC0C0'],
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { position: 'bottom' }
+    }
   }
-}
+});
 
-function renderTable(containerId, data, columns) {
-  const container = document.getElementById(containerId);
-  if (!data || data.length === 0) {
-    container.innerHTML = '<div class="empty">No data available</div>';
-    return;
+// Line Chart: Daily Sales Revenue
+const lineCtx = document.getElementById('lineChart').getContext('2d');
+const lineChart = new Chart(lineCtx, {
+  type: 'line',
+  data: {
+    labels: ['01/10','02/10','03/10','04/10','05/10'],
+    datasets: [{
+      label: 'Daily Sales Revenue',
+      data: [100000, 120000, 90000, 150000, 110000],
+      borderColor: 'rgba(75,192,192,1)',
+      fill: true,
+      tension: 0.4
+    }]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      y: { beginAtZero: true }
+    }
   }
-  let html = '<table><thead><tr>';
-  columns.forEach(col => html += `<th>${col.title}</th>`);
-  html += '</tr></thead><tbody>';
-  data.forEach(row => {
-    html += '<tr>';
-    columns.forEach(col => {
-      const value = row[col.key] || '';
-      html += `<td>${value}</td>`;
-    });
-    html += '</tr>';
-  });
-  html += '</tbody></table>';
-  container.innerHTML = html;
-}
-
-async function loadDashboard() {
-  // Metrics
-  const metrics = await fetchData('/metrics');
-  document.getElementById('stockValue').textContent =
-    metrics.totalStockValue ? `UGX ${metrics.totalStockValue}` : '—';
-  document.getElementById('salesToday').textContent =
-    metrics.totalSalesToday ? `UGX ${metrics.totalSalesToday}` : '—';
-  document.getElementById('pendingDeliveries').textContent =
-    metrics.pendingDeliveries ?? '—';
-  document.getElementById('lowStock').textContent =
-    metrics.lowStockCount ?? '—';
-
-  // Sales
-  const sales = await fetchData('/sales');
-  renderTable('salesTable', sales, [
-    {key: 'date', title: 'Date'},
-    {key: 'customerName', title: 'Customer'},
-    {key: 'productName', title: 'Product'},
-    {key: 'quantity', title: 'Qty'},
-    {key: 'totalPrice', title: 'Total'},
-    {key: 'paymentType', title: 'Payment'},
-    {key: 'salesAgent', title: 'Agent'}
-  ]);
-
-  // Stock
-  const stock = await fetchData('/stock');
-  renderTable('stockTable', stock, [
-    {key: 'productName', title: 'Product'},
-    {key: 'productType', title: 'Type'},
-    {key: 'quantity', title: 'Qty'},
-    {key: 'costPrice', title: 'Cost'},
-    {key: 'productPrice', title: 'Price'},
-    {key: 'supplierName', title: 'Supplier'}
-  ]);
-
-  // Deliveries
-  const deliveries = await fetchData('/deliveries');
-  renderTable('deliveryTable', deliveries, [
-    {key: 'scheduledAt', title: 'Due'},
-    {key: 'customerName', title: 'Customer'},
-    {key: 'status', title: 'Status'},
-    {key: 'assignedTo', title: 'Driver'}
-  ]);
-
-  // Receipts
-  const receipts = await fetchData('/receipts');
-  renderTable('receiptsTable', receipts, [
-    {key: 'receiptNo', title: 'Receipt'},
-    {key: 'amount', title: 'Amount'},
-    {key: 'paymentType', title: 'Payment'},
-    {key: 'date', title: 'Date'}
-  ]);
-
-  // Reports
-  const reports = await fetchData('/reports');
-  const reportsDiv = document.getElementById('reportsList');
-  if (!reports || reports.length === 0) {
-    reportsDiv.innerHTML = '<div class="empty">No reports available</div>';
-  } else {
-    reportsDiv.innerHTML = reports.map(r =>
-      `<div class="card"><strong>${r.name}</strong><br>
-      ${r.periodStart} — ${r.periodEnd}<br>
-      <a href="${r.url || '#'}">Download</a></div>`
-    ).join('');
-  }
-}
-
-loadDashboard();
+});

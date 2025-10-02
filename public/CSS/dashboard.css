@@ -1,93 +1,69 @@
+* {
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f9fafb;
-  color: #333;
+  padding: 0;
+  background-color: white;
+  color: white;
 }
-.layout {
-  display: flex;
-  min-height: 100vh;
-}
-aside {
-  width: 220px;
-  background: #fff;
-  border-right: 1px solid #eee;
-  padding: 1rem;
-}
-aside h2 {
-  margin-bottom: 1rem;
-  font-size: 1.2rem;
-  font-weight: bold;
-}
-aside nav a {
-  display: block;
-  padding: .5rem;
-  border-radius: .4rem;
-  text-decoration: none;
-  color: #444;
-  margin-bottom: .2rem;
-}
-aside nav a:hover {
-  background: #f1f5f9;
-}
-main {
-  flex: 1;
-  padding: 1.5rem;
-}
+
 header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.subtitle {
-  color:#666;
-  font-size:.9rem;
-}
-.metrics {
-  margin-top: 1.5rem;
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-}
-.card {
-  background: #fff;
-  padding: 1rem;
-  border-radius: .8rem;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-}
-.card h3 {
-  font-size: .9rem;
-  color: #666;
-}
-.card .value {
-  margin-top: .5rem;
-  font-size: 1.4rem;
-  font-weight: bold;
-}
-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: #fff;
-  border-radius: .8rem;
-  overflow: hidden;
-}
-th, td {
-  padding: .6rem .8rem;
-  border-bottom: 1px solid #eee;
-  text-align: left;
-  font-size: .9rem;
-}
-th {
-  background: #f9fafb;
-  font-weight: bold;
-  color: #666;
-}
-.section {
-  margin-top: 2rem;
-}
-.empty {
-  padding: 1rem;
+  padding: 20px;
   text-align: center;
-  color: #888;
-  font-size: .9rem;
+  background-color: gray;
+  color: white;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.card {
+  background: gray;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.alert-card ul {
+  padding-left: 20px;
+}
+
+.alert-card li {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.charts-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 40px;
+  padding: 20px;
+}
+
+.chart {
+  background: gray;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  flex: 1 1 400px;
+}
+
+.chart h3 {
+  text-align: center;
 }

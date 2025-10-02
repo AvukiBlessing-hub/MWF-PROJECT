@@ -8,21 +8,20 @@ const MongoStore = require("connect-mongo");
 const methodOverride = require("method-override");
 const moment = require("moment");
 
-// import routes
+// Import routes
 const authRoutes = require("./routes/authRoutes");
 const stockRoutes = require("./routes/stockRoutes");
 const salesRoutes = require("./routes/salesRoutes");
 const deliveryRoutes = require("./routes/deliveryRoutes");
 const userModel = require("./models/userModel");
 
- 
 const app = express();
 const port = 5000;
 
 // Mongoose config
-app.locals.moment = moment; // <-- make moment available in all templates
+app.locals.moment = moment;
 
-mongoose.connect(process.env.MONGODB_URI);
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.connection
   .on("open", () => console.log("Mongoose connection open"))
   .on("error", (err) => console.log(`Connection error: ${err.message}`));
@@ -34,7 +33,7 @@ app.set("views", path.join(__dirname, "views"));
 // Middleware
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
-app.use(methodOverride("_method")); // <-- ensure PUT/DELETE works
+app.use(methodOverride("_method"));
 
 // Session
 app.use(
@@ -54,21 +53,22 @@ passport.use(userModel.createStrategy());
 passport.serializeUser(userModel.serializeUser());
 passport.deserializeUser(userModel.deserializeUser());
 
+// Debug middleware
 app.use((req, res, next) => {
-  console.log("A new request received at " + Date.now());
+  console.log("Request URL:", req.url, "at", new Date().toISOString());
   next();
 });
 
-// Routes
-app.use("/", authRoutes);
-app.use("/", stockRoutes);     
-app.use("/", salesRoutes);
-app.use("/", deliveryRoutes);
+// Mount routes
+app.use("/", authRoutes);       // /signup, /signin, etc.
+app.use("/", stockRoutes);      // /stock, /stocklist, etc.
+app.use("/", salesRoutes);      // /sales, /saleslist, etc.
+app.use("/", deliveryRoutes);   // /delivery, /deliverylist, etc.
 
-// 404
+// 404 handler (keep it last)
 app.use((req, res) => {
   res.status(404).send("Oops! Route not found");
 });
 
 // Start server
-app.listen(port, () => console.log(`listening on port ${port}`));
+app.listen(port, () => console.log(`Server running on http://localhost:${port}`));

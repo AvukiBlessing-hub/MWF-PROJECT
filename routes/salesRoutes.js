@@ -21,7 +21,6 @@ router.get("/sales", ensureAttendant, async (req, res) => {
 
 // ================= Handle Sales Submission =================
 router.post("/sales", ensureAuthenticated, ensureAttendant, async (req, res) => {
-  console.log("POST /sales received:", req.body, "User:", req.user);
   try {
     const { stockId, customerName, quantity, costPrice, transportCheck, paymentMethod, quality } = req.body;
     if (!stockId) return res.status(400).send("No stock selected.");
@@ -31,11 +30,13 @@ router.post("/sales", ensureAuthenticated, ensureAttendant, async (req, res) => 
 
     const stock = await stockModel.findById(stockId);
     if (!stock) return res.status(400).send(`No stock found for ID: ${stockId}`);
-    if (stock.quantity < qty) return res.status(400).send(`Insufficient stock. Only ${stock.quantity} available.`);
+    if (stock.availableQuantity < qty) return res.status(400).send(`Insufficient stock. Only ${stock.availableQuantity} available.`);
 
+    // Calculate total price
     let total = price * qty;
     if (transportCheck) total *= 1.05;
 
+    // Create sale
     const sale = new salesModel({
       productType: stock.productType,
       productName: stock.productName,
@@ -50,7 +51,9 @@ router.post("/sales", ensureAuthenticated, ensureAttendant, async (req, res) => 
     });
 
     await sale.save();
-    stock.quantity -= qty;
+
+    // Reduce available stock only
+    stock.availableQuantity -= qty;
     await stock.save();
 
     res.redirect("/saleslist");
@@ -59,6 +62,7 @@ router.post("/sales", ensureAuthenticated, ensureAttendant, async (req, res) => 
     res.redirect("/sales");
   }
 });
+
 
 // ================= Sales List (for agents and managers) =================
 router.get("/saleslist", ensureAuthenticated, async (req, res) => {
