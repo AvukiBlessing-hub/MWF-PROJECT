@@ -13,6 +13,7 @@ const authRoutes = require("./routes/authRoutes");
 const stockRoutes = require("./routes/stockRoutes");
 const salesRoutes = require("./routes/salesRoutes");
 const deliveryRoutes = require("./routes/deliveryRoutes");
+const dashboardRoutes = require("./routes/dashboardRoutes"); // ✅ NEW
 const userModel = require("./models/userModel");
 
 const app = express();
@@ -21,7 +22,7 @@ const port = 5000;
 // Mongoose config
 app.locals.moment = moment;
 
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(process.env.MONGODB_URI); // ✅ Removed deprecated options
 mongoose.connection
   .on("open", () => console.log("Mongoose connection open"))
   .on("error", (err) => console.log(`Connection error: ${err.message}`));
@@ -64,6 +65,7 @@ app.use("/", authRoutes);       // /signup, /signin, etc.
 app.use("/", stockRoutes);      // /stock, /stocklist, etc.
 app.use("/", salesRoutes);      // /sales, /saleslist, etc.
 app.use("/", deliveryRoutes);   // /delivery, /deliverylist, etc.
+app.use("/", dashboardRoutes);  // ✅ NEW /dashboard route
 
 // 404 handler (keep it last)
 app.use((req, res) => {

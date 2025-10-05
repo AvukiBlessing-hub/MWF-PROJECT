@@ -34,18 +34,24 @@ nav.navbar
         if currentUser && currentUser.role === 'Attendant'
           th Receipt
     tbody
+      - var totalQuantity = 0
+      - var totalCostPrice = 0
+      - var totalTotalPrice = 0
       if items && items.length
         each item in items
+          - totalQuantity += item.quantity || 0
+          - totalCostPrice += item.costPrice || 0
+          - totalTotalPrice += item.totalPrice || 0
           tr
             td #{item.customerName}
             td #{item.productType}
             td #{item.productName}
             td #{item.quantity}
             td #{item.quality}
-            td #{item.costPrice}
+            td #{item.costPrice.toFixed(2)}
             td #{item.transportFee ? 'Yes' : 'No'}
-            td #{item.Attendant.name}
-            td #{item.totalPrice}
+            td #{item.Attendant ? (item.Attendant.fullname || item.Attendant.name) : 'N/A'}
+            td #{item.totalPrice.toFixed(2)}
             if currentUser && currentUser.role === 'Manager'
               td
                 a.btn.btn-warning(href=`/editsales/${item._id}`) Edit
@@ -58,6 +64,20 @@ nav.navbar
       else
         tr
           td(colspan= currentUser && currentUser.role === 'Manager' ? 11 : 10, style="text-align:center;") No sales available
+    tfoot
+      tr
+        td(colspan=3, style="text-align:right; font-weight:bold") Totals:
+        td #{totalQuantity}
+        td
+        td #{totalCostPrice.toFixed(2)}
+        td
+        td
+        td #{totalTotalPrice.toFixed(2)}
+        if currentUser && currentUser.role === 'Manager'
+          td
+          td
+        if currentUser && currentUser.role === 'Attendant'
+          td
 
   p(style="text-align:center; margin-top:10px;")
     a(href="/addsales") Add More Sales

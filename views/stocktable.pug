@@ -14,8 +14,8 @@ nav.navbar
       a(href="/delivery") Delivery
     li
       a(href="/deliverylist") Deliverylist
-        li
-      a(href="/stockHistory") Stock history 
+    li
+      a(href="/stockHistory") Stock History
 
 .form-container
   h2 Stock Table
@@ -31,22 +31,27 @@ nav.navbar
         th Selling Price (shs)
         th Supplier Name
         th Supplier Contact
+        th Total Value (shs)
         th Date
         th Edit
         th Delete
     tbody
+      - var grandTotal = 0
       if items && items.length
         each item in items
+          - var totalValue = Number(item.availableQuantity || 0) * Number(item.costPrice || 0)
+          - grandTotal += totalValue
           tr
-            td #{item.productName}
-            td #{item.productType}
-            td #{item.totalQuantity}
-            td #{item.availableQuantity}
-            td #{item.quality}
-            td #{item.costPrice}
-            td #{item.sellingPrice}
-            td #{item.supplierName}
-            td #{item.supplierContact}
+            td #{item.productName || '-'}
+            td #{item.productType || '-'}
+            td #{item.totalQuantity || 0}
+            td #{item.availableQuantity || 0}
+            td #{item.quality || '-'}
+            td #{(item.costPrice || 0).toFixed(2)}
+            td #{(item.sellingPrice || 0).toFixed(2)}
+            td #{item.supplierName || '-'}
+            td #{item.supplierContact || '-'}
+            td #{totalValue.toFixed(2)}
             td #{moment(item.date).format("DD-MM-YYYY")}
             td
               a.btn.btn-warning(href=`/editstock/${item._id}`) Edit
@@ -55,9 +60,15 @@ nav.navbar
                 button.btn.btn-danger(type='submit') Delete
       else
         tr
-          td(colspan="10", style="text-align:center") No stock available
+          td(colspan="13", style="text-align:center") No stock available
+    tfoot
+      tr
+        td(colspan="9", style="text-align:right; font-weight:bold") Grand Total:
+        td #{grandTotal.toFixed(2)}
+        td
+        td
 
-  p(style="text-align:center; margin-top:10px;")
-    a(href="/stock") Add More Stock
+p(style="text-align:center; margin-top:10px;")
+  a(href="/stock") Add More Stock
 
 script(src="/js/stocktable.js")

@@ -18,29 +18,36 @@ router.post("/stock", ensureAuthenticated, ensureManager, async (req, res) => {
 
   try {
     const { 
-      productName, productType, totalQuantity1, avalibleQuantity, 
+      productName, productType, totalQuantity, availableQuantity, 
       quality, costPrice, sellingPrice, supplierName, supplierContact, date 
-    } = req.body; // Make sure field names match your form
+    } = req.body;
 
     console.log("Extracted fields:", {
-      productName, productType, totalQuantity1, avalibleQuantity, quality, 
+      productName, productType, totalQuantity, availableQuantity, quality, 
       costPrice, sellingPrice, supplierName, supplierContact, date
     });
 
     // Validate required fields
-    if (!productName || !totalQuantity1 || !costPrice) {
+    if (!productName || !totalQuantity || !costPrice) {
       console.log("VALIDATION FAILED - Missing required fields");
       return res.status(400).send("Missing required fields: Product Name, Total Quantity, and Cost Price are required");
     }
 
+    // Safe numeric parsing: fallback availableQuantity to totalQuantity if missing or invalid
+    const parsedTotalQuantity = parseInt(totalQuantity);
+    const parsedAvailableQuantity = parseInt(availableQuantity);
+
+    const safeTotalQuantity = Number.isNaN(parsedTotalQuantity) ? 0 : parsedTotalQuantity;
+    const safeAvailableQuantity = Number.isNaN(parsedAvailableQuantity) ? safeTotalQuantity : parsedAvailableQuantity;
+
     const stockData = {
       productName,
       productType,
-      totalQuantity: parseInt(totalQuantity1),
-      availableQuantity: parseInt(avalibleQuantity),
+      totalQuantity: safeTotalQuantity,
+      availableQuantity: safeAvailableQuantity,
       quality,
-      costPrice: parseFloat(costPrice),
-      sellingPrice: parseFloat(sellingPrice),
+      costPrice: Number.isNaN(parseFloat(costPrice)) ? 0 : parseFloat(costPrice),
+      sellingPrice: Number.isNaN(parseFloat(sellingPrice)) ? 0 : parseFloat(sellingPrice),
       supplierName,
       supplierContact,
       date: date || new Date()
@@ -72,11 +79,6 @@ router.get("/stocklist", ensureAuthenticated, async (req, res) => {
   }
 });
 
-// ================= Dashboard =================
-router.get("/dashboard", ensureAuthenticated, ensureManager, (req, res) => {
-  res.render("dashboard", { title: "Dashboard Page" });
-});
-
 // ================= Edit stock =================
 router.get("/editstock/:id", ensureAuthenticated, ensureManager, async (req, res) => {
   try {
@@ -91,20 +93,30 @@ router.get("/editstock/:id", ensureAuthenticated, ensureManager, async (req, res
 
 router.post("/editstock/:id", ensureAuthenticated, ensureManager, async (req, res) => {
   try {
-    const { productName, productType, quantity, quality, costPrice, sellingPrice, supplierName, date } = req.body;
+    const { productName, productType, totalQuantity, availableQuantity, quality, costPrice, sellingPrice, supplierName, supplierContact, date } = req.body;
+
+    const parsedTotalQuantity = parseInt(totalQuantity);
+    const parsedAvailableQuantity = parseInt(availableQuantity);
+
+    const safeTotalQuantity = Number.isNaN(parsedTotalQuantity) ? 0 : parsedTotalQuantity;
+    const safeAvailableQuantity = Number.isNaN(parsedAvailableQuantity) ? safeTotalQuantity : parsedAvailableQuantity;
+
+    const updatedData = {
+      productName,
+      productType,
+      totalQuantity: safeTotalQuantity,
+      availableQuantity: safeAvailableQuantity,
+      quality,
+      costPrice: Number.isNaN(parseFloat(costPrice)) ? 0 : parseFloat(costPrice),
+      sellingPrice: Number.isNaN(parseFloat(sellingPrice)) ? 0 : parseFloat(sellingPrice),
+      supplierName,
+      supplierContact,
+      date: date || new Date()
+    };
 
     const updated = await stockModel.findByIdAndUpdate(
       req.params.id,
-      {
-        productName,
-        productType,
-        quantity: parseInt(quantity),
-        quality,
-        costPrice: parseFloat(costPrice),
-        sellingPrice: parseFloat(sellingPrice),
-        supplierName,
-        date: date || new Date(),
-      },
+      updatedData,
       { new: true, runValidators: true }
     );
 

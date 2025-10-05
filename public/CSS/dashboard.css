@@ -57,7 +57,8 @@ header {
 }
 
 .chart {
-  background: gray;
+  background: rgb(252, 251, 251);
+  color: black;
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);

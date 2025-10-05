@@ -87,7 +87,7 @@ if (currentUser.role === "Manager") {
 });
 router.post("/editsales/:id", async (req, res) => {
   try {
-    const updated = await stockModel.findByIdAndUpdate(
+    const updated = await salesModel.findByIdAndUpdate( // use salesModel instead of stockModel
       req.params.id,
       {
         productName: req.body.productName,
@@ -109,6 +109,7 @@ router.post("/editsales/:id", async (req, res) => {
     res.status(500).send("Error updating sales");
   }
 });
+
 
 // ================= Delete Sale =================
 router.post("/deletesales/:id", ensureAuthenticated, async (req, res) => {

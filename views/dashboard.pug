@@ -1,0 +1,58 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width,initial-scale=1")
+    title= title
+    link(rel="stylesheet", href="/CSS/dashboard.css")
+    script(src="https://cdn.jsdelivr.net/npm/chart.js", defer)
+
+  body
+    header
+      h1 Manager Dashboard
+
+    // ===== Cards Section =====
+    .cards-container
+      .card(onclick="location.href='/saleslist'")
+        h3 Total Sales
+        p #{(totalSales || 0).toLocaleString()}
+
+      .card(onclick="location.href='/saleslist'")
+        h3 Total Revenue
+        p $#{(totalRevenue || 0).toLocaleString()}
+
+      .card(onclick="location.href='/stocklist'")
+        h3 Stock Available
+        p #{(stockAvailable || 0).toLocaleString()}
+
+      .card.alert-card
+        h3 Stock Alerts
+        if stockAlerts && stockAlerts.length
+          ul
+            each item in stockAlerts
+              li #{item.productName} - Only #{item.alertMessage} 
+        else
+          p No low stock alerts 
+
+      .card(onclick="location.href='/deliverylist'")
+        h3 Pending Deliveries
+        p #{(pendingDeliveries || 0).toLocaleString()}
+
+    // ===== Charts Section =====
+    .charts-container
+      .chart
+        h3 Most Sold Products
+        canvas#pieChart(
+          width="400", 
+          height="400", 
+          data-labels=pieLabels, 
+          data-data=pieData)
+
+      .chart
+        h3 Daily Sales Revenue
+        canvas#lineChart(
+          width="800", 
+          height="400", 
+          data-labels=salesTrendLabels, 
+          data-data=salesTrendData)
+script(src="/js/dashboard.js")
