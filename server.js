@@ -65,7 +65,7 @@ app.use("/", authRoutes);       // /signup, /signin, etc.
 app.use("/", stockRoutes);      // /stock, /stocklist, etc.
 app.use("/", salesRoutes);      // /sales, /saleslist, etc.
 app.use("/", deliveryRoutes);   // /delivery, /deliverylist, etc.
-app.use("/", dashboardRoutes);  // ✅ NEW /dashboard route
+app.use("/", dashboardRoutes);  //  NEW /dashboard route
 
 // 404 handler (keep it last)
 app.use((req, res) => {

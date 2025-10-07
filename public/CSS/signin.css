@@ -16,6 +16,28 @@ body {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     width: 350px;
 }
+.password-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-container input {
+  width: 100%;
+  padding-right: 2rem;
+}
+
+.password-container i {
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
+  color: #555;
+}
+
+.password-container i:hover {
+  color: #000;
+}
+
 
 h2 {
     text-align: center;

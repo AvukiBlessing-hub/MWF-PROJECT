@@ -18,7 +18,11 @@ nav.navbar
       a(href="/stockHistory") Stock History
 
 .form-container
-  h2 Stock Table
+  h2 Stocklist
+
+  p(style="text-align:left; margin-bottom:10px;")
+    a(href="/stock") Add More Stock
+
   table#stockTable
     thead
       tr
@@ -67,8 +71,5 @@ nav.navbar
         td #{grandTotal.toFixed(2)}
         td
         td
-
-p(style="text-align:center; margin-top:10px;")
-  a(href="/stock") Add More Stock
 
 script(src="/js/stocktable.js")

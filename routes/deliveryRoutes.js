@@ -1,75 +1,39 @@
-// routes/deliveryRoutes.js
 const express = require("express");
 const router = express.Router();
-const { ensureAuthenticated, ensureManager } = require("../middleware/auth");
-const moment = require("moment");
+const { isAuthenticated } = require("../middleware/auth");
 const DeliveryModel = require("../models/deliveryModel");
-const SaleModel = require("../models/salesModel"); // import sales
+const SaleModel = require("../models/salesModel");
+const moment = require("moment");
 
-// ================= Show Delivery Page =================
-router.get("/delivery", ensureAuthenticated, async (req, res) => {
-  try {
-    // Fetch only sales that have not been delivered yet
-    const sales = await SaleModel.find({}).sort({ paymentDate: -1 }).lean();
-
-    res.render("delivery", {
-      title: "Delivery Page",
-       sales,   // 👈 match pug variable
-      currentUser: req.user
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Server error");
-  }
+// Delivery page
+router.get("/delivery", isAuthenticated, async (req, res) => {
+  const sales = await SaleModel.find().lean();
+  res.render("delivery", { title: "Delivery Page", sales, currentUser: req.user });
 });
 
-// ================= Handle Delivery Submission =================
-router.post("/delivery", ensureAuthenticated, async (req, res) => {
-  try {
-    const { saleId, deliveryStatus } = req.body;
+// Submit delivery
+router.post("/delivery", isAuthenticated, async (req, res) => {
+  const { saleId, deliveryStatus } = req.body;
+  const sale = await SaleModel.findById(saleId);
+  if (!sale) return res.status(400).send("Sale not found");
 
-    // Check that the sale exists
-    const sale = await SaleModel.findById(saleId);
-    if (!sale) {
-      return res.status(400).send("Cannot create delivery: sale does not exist.");
-    }
-
-    // Compute total price (could also include transport)
-    const transportFee = req.body.transport === "on" ? sale.costPrice * 0.05 : 0;
-    const totalPrice = (sale.costPrice + transportFee) * sale.quantity;
-
-    const delivery = new DeliveryModel({
-      customerName: sale.customerName,
-      customerAddress: req.body.customerAddress,
-      productName: sale.productName,
-      quantity: sale.quantity,
-      paymentType: sale.paymentMethod,
-      basePrice: sale.costPrice,
-      transport: req.body.transport === "on",
-      totalPrice,
-      deliveryStatus,
-    });
-
-    await delivery.save();
-    res.redirect("/deliverylist");
-  } catch (error) {
-    console.error(error);
-    res.redirect("/delivery");
-  }
+  const delivery = new DeliveryModel({
+    customerName: sale.customerName,
+    productName: sale.productName,
+    quantity: sale.quantity,
+    paymentType: sale.paymentMethod,
+    basePrice: sale.costPrice,
+    totalPrice: sale.totalPrice,
+    deliveryStatus
+  });
+  await delivery.save();
+  res.redirect("/deliverylist");
 });
-router.get("/deliverylist", ensureAuthenticated, async (req, res) => {
-  try {
-    const deliveries = await DeliveryModel.find().sort({ createdAt: -1 }).lean();
 
-    res.render("deliverytable", {
-      title: "Delivery List",
-      deliveries,     // all deliveries
-      currentUser: req.user
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Server error");
-  }
+// Delivery list
+router.get("/deliverylist", isAuthenticated, async (req, res) => {
+  const deliveries = await DeliveryModel.find().sort({ createdAt: -1 }).lean();
+  res.render("deliverytable", { title: "Delivery List", deliveries, currentUser: req.user });
 });
 
 module.exports = router;

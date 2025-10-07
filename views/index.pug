@@ -1,14 +1,21 @@
-meta(charset="UTF-8")
-meta(name="viewport", content="width=device-width,initial-scale=1")
-title MWF - Landing Page
-link(rel="stylesheet", href="/public/CSS/index.css")
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1")
+    title MWF - Landing Page
+    link(rel="stylesheet", href="/CSS/index.css") 
 
-section.hero
-  div
-    h1 Welcome to MWF Wood & Furniture
-    p Your trusted B2B partner for quality timber and furniture solutions.
-    .buttons
-      a.btn.signup(href="/signup") Sign up
-      a.btn.signin(href="/signin") Sign in
+  body
+    section.hero
+      div.hero-content
+        h1 Welcome to MWF Wood & Furniture
+        p Your trusted B2B partner for quality timber and furniture solutions.
+        .buttons
+          a.btn.signin(href="/signin") Sign in
 
-script(src="/public/index.js")
+    //- // Auto-redirect to /signin after 3 seconds
+    //- script.
+    //-   setTimeout(function() {
+    //-     window.location.href = '/signin';
+    //-   }, 3000);

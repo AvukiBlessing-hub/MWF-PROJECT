@@ -4,8 +4,10 @@ body {
     background: #f4f4f4;
     text-align: center;
     font-size: larger;
-    background: url(../image/chair.jpg); background-repeat: no-repeat;
+    background: url(../image/new.jpg); background-repeat: no-repeat;
     background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
    
     
 }
@@ -87,9 +89,9 @@ a.btn.signup:hover {
 
 /* Sign in button */
 a.btn.signin {
-  background: peru;  /* blue */
+  background: black;  /* blue */
 }
 
 a.btn.signin:hover {
-  background: peru;
+  background: black;
 }

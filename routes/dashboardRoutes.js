@@ -1,13 +1,12 @@
-// routes/dashboardRoutes.js
 const express = require("express");
 const router = express.Router();
-const { ensureAuthenticated, ensureManager } = require("../middleware/auth");
+const { isAuthenticated, isManager } = require("../middleware/auth");
 const stockModel = require("../models/stockModel");
 const salesModel = require("../models/salesModel");
 const deliveryModel = require("../models/deliveryModel");
 
 // ================= Dashboard =================
-router.get("/dashboard", ensureAuthenticated, ensureManager, async (req, res) => {
+router.get("/dashboard", isAuthenticated, isManager, async (req, res) => {
   try {
     // ===== Total Sales =====
     const totalSales = await salesModel.countDocuments();
@@ -18,46 +17,31 @@ router.get("/dashboard", ensureAuthenticated, ensureManager, async (req, res) =>
     ]);
     const totalRevenue = revenueAgg.length > 0 ? revenueAgg[0].total : 0;
 
-    // ===== Get all stock items =====
-    const stockItems = await stockModel.find().lean();
+    // ===== Stock Summary =====
+    const stockSummary = await stockModel.aggregate([
+      { $group: { _id: "$productName", totalAvailable: { $sum: "$availableQuantity" } } },
+      { $project: { productName: "$_id", totalAvailable: 1, _id: 0 } }
+    ]);
 
-    // ===== Group stock by productName and sum availableQuantity =====
-  // ===== Group stock by productName and sum availableQuantity =====
-const stockSummary = await stockModel.aggregate([
-  {
-    $group: {
-      _id: "$productName",
-      totalAvailable: { $sum: "$availableQuantity" }
-    }
-  },
-  { $project: { productName: "$_id", totalAvailable: 1, _id: 0 } }
-]);
+    const stockAlerts = stockSummary.map(item => {
+      let alertMessage;
+      if (item.totalAvailable < 5) alertMessage = `Restock urgently (${item.totalAvailable} left)`;
+      else if (item.totalAvailable < 10) alertMessage = `Restock soon (${item.totalAvailable} left)`;
+      else if (item.totalAvailable >= 20) alertMessage = `Plenty (${item.totalAvailable} left)`;
+      else alertMessage = `Low stock (${item.totalAvailable} left)`;
 
-// ===== Stock Alerts per product =====
-const stockAlerts = stockSummary.map(item => {
-  let alertMessage;
-  if (item.totalAvailable < 5) alertMessage = `Restock urgently (${item.totalAvailable} left)`;
-  else if (item.totalAvailable < 10) alertMessage = `Restock soon (${item.totalAvailable} left)`;
-  else if (item.totalAvailable >= 20) alertMessage = `Plenty (${item.totalAvailable} left)`;
-  else alertMessage = `Low stock (${item.totalAvailable} left)`;
-  
-  return { productName: item.productName, totalAvailable: item.totalAvailable, alertMessage };
-});
+      return { productName: item.productName, totalAvailable: item.totalAvailable, alertMessage };
+    });
 
-
-    // ===== Total Stock Available across all products =====
     const stockAvailable = stockSummary.reduce((sum, item) => sum + item.totalAvailable, 0);
 
     // ===== Pending Deliveries =====
-    const pendingDeliveries = await deliveryModel.countDocuments({
-      deliveryStatus: { $ne: "Delivered" }
-    });
+    const pendingDeliveries = await deliveryModel.countDocuments({ deliveryStatus: { $ne: "Delivered" } });
 
-    // ===== Chart Data for Stock =====
+    // ===== Chart Data =====
     const chartLabels = stockSummary.map(item => item.productName);
     const chartData = stockSummary.map(item => item.totalAvailable);
 
-    // ===== Sales per Day (Line Chart Data) =====
     const salesPerDay = await salesModel.aggregate([
       {
         $group: {
@@ -70,20 +54,14 @@ const stockAlerts = stockSummary.map(item => {
     const salesTrendLabels = salesPerDay.map(s => s._id);
     const salesTrendData = salesPerDay.map(s => s.totalSales);
 
-    // ===== Most Bought Items (Pie Chart Data) =====
     const mostBought = await salesModel.aggregate([
-      {
-        $group: {
-          _id: "$productName",
-          totalQuantity: { $sum: "$quantity" }
-        }
-      },
+      { $group: { _id: "$productName", totalQuantity: { $sum: "$quantity" } } },
       { $sort: { totalQuantity: -1 } }
     ]);
     const pieLabels = mostBought.map(item => item._id);
     const pieData = mostBought.map(item => item.totalQuantity);
 
-    // ===== Render dashboard =====
+    // ===== Render Dashboard =====
     res.render("dashboard", {
       title: "Manager Dashboard",
       totalSales,

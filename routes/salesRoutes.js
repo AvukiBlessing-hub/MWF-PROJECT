@@ -1,42 +1,37 @@
 const express = require("express");
 const router = express.Router();
-const { ensureAuthenticated, ensureAttendant: ensureAttendant } = require("../middleware/auth"); // <-- renamed here
-const UserModel = require("../models/userModel"); // add this
+const { isAuthenticated, isAttendant } = require("../middleware/auth");
 const salesModel = require("../models/salesModel");
 const stockModel = require("../models/stockModel");
 const moment = require("moment");
 
-
-
 // ================= Show Add Sales Page =================
-router.get("/sales", ensureAttendant, async (req, res) => {
+router.get("/sales", isAuthenticated, isAttendant, async (req, res) => {
   try {
-    const stocks = await stockModel.find();
-    res.render("sales", { stocks });
+    const stocks = await stockModel.find().lean();
+    res.render("sales", { stocks, user: req.user });
   } catch (error) {
-    console.error("Error loading add sales page:", error.message);
-    res.redirect("/");
+    console.error("Error loading sales page:", error.message);
+    res.redirect("/"); // redirect to landing page if error
   }
 });
 
 // ================= Handle Sales Submission =================
-router.post("/sales", ensureAuthenticated, ensureAttendant, async (req, res) => {
+router.post("/sales", isAuthenticated, isAttendant, async (req, res) => {
   try {
     const { stockId, customerName, quantity, costPrice, transportCheck, paymentMethod, quality } = req.body;
+
     if (!stockId) return res.status(400).send("No stock selected.");
 
     const qty = Number(quantity);
     const price = Number(costPrice);
 
     const stock = await stockModel.findById(stockId);
-    if (!stock) return res.status(400).send(`No stock found for ID: ${stockId}`);
+    if (!stock) return res.status(400).send("Stock not found.");
     if (stock.availableQuantity < qty) return res.status(400).send(`Insufficient stock. Only ${stock.availableQuantity} available.`);
 
-    // Calculate total price
-    let total = price * qty;
-    if (transportCheck) total *= 1.05;
+    const totalPrice = transportCheck ? price * qty * 1.05 : price * qty;
 
-    // Create sale
     const sale = new salesModel({
       productType: stock.productType,
       productName: stock.productName,
@@ -44,7 +39,7 @@ router.post("/sales", ensureAuthenticated, ensureAttendant, async (req, res) => 
       Attendant: req.user._id,
       quantity: qty,
       costPrice: price,
-      totalPrice: total,
+      totalPrice,
       transportFee: !!transportCheck,
       paymentMethod,
       quality,
@@ -52,7 +47,6 @@ router.post("/sales", ensureAuthenticated, ensureAttendant, async (req, res) => 
 
     await sale.save();
 
-    // Reduce available stock only
     stock.availableQuantity -= qty;
     await stock.save();
 
@@ -63,88 +57,72 @@ router.post("/sales", ensureAuthenticated, ensureAttendant, async (req, res) => 
   }
 });
 
-
-// ================= Sales List (for agents and managers) =================
-router.get("/saleslist", ensureAuthenticated, async (req, res) => {
+// ================= Sales List =================
+router.get("/saleslist", isAuthenticated, async (req, res) => {
   try {
-    const currentUser = req.user;
-
+    const user = req.user;
     let sales;
-if (currentUser.role === "Manager") {
-  sales = await salesModel.find().populate("Attendant", "fullname");
-} else if (currentUser.role === "Attendant") {
-  sales = await salesModel.find({ Attendant: currentUser._id }).populate("Attendant", "fullname");
-} else {
-  return res.status(403).send("Access denied.");
-}
 
+    if (user.role === "Manager") {
+      sales = await salesModel.find().populate("Attendant", "fullname").lean();
+    } else if (user.role === "Attendant") {
+      sales = await salesModel.find({ Attendant: user._id }).populate("Attendant", "fullname").lean();
+    } else {
+      return res.status(403).send("Access denied");
+    }
 
-    res.render("salestable", { items: sales, currentUser, moment });
+    res.render("salestable", { items: sales, currentUser: user, moment });
   } catch (error) {
     console.error(error.message);
     res.redirect("/");
   }
 });
-router.post("/editsales/:id", async (req, res) => {
+
+// ================= Edit Sale =================
+router.post("/editsales/:id", isAuthenticated, async (req, res) => {
   try {
-    const updated = await salesModel.findByIdAndUpdate( // use salesModel instead of stockModel
+    const updated = await salesModel.findByIdAndUpdate(
       req.params.id,
-      {
-        productName: req.body.productName,
-        productType: req.body.productType,
-        quantity: req.body.quantity,
-        quality: req.body.quality,
-        costPrice: req.body.costPrice,
-        sellingPrice: req.body.sellingPrice,
-        supplierName: req.body.supplierName,
-        date: req.body.date,
-      },
+      { ...req.body },
       { new: true, runValidators: true }
     );
 
-    if (!updated) return res.status(404).send("Sales item not found");
+    if (!updated) return res.status(404).send("Sale not found");
     res.redirect("/saleslist");
   } catch (err) {
     console.error(err);
-    res.status(500).send("Error updating sales");
+    res.status(500).send("Error updating sale");
   }
 });
 
-
-// ================= Delete Sale =================
-router.post("/deletesales/:id", ensureAuthenticated, async (req, res) => {
+// ================= Delete Sale (Manager only) =================
+router.post("/deletesales/:id", isAuthenticated, async (req, res) => {
   try {
-    const currentUser = req.user;
-    if (currentUser.role !== "Manager") return res.status(403).send("Access denied.");
+    if (req.user.role !== "Manager") return res.status(403).send("Access denied");
 
     await salesModel.findByIdAndDelete(req.params.id);
     res.redirect("/saleslist");
   } catch (error) {
     console.error(error.message);
-    res.status(400).send("Unable to delete sale.");
+    res.status(400).send("Unable to delete sale");
   }
 });
-// ================= View Sales Receipt =================
-router.get("/salesreceipt/:id", ensureAuthenticated, async (req, res) => {
-  try {
-    const sale = await salesModel
-      .findById(req.params.id)
-      .populate("Attendant", "fullname");
 
+// ================= View Sales Receipt =================
+router.get("/salesreceipt/:id", isAuthenticated, async (req, res) => {
+  try {
+    const sale = await salesModel.findById(req.params.id).populate("Attendant", "fullname").lean();
     if (!sale) return res.status(404).send("Sale not found");
 
-    // Restrict attendants to only their own sales
     if (req.user.role === "Attendant" && sale.Attendant._id.toString() !== req.user._id.toString()) {
       return res.status(403).send("Access denied. You can only view your own receipts.");
     }
 
     res.render("receipt", { sale, moment });
   } catch (error) {
-    console.error("Error fetching sale receipt:", error.message);
+    console.error(error.message);
     res.redirect("/saleslist");
   }
 });
-
-
 
 module.exports = router;
