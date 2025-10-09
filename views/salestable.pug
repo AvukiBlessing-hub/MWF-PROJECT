@@ -1,80 +1,97 @@
-meta(charset="UTF-8")
-meta(name="viewport", content="width=device-width,initial-scale=1")
-title Sales Table
-link(rel="stylesheet", href="/CSS/salestable.css")
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1")
+    title Sales Table
+    link(rel="stylesheet", href="/CSS/salestable.css")
 
-.container
-  h1 Sales Table
-  table#salesTable
-    thead
-      tr
-        th Customer Name
-        th Product Type
-        th Product Name
-        th Quantity
-        th Quality
-        th Cost Price
-        th Transport
-        th Sales Agent
-        th Total Price
-        if currentUser && currentUser.role === 'Manager'
-          th Edit
-          th Delete
-        if currentUser && currentUser.role === 'Attendant'
-          th Receipt
+  body
+    nav.navbar
+      ul
+        li
+          a(href="/sales") Sales
+        li
+          a(href="/salestable") Saleslist
+        li
+          a(href="/stock") Stock
+        li
+          a(href="/stocktable") Stocklist
+        li
+          a(href="/delivery") Delivery
+        li
+          a(href="/deliverytable") Deliverylist
 
-    tbody
-      - var totalQuantity = 0
-      - var totalCostPrice = 0
-      - var totalTotalPrice = 0
+    .container
+      h1 Sales Table
 
-      if items && items.length
-        each item in items
-          - totalQuantity += item.quantity || 0
-          - totalCostPrice += item.costPrice || 0
-          - totalTotalPrice += item.totalPrice || 0
+      // ===== Add Sales Button =====
+      a.btn.add-sales(href="/addsales") Add More Sales
+
+      table#salesTable
+        thead
           tr
-            td #{item.customerName}
-            td #{item.productType}
-            td #{item.productName}
-            td #{item.quantity}
-            td #{item.quality}
-            td #{item.costPrice.toFixed(2)}
-            td #{item.transportFee ? 'Yes' : 'No'}
-            td #{item.Attendant ? (item.Attendant.fullname || item.Attendant.name) : 'N/A'}
-            td #{item.totalPrice.toFixed(2)}
+            th Customer Name
+            th Product Type
+            th Product Name
+            th Quantity
+            th Quality
+            th Cost Price
+            th Transport
+            th Sales Agent
+            th Total Price
+            if currentUser && currentUser.role === 'Manager'
+              th Edit
+              th Delete
+            if currentUser && currentUser.role === 'Attendant'
+              th Receipt
+
+        tbody
+          - var totalQuantity = 0
+          - var totalCostPrice = 0
+          - var totalTotalPrice = 0
+
+          if items && items.length
+            each item in items
+              - totalQuantity += item.quantity || 0
+              - totalCostPrice += item.costPrice || 0
+              - totalTotalPrice += item.totalPrice || 0
+              tr
+                td #{item.customerName}
+                td #{item.productType}
+                td #{item.productName}
+                td #{item.quantity}
+                td #{item.quality}
+                td #{item.costPrice.toFixed(2)}
+                td #{item.transportFee ? 'Yes' : 'No'}
+                td #{item.Attendant ? (item.Attendant.fullname || item.Attendant.name) : 'N/A'}
+                td #{item.totalPrice.toFixed(2)}
+                if currentUser && currentUser.role === 'Manager'
+                  td
+                    a.btn.btn-warning(href=`/editsales/${item._id}`) Edit
+                  td
+                    form(method='post', action=`/deletesales/${item._id}`)
+                      button.btn.btn-danger(type='submit') Delete
+                if currentUser && currentUser.role === 'Attendant'
+                  td
+                    a.btn.btn-info(href=`/salesreceipt/${item._id}`) Receipt
+          else
+            tr
+              td(colspan=(currentUser && currentUser.role === 'Manager' ? 11 : 10), style="text-align:center;") No sales available
+
+        tfoot
+          tr
+            td(colspan="3", style="text-align:right; font-weight:bold") Totals:
+            td #{totalQuantity}
+            td
+            td #{totalCostPrice.toFixed(2)}
+            td
+            td
+            td #{totalTotalPrice.toFixed(2)}
             if currentUser && currentUser.role === 'Manager'
               td
-                a.btn.btn-warning(href=`/editsales/${item._id}`) Edit
               td
-                form(method='post', action=`/deletesales/${item._id}`)
-                  button.btn.btn-danger(type='submit') Delete
             if currentUser && currentUser.role === 'Attendant'
               td
-                a.btn.btn-info(href=`/salesreceipt/${item._id}`) Receipt
-      else
-        tr
-          td(
-            colspan=(currentUser && currentUser.role === 'Manager' ? 11 : 10),
-            style="text-align:center;"
-          ) No sales available
 
-    tfoot
-      tr
-        td(colspan="3", style="text-align:right; font-weight:bold") Totals:
-        td #{totalQuantity}
-        td
-        td #{totalCostPrice.toFixed(2)}
-        td
-        td
-        td #{totalTotalPrice.toFixed(2)}
-        if currentUser && currentUser.role === 'Manager'
-          td
-          td
-        if currentUser && currentUser.role === 'Attendant'
-          td
-
-  p(style="text-align:center; margin-top:10px;")
-    a(href="/addsales") Add More Sales
-
-script(src="/public/salestable.js")
+    script(src="/salestable.js")

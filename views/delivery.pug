@@ -4,53 +4,46 @@ title Add Delivery
 link(rel="stylesheet", href="/CSS/delivery.css")
 
 nav.navbar
-
   ul
     li
       a(href="/stock") Stock
     li
-      a(href="/stocklist") Stock Table
+      a(href="/stocklist") Stocklist
     li
-      a(href="/deliverylist") Delivery List
+      a(href="/deliverylist") Deliverylist
 
 .container
   h1 Add Delivery
 
   if sales.length
-    table
-      thead
-        tr
-          th Customer Name
-          th Customer Address
-          th Product Name
-          th Quantity
-          th Payment Method
-          th Action
-      tbody
-        each sale in sales
-          tr
-            td= sale.customerName
-            // New input for customer address
-            td
-              input(type="text", name="customerAddress", placeholder="Enter address", required)
-            td= sale.productName
-            td= sale.quantity
-            td= sale.paymentMethod
-            td
-              form(action="/delivery", method="post")
-                input(type="hidden", name="saleId", value=sale._id)
-                
-                // Checkbox with label
-                input(type="checkbox", name="transport", id=`transport-${sale._id}`)
-                label(for=`transport-${sale._id}`) Transport Fee 5%
-                
-                // Delivery status select
-                select(name="deliveryStatus", required)
-                  option(value="pending") Pending
-                  option(value="dispatched") Dispatched
-                  option(value="delivered") Delivered
-                
-                // Submit button
-                button(type="submit") Add Delivery
+    .delivery-board
+      each sale in sales
+        .delivery-card
+          h3= sale.customerName
+          p
+            strong Product: 
+            | #{sale.productName}
+          p
+            strong Quantity: 
+            | #{sale.quantity}
+          p
+            strong Payment: 
+            | #{sale.paymentMethod}
+
+          form(action="/delivery", method="post")
+            input(type="hidden", name="saleId", value=sale._id)
+
+            .form-group
+              input(type="checkbox", name="transport", id="transport-" + sale._id)
+              label(for="transport-" + sale._id) Transport Fee 5%
+
+            .form-group
+              label(for="status-" + sale._id) Delivery Status
+              select(name="deliveryStatus", id="status-" + sale._id, required)
+                option(value="pending") Pending
+                option(value="dispatched") Dispatched
+                option(value="delivered") Delivered
+
+            button(type="submit") Add Delivery
   else
     p No sales available to create delivery.

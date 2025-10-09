@@ -2,27 +2,29 @@ doctype html
 html(lang="en")
   head
     meta(charset="UTF-8")
-    meta(name="viewport", content="width=device-width,initial-scale=1")
-    title= title
+    meta(name="viewport", content="width=device-width, initial-scale=1")
+    title #{title}
     link(rel="stylesheet", href="/CSS/dashboard.css")
     script(src="https://cdn.jsdelivr.net/npm/chart.js", defer)
 
   body
+    // ===== Navbar =====
+    nav.navbar
+      ul
+        li
+          a(href="/sales") Sales
+        li
+          a(href="/salestable") Saleslist
+        li
+          a(href="/stock") Stock
+        li
+          a(href="/stocklist") Stocklist
+        li
+          a(href="/delivery") Delivery
+        li
+          a(href="/deliverylist") Deliverylist
 
-  nav.navbar
-  ul
-    li
-      a(href="/sales") Sales 
-       li
-      a(href="/salestable") Saleslist
-       li
-      a(href="/stock") Stock
-    li
-      a(href="/stocklist") Stocklist 
-    li
-      a(href="/delivery") Delivery 
-    li
-      a(href="/deliverylist") Deliverylist 
+    // ===== Header =====
     header
       h1 Manager Dashboard
 
@@ -45,9 +47,9 @@ html(lang="en")
         if stockAlerts && stockAlerts.length
           ul
             each item in stockAlerts
-              li #{item.productName} - Only #{item.alertMessage} 
+              li #{item.productName} - Only #{item.alertMessage}
         else
-          p No low stock alerts 
+          p No low stock alerts
 
       .card(onclick="location.href='/deliverylist'")
         h3 Pending Deliveries
@@ -58,16 +60,20 @@ html(lang="en")
       .chart
         h3 Most Sold Products
         canvas#pieChart(
-          width="400", 
-          height="400", 
-          data-labels=pieLabels, 
-          data-data=pieData)
+          width="400",
+          height="400",
+          data-labels=pieLabels,
+          data-data=pieData
+        )
 
       .chart
         h3 Daily Sales Revenue
         canvas#lineChart(
-          width="800", 
-          height="400", 
-          data-labels=salesTrendLabels, 
-          data-data=salesTrendData)
-script(src="/js/dashboard.js")
+          width="800",
+          height="400",
+          data-labels=salesTrendLabels,
+          data-data=salesTrendData
+        )
+
+    // ===== JS =====
+    script(src="/js/dashboard.js")

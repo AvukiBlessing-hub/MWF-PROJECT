@@ -1,54 +1,68 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // Parse data injected from backend
-  const pieLabels = JSON.parse(document.getElementById("pieChart").dataset.labels || "[]");
-  const pieData = JSON.parse(document.getElementById("pieChart").dataset.data || "[]");
-  const salesTrendLabels = JSON.parse(document.getElementById("lineChart").dataset.labels || "[]");
-  const salesTrendData = JSON.parse(document.getElementById("lineChart").dataset.data || "[]");
+  // === PIE CHART ===
+  const pieEl = document.getElementById("pieChart");
+  if (pieEl) {
+    const pieLabels = JSON.parse(pieEl.dataset.labels || "[]");
+    const pieData = JSON.parse(pieEl.dataset.data || "[]");
 
-  // === Pie Chart: Most Sold Products ===
-  if (pieLabels.length && pieData.length) {
-    new Chart(document.getElementById("pieChart"), {
+    new Chart(pieEl, {
       type: "pie",
       data: {
         labels: pieLabels,
         datasets: [{
           data: pieData,
           backgroundColor: [
-            "#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF", "#FF9F40"
-          ],
+            "#FF6384", "#36A2EB", "#FFCE56",
+            "#4BC0C0", "#9966FF", "#FF9F40"
+          ]
         }]
       },
       options: {
         responsive: true,
-        plugins: {
-          legend: { position: "bottom" }
-        }
+        plugins: { legend: { position: "bottom" } }
       }
     });
   }
 
-  // === Line Chart: Daily Sales Revenue ===
-  if (salesTrendLabels.length && salesTrendData.length) {
-    new Chart(document.getElementById("lineChart"), {
-      type: "line",
+  // === BAR CHART ===
+  const barEl = document.getElementById("lineChart"); // still using id "lineChart"
+  if (barEl) {
+    const barLabels = JSON.parse(barEl.dataset.labels || "[]");
+    const barData = JSON.parse(barEl.dataset.data || "[]");
+
+    new Chart(barEl, {
+      type: "bar", // <-- key change
       data: {
-        labels: salesTrendLabels,
+        labels: barLabels,
         datasets: [{
-          label: "Revenue per Day ($)",
-          data: salesTrendData,
-          borderColor: "blue",
-          backgroundColor: "rgba(54,162,235,0.2)",
-          fill: true,
-          tension: 0.2
+          label: "Daily Sales Revenue",
+          data: barData,
+          backgroundColor: "rgba(54, 162, 235, 0.6)",
+          borderColor: "rgba(54, 162, 235, 1)",
+          borderWidth: 1,
+          borderRadius: 4
         }]
       },
       options: {
         responsive: true,
         plugins: {
-          legend: { display: true }
+          title: {
+            display: true,
+            text: "Daily Sales Revenue (by Month)",
+            font: { size: 16 }
+          },
+          legend: { display: false }
         },
         scales: {
-          y: { beginAtZero: true }
+          x: {
+            title: { display: true, text: "Date" },
+            ticks: { autoSkip: true, maxTicksLimit: 15 },
+            grid: { display: false }
+          },
+          y: {
+            title: { display: true, text: "Revenue ($)" },
+            beginAtZero: true
+          }
         }
       }
     });

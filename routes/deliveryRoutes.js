@@ -13,6 +13,7 @@ router.get("/delivery", isAuthenticated, async (req, res) => {
 // ===== ADD DELIVERY (POST) =====
 router.post("/delivery", isAuthenticated, async (req, res) => {
   const { saleId, deliveryStatus, transport } = req.body;
+
   const sale = await SaleModel.findById(saleId);
   if (!sale) return res.status(400).send("Sale not found");
 
@@ -20,7 +21,6 @@ router.post("/delivery", isAuthenticated, async (req, res) => {
 
   const delivery = new DeliveryModel({
     customerName: sale.customerName,
-    customerAddress: sale.customerAddress,
     productName: sale.productName,
     quantity: sale.quantity,
     paymentType: sale.paymentMethod,
@@ -48,12 +48,11 @@ router.get("/delivery/:id/edit", isAuthenticated, async (req, res) => {
 });
 
 router.post("/delivery/:id", isAuthenticated, async (req, res) => {
-  const { customerName, customerAddress, productName, quantity, paymentType, basePrice, transport, deliveryStatus } = req.body;
+  const { customerName, productName, quantity, paymentType, basePrice, transport, deliveryStatus } = req.body;
   const totalPrice = Number(basePrice) * Number(quantity) + (transport ? Number(basePrice) * Number(quantity) * 0.05 : 0);
 
   await DeliveryModel.findByIdAndUpdate(req.params.id, {
     customerName,
-    customerAddress,
     productName,
     quantity,
     paymentType,

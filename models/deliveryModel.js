@@ -6,10 +6,6 @@ const deliverySchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  customerAddress: {
-    type: String,
-    required: true,
-  },
   productName: {
     type: String,
     required: true,
@@ -28,7 +24,7 @@ const deliverySchema = new mongoose.Schema({
     required: true,
   },
   transport: {
-    type: Boolean, // better as true/false
+    type: Boolean,
     default: false,
   },
   totalPrice: {

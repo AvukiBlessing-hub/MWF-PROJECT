@@ -9,7 +9,7 @@ body {
   padding: 0;
   background-color: #f4f4f4;
   color: #222;
-  font-size: 15px; /* slightly larger */
+  font-size: 15px;
 }
 
 /* ===== Header ===== */
@@ -26,36 +26,52 @@ header {
 
 /* ===== Navbar ===== */
 nav.navbar {
-  background-color: #333;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: #000;
   padding: 10px 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
 }
 
 nav.navbar ul {
   list-style: none;
   display: flex;
   justify-content: center;
-  gap: 20px;
+  align-items: center;
+  gap: 30px;
   margin: 0;
   padding: 0;
 }
 
-nav.navbar li a {
-  color: white;
-  text-decoration: none;
-  font-size: 15px;
-  padding: 8px 15px;
-  border-radius: 6px;
-  transition: background 0.3s ease;
+nav.navbar li {
+  display: inline-block;
 }
 
-nav.navbar li a:hover {
-  background-color: #555;
+nav.navbar a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 8px 15px;
+  border-radius: 6px;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+nav.navbar a:hover {
+  background-color: #222;
+  transform: translateY(-2px);
+}
+
+nav.navbar a.active {
+  background-color: #444;
+  font-weight: 600;
 }
 
 /* ===== Cards Section ===== */
 .cards-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* bigger cards */
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 15px;
   padding: 20px 25px;
 }
@@ -63,27 +79,28 @@ nav.navbar li a:hover {
 .card {
   background: #666;
   color: white;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+  padding: 12px 15px;
+  border-radius: 10px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
   cursor: pointer;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
-  font-size: 15px;
+  font-size: 14px;
   text-align: center;
+  min-height: 90px;
 }
 
 .card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+  transform: translateY(-3px);
+  box-shadow: 0 5px 10px rgba(0,0,0,0.2);
 }
 
 .card h3 {
-  font-size: 16px;
-  margin-bottom: 8px;
+  font-size: 14px;
+  margin-bottom: 6px;
 }
 
 .card p {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
   margin: 0;
 }
@@ -93,13 +110,13 @@ nav.navbar li a:hover {
 }
 
 .alert-card ul {
-  padding-left: 20px;
+  padding-left: 18px;
   margin: 0;
 }
 
 .alert-card li {
-  font-size: 14px;
-  margin-bottom: 5px;
+  font-size: 13px;
+  margin-bottom: 4px;
   font-weight: 500;
 }
 
@@ -107,9 +124,10 @@ nav.navbar li a:hover {
 .charts-container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
-  padding: 20px;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 40px;
+  padding: 40px 30px;
 }
 
 .chart {
@@ -118,41 +136,42 @@ nav.navbar li a:hover {
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-  flex: 1 1 450px;
-  max-width: 500px;
+  flex: 1 1 48%;
+  max-width: 48%;
+  min-width: 400px;
 }
 
 .chart h3 {
   text-align: center;
   font-size: 16px;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
 /* ===== Responsive ===== */
-@media (max-width: 768px) {
-  header {
-    font-size: 16px;
+@media (max-width: 900px) {
+  .charts-container {
+    flex-direction: column;
+    align-items: center;
   }
 
-  nav.navbar ul {
-    flex-wrap: wrap;
-    gap: 10px;
+  .chart {
+    max-width: 100%;
+    flex: 1 1 100%;
   }
 
   .cards-container {
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     padding: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  header {
+    font-size: 16px;
   }
 
   .card {
     padding: 15px;
     font-size: 14px;
   }
-
-  .chart {
-    flex: 1 1 100%;
-    max-width: 100%;
-    padding: 15px;
-  }
 }
-  
