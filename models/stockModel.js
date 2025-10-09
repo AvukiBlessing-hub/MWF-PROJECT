@@ -44,6 +44,6 @@ const stockSchema = new mongoose.Schema({
     type: Date, 
     default: Date.now 
   }
-});
+}, { timestamps: true }); // adds createdAt & updatedAt automatically
 
 module.exports = mongoose.models.StockModel || mongoose.model('StockModel', stockSchema);

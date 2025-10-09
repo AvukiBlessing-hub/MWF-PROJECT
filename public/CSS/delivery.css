@@ -13,6 +13,33 @@ body {
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
+
+/* Make table wider */
+.add-delivery-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Compact table rows */
+.add-delivery-table td, .add-delivery-table th {
+  padding: 5px 10px;
+  text-align: center;
+}
+
+/* Compact form elements */
+.add-delivery-form .compact-checkbox,
+.add-delivery-form .compact-select,
+.add-delivery-form .compact-btn {
+  height: 25px;
+  font-size: 0.85rem;
+  margin: 2px;
+}
+
+/* Optional: shrink button width */
+.add-delivery-form .compact-btn {
+  min-width: 80px;
+}
+
 h1 {
   text-align: center;
   margin-bottom: 20px;

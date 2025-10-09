@@ -1,0 +1,66 @@
+/* ===== Reset some default styles ===== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ===== Navbar container ===== */
+nav.navbar {
+  background-color: #2c3e50; /* Dark blue-gray */
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* ===== Navbar list ===== */
+ul.nav-list {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem;
+}
+
+/* ===== Navbar items ===== */
+li.nav-item {
+  position: relative;
+}
+
+/* ===== Links ===== */
+.nav-link {
+  color: #ecf0f1; /* light gray */
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* ===== Active page styling ===== */
+.nav-item.active .nav-link {
+  background-color: #3498db; /* bright blue */
+  color: #fff;
+}
+
+/* ===== Hover effects ===== */
+.nav-link:hover {
+  background-color: #34495e; /* darker blue-gray */
+  color: #fff;
+}
+
+/* ===== Responsive adjustments ===== */
+@media (max-width: 768px) {
+  nav.navbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  ul.nav-list {
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+  }
+  .nav-link {
+    width: 100%;
+  }
+}

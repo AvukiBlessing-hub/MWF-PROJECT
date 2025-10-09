@@ -1,38 +1,49 @@
-meta(charset="UTF-8")
-meta(name="viewport", content="width=device-width,initial-scale=1")
-title Signup Page
-link(rel="stylesheet", href="/CSS/signup.css")
+doctype html
+html
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1")
+    title Signup Page
+    link(rel="stylesheet", href="/CSS/signup.css")
+    //- link(rel="stylesheet", href="/CSS/navbar.css")
 
-.container
-  h2 Create an Account
-  form(action="/signup", method="post")
-    // Full Name
-    label(for="fullname") Full Name
-    input#fullname(type="text", name="fullname", required, placeholder="Enter your full name")
-    #nameError.error
+  body
+    .container
+      h2 Create an Account
 
-    // Email
-    label(for="email") Email Address
-    input#email(type="email", name="email", required, placeholder="Enter your email")
-    #emailError.error
+      form(action="/signup", method="post")
+        // Full Name
+        .form-group
+          label(for="fullname") Full Name
+          input#fullname(type="text", name="fullname", required, placeholder="Enter your full name")
+          #nameError.error
 
-    // Password
-    label(for="password") Password
-    input#password(type="password", name="password", required, placeholder="Enter your password")
-    #passError.error
+        // Email
+        .form-group
+          label(for="email") Email Address
+          input#email(type="email", name="email", required, placeholder="Enter your email")
+          #emailError.error
 
-    // Role
-    label(for="role") Role
-    select#role(name="role", required)
-      option(value) -- Select Role --
-      option(value="Manager")  Manager
-      option(value="Attendant") Attendant
+        // Password
+        .form-group
+          label(for="password") Password
+          input#password(type="password", name="password", required, placeholder="Enter your password")
+          #passError.error
 
-    // Submit
-    button(type="submit") Sign Up
+        // Role
+        .form-group
+          label(for="role") Role
+          select#role(name="role", required)
+            option(value="") -- Select Role --
+            option(value="Manager") Manager
+            option(value="Attendant") Attendant
 
-  p
-    | Already have an account?
-    a(href="/signin") Sign in
+        // Submit
+        .form-group
+          button.btn(type="submit") Sign Up
 
-script(src="signup.js")
+      p
+        | Already have an account?
+        a(href="/signin") Sign in
+
+    script(src="/js/signup.js")

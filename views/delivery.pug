@@ -1,56 +1,56 @@
 meta(charset="UTF-8")
-meta(name="viewport", content="width=device-width,initial-scale=1")
-title MWF Delivery Page
+meta(name="viewport", content="width=device-width, initial-scale=1")
+title Add Delivery
 link(rel="stylesheet", href="/CSS/delivery.css")
 
-// Navigation Bar
 nav.navbar
+
   ul
     li
       a(href="/stock") Stock
     li
-      a(href="/stocktable") Stocklist
+      a(href="/stocklist") Stock Table
     li
-      a(href="/delivery") Delivery
-    li
-      a(href="/deliverylist") Deliverylist
+      a(href="/deliverylist") Delivery List
 
 .container
-  h1 Delivery Management
+  h1 Add Delivery
 
-  form(action="/delivery", method="POST") 
-    label Customer Name
-    input(name="customerName", id="customerName", type="text", placeholder="Enter customer name", required)
-
-    label Delivery Address
-    input(name="customerAddress", id="customerAddress", type="text", placeholder="Enter address", required)
-
-    label Product / Sale
-    select(name="saleId", required)   //  link to sale
-      each sale in sales
-        option(value=sale._id)= `${sale.productName} - ${sale.customerName}`
-
-    label Quantity
-    input(name="quantity", id="quantity", type="number", value=1, min=1, required)
-
-    label Payment Method
-    select(name="paymentMethod", id="paymentType", required)
-      option(value="cash") Cash
-      option(value="cheque") Cheque
-      option(value="overdraft") Bank Overdraft
-
-    .checkbox
-      input(type="checkbox", name="transport", id="transport")
-      label(for="transport") Add 5% Transport Fee
-
-    label Delivery Status
-    select(name="deliveryStatus", id="deliveryStatus")
-      option(value="pending") Pending
-      option(value="dispatched") Dispatched
-      option(value="delivered") Delivered
-
-    button(type="submit")  submit form
-
-  p.status#statusMessage
-
-script(src="/js/delivery.js")
+  if sales.length
+    table
+      thead
+        tr
+          th Customer Name
+          th Customer Address
+          th Product Name
+          th Quantity
+          th Payment Method
+          th Action
+      tbody
+        each sale in sales
+          tr
+            td= sale.customerName
+            // New input for customer address
+            td
+              input(type="text", name="customerAddress", placeholder="Enter address", required)
+            td= sale.productName
+            td= sale.quantity
+            td= sale.paymentMethod
+            td
+              form(action="/delivery", method="post")
+                input(type="hidden", name="saleId", value=sale._id)
+                
+                // Checkbox with label
+                input(type="checkbox", name="transport", id=`transport-${sale._id}`)
+                label(for=`transport-${sale._id}`) Transport Fee 5%
+                
+                // Delivery status select
+                select(name="deliveryStatus", required)
+                  option(value="pending") Pending
+                  option(value="dispatched") Dispatched
+                  option(value="delivered") Delivered
+                
+                // Submit button
+                button(type="submit") Add Delivery
+  else
+    p No sales available to create delivery.

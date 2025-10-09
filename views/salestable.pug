@@ -3,17 +3,6 @@ meta(name="viewport", content="width=device-width,initial-scale=1")
 title Sales Table
 link(rel="stylesheet", href="/CSS/salestable.css")
 
-nav.navbar
-  ul
-    li
-      a(href="/stock") Stock
-    li
-      a(href="/stocktable") Stocklist 
-    li
-      a(href="/delivery") Delivery
-    li
-      a(href="/deliverytable") Deliverylist 
-
 .container
   h1 Sales Table
   table#salesTable
@@ -33,10 +22,12 @@ nav.navbar
           th Delete
         if currentUser && currentUser.role === 'Attendant'
           th Receipt
+
     tbody
       - var totalQuantity = 0
       - var totalCostPrice = 0
       - var totalTotalPrice = 0
+
       if items && items.length
         each item in items
           - totalQuantity += item.quantity || 0
@@ -63,10 +54,14 @@ nav.navbar
                 a.btn.btn-info(href=`/salesreceipt/${item._id}`) Receipt
       else
         tr
-          td(colspan= currentUser && currentUser.role === 'Manager' ? 11 : 10, style="text-align:center;") No sales available
+          td(
+            colspan=(currentUser && currentUser.role === 'Manager' ? 11 : 10),
+            style="text-align:center;"
+          ) No sales available
+
     tfoot
       tr
-        td(colspan=3, style="text-align:right; font-weight:bold") Totals:
+        td(colspan="3", style="text-align:right; font-weight:bold") Totals:
         td #{totalQuantity}
         td
         td #{totalCostPrice.toFixed(2)}

@@ -2,21 +2,18 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 const UserModel = require("../models/userModel");
-
-// Import middleware from auth.js
 const { isAuthenticated, isManager } = require("../middleware/auth");
 
-// Landing page
+// ================= Landing Page =================
 router.get("/", (req, res) => {
   res.render("index", { title: "MWF - Landing Page" });
 });
 
-// Manager-only signup page
+// ================= Signup (Manager Only) =================
 router.get("/signup", isManager, (req, res) => {
   res.render("signup", { title: "Register User", user: req.user });
 });
 
-// POST /signup - Only Manager can register users
 router.post("/signup", isManager, (req, res) => {
   const { fullname, email, role, password } = req.body;
 
@@ -26,7 +23,7 @@ router.post("/signup", isManager, (req, res) => {
 
   const newUser = new UserModel({ fullname, email, role });
 
-  UserModel.register(newUser, password, (err, user) => {
+  UserModel.register(newUser, password, (err) => {
     if (err) {
       console.error("Error registering user:", err);
       return res.status(500).send("Error registering user");
@@ -35,31 +32,42 @@ router.post("/signup", isManager, (req, res) => {
   });
 });
 
-// ===== SIGNIN =====
+// ================= Sign In =================
 router.get("/signin", (req, res) => {
   res.render("signin", { title: "Login Page" });
 });
 
-router.post(
-  "/signin",
-  passport.authenticate("local", { failureRedirect: "/signin" }),
-  (req, res) => {
-    // Redirect based on role
-    if (req.user.role === "Manager") return res.redirect("/stock");
-    if (req.user.role === "Attendant") return res.redirect("/sales");
-    return res.render("nonUser");
-  }
-);
-
-// ===== LOGOUT =====
-router.get("/logout", (req, res, next) => {
-  req.logout(err => {
+router.post("/signin", (req, res, next) => {
+  passport.authenticate("local", (err, user, info) => {
     if (err) return next(err);
-    res.redirect("/signin");
+    if (!user) return res.redirect("/signin");
+
+    // ✅ Proper session handling
+    req.logIn(user, (err) => {
+      if (err) return next(err);
+
+      // ✅ Redirect based on role
+      if (user.role === "Manager") return res.redirect("/stocklist");
+      if (user.role === "Attendant") return res.redirect("/saleslist");
+      return res.render("nonUser");
+    });
+  })(req, res, next);
+});
+
+// ================= Logout =================
+router.get("/logout", (req, res, next) => {
+  req.logout(function (err) {
+    if (err) return next(err);
+
+    // ✅ Completely destroy the session
+    req.session.destroy(() => {
+      res.clearCookie("connect.sid");
+      res.redirect("/signin");
+    });
   });
 });
 
-// ===== USER LIST =====
+// ================= User List =================
 router.get("/userlist", isAuthenticated, async (req, res) => {
   try {
     const users = await UserModel.find().sort();
@@ -70,7 +78,7 @@ router.get("/userlist", isAuthenticated, async (req, res) => {
   }
 });
 
-// ===== EDIT USER =====
+// ================= Edit User =================
 router.get("/edituser/:id", isManager, async (req, res) => {
   try {
     const foundUser = await UserModel.findById(req.params.id).lean();
@@ -93,7 +101,7 @@ router.post("/edituser/:id", isManager, async (req, res) => {
   }
 });
 
-// ===== DELETE USER =====
+// ================= Delete User =================
 router.post("/deleteuser/:id", isManager, async (req, res) => {
   try {
     await UserModel.findByIdAndDelete(req.params.id);

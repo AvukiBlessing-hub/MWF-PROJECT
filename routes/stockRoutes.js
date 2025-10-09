@@ -12,31 +12,49 @@ router.get("/stock", isAuthenticated, isManager, (req, res) => {
 // ================= Add Stock =================
 router.post("/stock", isAuthenticated, isManager, async (req, res) => {
   try {
-    const { productName, productType, totalQuantity, availableQuantity, quality, costPrice, sellingPrice, supplierName, supplierContact, date } = req.body;
+    console.log("POST /stock hit");
+    console.log("Form data:", req.body);
+
+    const {
+      productName,
+      productType,
+      totalQuantity,
+      availableQuantity,
+      quality,
+      costPrice,
+      sellingPrice,
+      supplierName,
+      supplierContact,
+      date
+    } = req.body;
 
     if (!productName || !totalQuantity || !costPrice) {
+      console.log("Missing required fields!");
       return res.status(400).send("Product Name, Total Quantity, and Cost Price are required");
     }
 
     const stockData = {
       productName,
       productType,
-      totalQuantity: parseInt(totalQuantity) || 0,
-      availableQuantity: parseInt(availableQuantity) || parseInt(totalQuantity) || 0,
+      totalQuantity: Number(totalQuantity) || 0,
+      availableQuantity: Number(availableQuantity) || Number(totalQuantity) || 0,
       quality,
-      costPrice: parseFloat(costPrice) || 0,
-      sellingPrice: parseFloat(sellingPrice) || 0,
+      costPrice: Number(costPrice) || 0,
+      sellingPrice: Number(sellingPrice) || 0,
       supplierName,
       supplierContact,
-      date: date || new Date()
+      date: date ? new Date(date) : new Date()
     };
+
+    console.log("Saving stock:", stockData);
 
     const stock = new stockModel(stockData);
     await stock.save();
 
+    console.log("Stock saved successfully!");
     res.redirect("/stocklist");
   } catch (error) {
-    console.error(error);
+    console.error("Error adding stock:", error);
     res.status(500).send("Error adding stock");
   }
 });
@@ -44,10 +62,13 @@ router.post("/stock", isAuthenticated, isManager, async (req, res) => {
 // ================= Stock List =================
 router.get("/stocklist", isAuthenticated, async (req, res) => {
   try {
-    const items = await stockModel.find().sort({ createdAt: -1 });
-    res.render("stocktable", { items, moment });
+    const items = await stockModel.find().sort({ date: -1 }).lean(); // sort by actual stock date
+
+    console.log("Fetched items from DB:", items.length);
+
+    res.render("stocklist", { items, moment });
   } catch (error) {
-    console.error(error);
+    console.error("Error fetching stock:", error);
     res.status(500).send("Unable to get stock data");
   }
 });
@@ -55,37 +76,48 @@ router.get("/stocklist", isAuthenticated, async (req, res) => {
 // ================= Edit Stock =================
 router.get("/editstock/:id", isAuthenticated, isManager, async (req, res) => {
   try {
-    const item = await stockModel.findById(req.params.id);
+    const item = await stockModel.findById(req.params.id).lean();
     if (!item) return res.status(404).send("Product not found");
     res.render("editstock", { item });
   } catch (error) {
-    console.error(error);
+    console.error("Error loading edit form:", error);
     res.status(500).send("Error loading edit form");
   }
 });
 
 router.post("/editstock/:id", isAuthenticated, isManager, async (req, res) => {
   try {
-    const { productName, productType, totalQuantity, availableQuantity, quality, costPrice, sellingPrice, supplierName, supplierContact, date } = req.body;
+    const {
+      productName,
+      productType,
+      totalQuantity,
+      availableQuantity,
+      quality,
+      costPrice,
+      sellingPrice,
+      supplierName,
+      supplierContact,
+      date
+    } = req.body;
 
     const updatedData = {
       productName,
       productType,
-      totalQuantity: parseInt(totalQuantity) || 0,
-      availableQuantity: parseInt(availableQuantity) || parseInt(totalQuantity) || 0,
+      totalQuantity: Number(totalQuantity) || 0,
+      availableQuantity: Number(availableQuantity) || Number(totalQuantity) || 0,
       quality,
-      costPrice: parseFloat(costPrice) || 0,
-      sellingPrice: parseFloat(sellingPrice) || 0,
+      costPrice: Number(costPrice) || 0,
+      sellingPrice: Number(sellingPrice) || 0,
       supplierName,
       supplierContact,
-      date: date || new Date()
+      date: date ? new Date(date) : new Date()
     };
 
     await stockModel.findByIdAndUpdate(req.params.id, updatedData, { new: true, runValidators: true });
 
     res.redirect("/stocklist");
   } catch (error) {
-    console.error(error);
+    console.error("Error updating stock:", error);
     res.status(500).send("Error updating stock");
   }
 });
@@ -96,8 +128,19 @@ router.post("/deletestock/:id", isAuthenticated, isManager, async (req, res) => 
     await stockModel.findByIdAndDelete(req.params.id);
     res.redirect("/stocklist");
   } catch (error) {
-    console.error(error);
+    console.error("Error deleting stock:", error);
     res.status(500).send("Unable to delete stock");
+  }
+});
+
+// ================= Debug Route =================
+router.get("/stock/test", async (req, res) => {
+  try {
+    const allStock = await stockModel.find().lean();
+    console.log("All stock in DB:", allStock.length);
+    res.json(allStock);
+  } catch (err) {
+    res.status(500).send("Error fetching stock for test");
   }
 });
 

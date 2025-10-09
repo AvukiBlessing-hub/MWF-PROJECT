@@ -1,15 +1,28 @@
-/* Container styling */
+/* Body styling */
 body {
     font-family: Arial, sans-serif;
-    background: #f0f2f5;
+    background: url(../image/lates.jpg) no-repeat center center fixed;
+    background-size: cover;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+    flex-direction: column; /* stack navbar and container vertically */
+    align-items: center; /* center only the container, navbar will override */
     margin: 0;
-    background: url(../image/lates.jpg);
+    padding: 0;
 }
 
+/* Navbar full-width fix */
+nav {
+    width: 100%;
+    background: black; /* adjust as needed */
+    color: white;
+    display: flex;
+    justify-content: space-between; /* adjust nav items */
+    align-items: center;
+    padding: 15px 30px;
+    box-sizing: border-box;
+}
+
+/* Container styling */
 .container {
     background: gray;
     padding: 30px 40px;
@@ -17,8 +30,10 @@ body {
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
     width: 100%;
     max-width: 600px;
+    margin: 20px 0; /* spacing below navbar */
 }
 
+/* Form title */
 h2 {
     text-align: center;
     margin-bottom: 20px;
@@ -43,7 +58,7 @@ form select {
 }
 
 form select {
-    appearance: none; /* remove default arrow style on some browsers */
+    appearance: none; 
     -webkit-appearance: none;
     -moz-appearance: none;
     background: #fff url("data:image/svg+xml,%3Csvg fill='gray' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3C/svg%3E") no-repeat right 10px center;
@@ -64,7 +79,7 @@ form button {
 }
 
 form button:hover {
-    background:plum ;
+    background: plum;
 }
 
 /* Error messages */
@@ -75,7 +90,7 @@ form button:hover {
     margin-bottom: 10px;
 }
 
-/* Link styling */
+/* Paragraph styling */
 p {
     text-align: center;
     margin-top: 15px;

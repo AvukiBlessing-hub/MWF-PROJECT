@@ -1,46 +1,66 @@
 meta(charset="UTF-8")
-meta(name="viewport", content="width=device-width,initial-scale=1")
-title MWF Delivery Page
+meta(name="viewport", content="width=device-width, initial-scale=1")
+title= product ? "Edit Delivery" : "Add Delivery"
 link(rel="stylesheet", href="/CSS/delivery.css")
-//  Navigation Bar 
+
+// Navigation Bar 
 nav.navbar
   ul
     li
-      a(href="stock.html") Stock
+      a(href="/stock") Stock
     li
-      a(href="stocktable.html") Stock Table
+      a(href="/stocklist") Stock Table
     li
-      a(href="delivery.html") Delivery
+      a(href="/delivery") Delivery
     li
-      a(href="deliverytable.html") Delivery Table
+      a(href="/deliverylist") Delivery Table
+
 .container
-  h1 Delivery Management
-  form(action=`/editdelivery/${product ._id}?_method=PUT`, method="post")
-  label Customer Name
-  input#customerName(type="text", placeholder)
-  label Delivery Address
-  input#customerAddress(type="text", placeholder)
-  label Product Name
-  input#productName(type="text", placeholder)
-  label Quantity
-  input#quantity(type="number", placeholder)
-  label Payment Method
-  select#paymentType
-    option(value) -- Select Payment --
-    option(value="cash") Cash
-    option(value="cheque") Cheque
-    option(value="overdraft") Bank Overdraft
-  label Base Price
-  input#basePrice(type="number", placeholder)
-  .checkbox
-    input#transport(type="checkbox")
-    label(for="transport") Add 5% Transport Fee
-  p.total#totalPrice Total:
-  label Delivery Status
-  select#deliveryStatus
-    option(value="pending") Pending
-    option(value="dispatched") Dispatched
-    option(value="delivered") Delivered
-  button(onclick="processDelivery()") Save Delivery
-  p.status#statusMessage
-script(src="/js/delivery.js")
+  h1= product ? "Edit Delivery" : "Add New Delivery"
+
+  form(action=product ? `/delivery/editdelivery/${product._id}?_method=PUT` : '/delivery', method="post")
+    // Customer Name
+    label(for="customerName") Customer Name
+    input#customerName(type="text", name="customerName", value=product ? product.customerName : '', placeholder="Enter customer name", required)
+
+    // Delivery Address
+    label(for="customerAddress") Delivery Address
+    input#customerAddress(type="text", name="customerAddress", value=product ? product.customerAddress : '', placeholder="Enter address", required)
+
+    // Product Name
+    label(for="productName") Product Name
+    input#productName(type="text", name="productName", value=product ? product.productName : '', placeholder="Enter product name", required)
+
+    // Quantity
+    label(for="quantity") Quantity
+    input#quantity(type="number", name="quantity", value=product ? product.quantity : '', placeholder="Enter quantity", required)
+
+    // Payment Method
+    label(for="paymentType") Payment Method
+    select#paymentType(name="paymentType", required)
+      option(value="") -- Select Payment --
+      option(value="cash", selected=product && product.paymentType === "cash") Cash
+      option(value="cheque", selected=product && product.paymentType === "cheque") Cheque
+      option(value="overdraft", selected=product && product.paymentType === "overdraft") Bank Overdraft
+
+    // Base Price
+    label(for="basePrice") Base Price
+    input#basePrice(type="number", name="basePrice", value=product ? product.basePrice : '', placeholder="Enter base price", required)
+
+    // Transport Fee
+    .checkbox
+      input#transport(type="checkbox", name="transport", checked=product && product.transport)
+      label(for="transport") Add 5% Transport Fee
+
+    // Total Price (display only)
+    p.total#totalPrice Total: #{product ? product.totalPrice : 0}
+
+    // Delivery Status
+    label(for="deliveryStatus") Delivery Status
+    select#deliveryStatus(name="deliveryStatus", required)
+      option(value="pending", selected=product && product.deliveryStatus === "pending") Pending
+      option(value="dispatched", selected=product && product.deliveryStatus === "dispatched") Dispatched
+      option(value="delivered", selected=product && product.deliveryStatus === "delivered") Delivered
+
+    // Submit button
+    button(type="submit")= product ? "Update Delivery" : "Add Delivery"

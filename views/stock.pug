@@ -1,76 +1,93 @@
-meta(charset="UTF-8")
-meta(name="viewport", content="width=device-width,initial-scale=1")
-title Stock Registration
-link(rel="stylesheet", href="/css/stock.css")
+doctype html
+html
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width,initial-scale=1")
+    title Stock Registration
+    link(rel="stylesheet", href="/css/stock.css")
 
-.form-container
-  h2 Stock Registration Form
-  form(action="/stock", method="post")
-    // Product Name 
-    .form-group
-      label(for="productName") Product Name
-      select#productName(name="productName", required)
-        option(value="" disabled selected) -- Select Product --
-        option(value="sofa") Sofa
-        option(value="dining-table") Dining Table
-        option(value="bed") Bed
-        option(value="chair") Chair
-        option(value="timber") Timber
-        option(value="table") Table      
-        option(value="poles") Poles
-        option(value="Hardwood") Hardwood
+  body
+    // Navigation Bar
+    nav.navbar
+      ul
+        li
+          a(href="/stock") Stock
+        li
+          a(href="/stocklist") Stocklist
+        li
+          a(href="/delivery") Delivery
+        li
+          a(href="/deliverylist") Deliverylist
 
-    // Product Type 
-    .form-group
-      label(for="productType") Product Type
-      select#productType(name="productType", required)
-        option(value="" disabled selected) -- Select Type --
-        option(value="furniture") Furniture
-        option(value="wood") Wood
+    .scroll-container
+      .form-container
+        h2 Stock Registration Form
+        form(action="/stock", method="post")
+          // Product Name 
+          .form-group
+            label(for="productName") Product Name
+            select#productName(name="productName", required)
+              option(value="" disabled selected) -- Select Product --
+              option(value="sofa") Sofa
+              option(value="dining-table") Dining Table
+              option(value="bed") Bed
+              option(value="chair") Chair
+              option(value="timber") Timber
+              option(value="table") Table      
+              option(value="poles") Poles
+              option(value="Hardwood") Hardwood
 
-    // Total Quantity 
-    .form-group
-      label(for="totalQuantity") Total Quantity
-      input#totalQuantity(type="number", name="totalQuantity", min="1", required, placeholder="Enter quantity")
+          // Product Type 
+          .form-group
+            label(for="productType") Product Type
+            select#productType(name="productType", required)
+              option(value="" disabled selected) -- Select Type --
+              option(value="furniture") Furniture
+              option(value="wood") Wood
 
-    // Available Quantity 
-    .form-group
-      label(for="availableQuantity") Available Quantity
-      input#availableQuantity(type="number", name="availableQuantity", min="1", required, placeholder="Enter quantity")
+          // Total Quantity 
+          .form-group
+            label(for="totalQuantity") Total Quantity
+            input#totalQuantity(type="number", name="totalQuantity", min="1", required, placeholder="Enter quantity")
 
-    // Quality 
-    .form-group
-      label(for="quality") Quality
-      select#quality(name="quality", required)
-        option(value="" disabled selected) -- Select Quality --
-        option(value="high") High
-        option(value="medium") Medium
-        option(value="low") Low
+          // Available Quantity 
+          .form-group
+            label(for="availableQuantity") Available Quantity
+            input#availableQuantity(type="number", name="availableQuantity", min="1", required, placeholder="Enter quantity")
 
-    // Unit Cost Price
-    .form-group
-      label(for="costPrice") Unit Cost Price (shs)
-      input#costPrice(type="number", name="costPrice", min="1", step="0.01", required, placeholder="Enter cost price")
+          // Quality 
+          .form-group
+            label(for="quality") Quality
+            select#quality(name="quality", required)
+              option(value="" disabled selected) -- Select Quality --
+              option(value="high") High
+              option(value="medium") Medium
+              option(value="low") Low
 
-    // Unit Selling Price 
-    .form-group
-      label(for="sellingPrice") Unit Selling Price (shs)
-      input#sellingPrice(type="number", name="sellingPrice", min="1", step="0.01", required, placeholder="Enter Selling Price")
+          // Unit Cost Price
+          .form-group
+            label(for="costPrice") Unit Cost Price (shs)
+            input#costPrice(type="number", name="costPrice", min="1", step="0.01", required, placeholder="Enter cost price")
 
-    // Supplier 
-    .form-group
-      label(for="supplierName") Supplier Name
-      input#supplierName(type="text", name="supplierName", required, placeholder="Enter the Supplier's Name")
+          // Unit Selling Price 
+          .form-group
+            label(for="sellingPrice") Unit Selling Price (shs)
+            input#sellingPrice(type="number", name="sellingPrice", min="1", step="0.01", required, placeholder="Enter Selling Price")
 
-    // Supplier Contact
-    .form-group
-      label(for="supplierContact") Supplier Contact
-      input#supplierContact(type="text", name="supplierContact", required, placeholder="Enter Supplier Contact")
+          // Supplier 
+          .form-group
+            label(for="supplierName") Supplier Name
+            input#supplierName(type="text", name="supplierName", required, placeholder="Enter the Supplier's Name")
 
-    // Date 
-    .form-group
-      label(for="date") Date of Stock
-      input#date(type="date", name="date", required)
+          // Supplier Contact
+          .form-group
+            label(for="supplierContact") Supplier Contact
+            input#supplierContact(type="text", name="supplierContact", required, placeholder="Enter Supplier Contact")
 
-    // Submit Button 
-    button.btn(type="submit") Add Stock
+          // Date 
+          .form-group
+            label(for="date") Date of Stock
+            input#date(type="date", name="date", required)
+
+          // Submit Button 
+          button.btn(type="submit") Add Stock

@@ -6,13 +6,17 @@ link(rel="stylesheet", href="/CSS/sales.css")
 nav.navbar
   ul
     li
+      a(href="/sales") Sales
+    li
+      a(href="/salestable") Stocklist
+    li
       a(href="/stock") Stock
     li
-      a(href="/stocktable") Stocklist 
+      a(href="/stocktable") Stocklist
     li
       a(href="/delivery") Delivery
     li
-      a(href="/deliverytable") Deliverylist 
+      a(href="/deliverytable") Deliverylist
 
 .container
   h1 Record a Sale
@@ -64,11 +68,7 @@ nav.navbar
       option(value="cheque") Cheque
       option(value="bank-overdraft") Bank Overdraft
 
-    //- // Attendant
-    //- label(for="Attendant") Attendant
-    //- input#Attendant(type="text", name="Attendant", required)
-
     // Submit
-    button.btn(type="submit")  Add Sale
+    button.btn(type="submit") Add Sale
 
 //- script(src="/js/sales.js")

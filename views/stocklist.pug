@@ -1,21 +1,7 @@
 meta(charset="UTF-8")
 meta(name="viewport", content="width=device-width, initial-scale=1")
 title Stock Table
-link(rel="stylesheet", href="/css/stocktable.css")
-
-// Navigation Bar
-nav.navbar
-  ul
-    li
-      a(href="/stock") Stock
-    li
-      a(href="/stocklist") Stocklist
-    li
-      a(href="/delivery") Delivery
-    li
-      a(href="/deliverylist") Deliverylist
-    li
-      a(href="/stockHistory") Stock History
+link(rel="stylesheet", href="/css/stocklist.css")
 
 .form-container
   h2 Stocklist
@@ -39,24 +25,29 @@ nav.navbar
         th Date
         th Edit
         th Delete
+
     tbody
       - var grandTotal = 0
       if items && items.length
         each item in items
-          - var totalValue = Number(item.availableQuantity || 0) * Number(item.costPrice || 0)
+          - var totalQuantity = Number(item.totalQuantity) || 0
+          - var available = Number(item.availableQuantity) || 0
+          - var cost = Number(item.costPrice) || 0
+          - var selling = Number(item.sellingPrice) || 0
+          - var totalValue = available * cost
           - grandTotal += totalValue
           tr
             td #{item.productName || '-'}
             td #{item.productType || '-'}
-            td #{item.totalQuantity || 0}
-            td #{item.availableQuantity || 0}
+            td #{totalQuantity}
+            td #{available}
             td #{item.quality || '-'}
-            td #{(item.costPrice || 0).toFixed(2)}
-            td #{(item.sellingPrice || 0).toFixed(2)}
+            td #{cost.toFixed(2)}
+            td #{selling.toFixed(2)}
             td #{item.supplierName || '-'}
             td #{item.supplierContact || '-'}
             td #{totalValue.toFixed(2)}
-            td #{moment(item.date).format("DD-MM-YYYY")}
+            td #{item.date ? moment(item.date).format("DD-MM-YYYY") : '-'}
             td
               a.btn.btn-warning(href=`/editstock/${item._id}`) Edit
             td
@@ -64,12 +55,4 @@ nav.navbar
                 button.btn.btn-danger(type='submit') Delete
       else
         tr
-          td(colspan="13", style="text-align:center") No stock available
-    tfoot
-      tr
-        td(colspan="9", style="text-align:right; font-weight:bold") Grand Total:
-        td #{grandTotal.toFixed(2)}
-        td
-        td
-
-script(src="/js/stocktable.js")
+          td(colspan="13", style="text-align:center; color: gray") No stock available

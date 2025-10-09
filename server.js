@@ -28,8 +28,8 @@ mongoose.connection
   .on("error", (err) => console.log(`Connection error: ${err.message}`));
 
 // View engine
-app.set("view engine", "pug");
 app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "pug");
 
 // Middleware
 app.use(express.static(path.join(__dirname, "public")));
@@ -59,6 +59,19 @@ app.use((req, res, next) => {
   console.log("Request URL:", req.url, "at", new Date().toISOString());
   next();
 });
+
+
+// --- Individual page routes
+// app.get('/dashboard', (req, res) => res.render('dashboard', { page: 'dashboard' }));
+// app.get('/stock', (req, res) => res.render('stock', { page: 'stock' }));
+// app.get('/stocklist', (req, res) => res.render('stocklist', { page: 'stocklist' }));
+// app.get('/sales', (req, res) => res.render('sales', { page: 'sales' }));
+// app.get('/saleslist', (req, res) => res.render('saleslist', { page: 'saleslist' }));
+// app.get('/delivery', (req, res) => res.render('delivery', { page: 'delivery' }));
+// app.get('/deliverylist', (req, res) => res.render('deliverylist', { page: 'deliverylist' }));
+// app.get('/signup', (req, res) => res.render('signup', { page: 'signup' }));
+// app.get('/userlist', (req, res) => res.render('userlist', { page: 'userlist' }));
+
 
 // Mount routes
 app.use("/", authRoutes);       // /signup, /signin, etc.

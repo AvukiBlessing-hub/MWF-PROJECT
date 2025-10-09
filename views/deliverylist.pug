@@ -1,0 +1,40 @@
+doctype html
+html
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1")
+    title Delivery List
+    link(rel="stylesheet", href="/CSS/deliverytable.css")
+
+    h1 Deliverylist Page
+    .container
+      h1 Delivery Management
+      table#deliveryTable
+        thead
+          tr
+            th Customer Name
+            th Delivery Address
+            th Product Name
+            th Quantity
+            th Payment Method
+            th Base Price
+            th Transport Fee
+            th Total Price
+            th Delivery Status
+            th Actions
+        tbody
+          each delivery in deliveries
+            tr
+              td= delivery.customerName
+              td= delivery.customerAddress
+              td= delivery.productName
+              td= delivery.quantity
+              td= delivery.paymentType
+              td= delivery.basePrice
+              td= delivery.transport ? "Yes" : "No"
+              td= delivery.totalPrice
+              td= delivery.deliveryStatus
+              td
+                a.btn.btn-warning(href=`/delivery/${delivery._id}/edit`) Edit
+                form(action=`/delivery/${delivery._id}/delete`, method="post", style="display:inline")
+                  button.btn.btn-danger(type="submit") Delete

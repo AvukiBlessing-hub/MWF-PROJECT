@@ -1,39 +1,44 @@
-meta(charset="UTF-8")
-meta(name="viewport", content="width=device-width,initial-scale=1")
-title User Table
-link(rel="stylesheet", href="/CSS/userlist.css")
+doctype html
+html
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width,initial-scale=1")
+    title User Table
+    link(rel="stylesheet", href="/CSS/userlist.css")
+    //- link(rel="stylesheet", href="/CSS/navbar.css")
 
-.container
-  h2(style="text-align:center;") Registered Users
+  body
+    .container
+      h2(style="text-align:center;") Registered Users
 
-  // Add User button (visible only to Manager)
-  p(style="text-align:left; margin-bottom:10px;")
-    a.btn.btn-primary(href="/signup") Add New User
+      // Add User button (visible only to Manager)
+      p(style="text-align:left; margin-bottom:10px;")
+        a.btn.btn-primary(href="/signup") Add New User
 
-  table#userTable
-    thead
-      tr
-        th Full Name
-        th Email
-        th Role
-        th Date Created
-        th Edit
-        th Delete
-    tbody#userTableBody
-      if users && users.length
-        each u in users
+      table#userTable
+        thead
           tr
-            td= u.fullname
-            td= u.email
-            td= u.role
-            td= u.createdAt ? u.createdAt.toLocaleDateString() : ""
-            td 
-              a.btn.btn-warning(href=`/edituser/${u._id}`) Edit
-            td 
-              form(action=`/deleteuser/${u._id}`, method="POST", onsubmit="return confirm('Delete this user?');")
-                button.btn.btn-danger(type="submit") Delete
-      else
-        tr
-          td(colspan="6", style="text-align:center; color:gray;") No users found.
+            th Full Name
+            th Email
+            th Role
+            th Date Created
+            th Edit
+            th Delete
+        tbody#userTableBody
+          if users && users.length
+            each u in users
+              tr
+                td= u.fullname
+                td= u.email
+                td= u.role
+                td= u.createdAt ? u.createdAt.toLocaleDateString() : ""
+                td
+                  a.btn.btn-warning(href=`/edituser/${u._id}`) Edit
+                td
+                  form(action=`/deleteuser/${u._id}`, method="POST", onsubmit="return confirm('Delete this user?');")
+                    button.btn.btn-danger(type="submit") Delete
+          else
+            tr
+              td(colspan="6", style="text-align:center; color:gray;") No users found.
 
-script(src="/js/usertable.js")
+    script(src="/js/usertable.js")

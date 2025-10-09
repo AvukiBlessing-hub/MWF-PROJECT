@@ -1,4 +1,4 @@
-/* Reset */
+/* Reset defaults */
 * {
   margin: 0;
   padding: 0;
@@ -6,136 +6,124 @@
 }
 
 body {
-  font-family: Arial, sans-serif;
-  background: url(../image/lates.jpg);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background:url(/image/lates.jpg) ;
+  color: #fff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Navbar */
+.navbar {
+  background: #000;
+  padding: 10px 0;
+  text-align: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+}
+
+.navbar li a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+.navbar li a:hover {
+  color: black;
+}
+
+/* Scroll container */
+.scroll-container {
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  padding: 15px;
+  padding: 30px;
+  overflow-y: auto;
 }
 
-
-/* Container */
+/* Form box */
 .form-container {
   background: gray;
-  padding: 25px 30px;
-  border-radius: 10px;
-  box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
-  width: 100%;
-  max-width: 1100px; /* increased for 2 columns */
+  padding: 40px;
+  border-radius: 15px;
+  max-width: 900px;
+  width: 90%;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
 }
 
+/* Header */
 .form-container h2 {
   text-align: center;
-  margin-bottom: 20px;
-  color: #5a3d2b; /* Dark brown */
+  color: black;
+  margin-bottom: 25px;
 }
 
-/* Form Grid Layout */
+/* Two-column layout */
 form {
   display: grid;
-  grid-template-columns: 1fr 1fr; /* two equal columns */
-  column-gap: 20px;
-  row-gap: 15px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px 30px;
 }
 
-/* Form fields */
+/* Form group */
 .form-group {
   display: flex;
   flex-direction: column;
 }
 
-.form-group label {
-  margin-bottom: 5px;
+label {
   font-weight: bold;
-  color: white;
+  margin-bottom: 5px;
+  color: #fff;
 }
 
-.form-group input,
-.form-group select {
+input,
+select {
   padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  outline: none;
-  transition: border 0.3s ease;
+  border: none;
+  border-radius: 8px;
+  background: #222;
+  color: #fff;
+  font-size: 14px;
 }
 
-.form-group input:focus,
-.form-group select:focus {
-  border-color: #d97706; /* warm orange */
+input:focus,
+select:focus {
+  outline: 2px solid black;
 }
 
-/* Make submit button span both columns */
-.btn {
-  grid-column: 1 / -1; /* full width */
-  padding: 12px;
-  background:black; /* Orange-brown */
+/* Submit button across full width */
+button.btn {
+  grid-column: span 2;
+  background: black;
   color: #fff;
   border: none;
-  border-radius: 6px;
+  padding: 15px;
   font-size: 16px;
+  font-weight: bold;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: background 0.3s;
 }
 
-.btn:hover {
-  background: #b45309; /* Darker orange */
+button.btn:hover {
+  background: #e63b3b;
 }
 
-/* Responsive Design */
-@media (max-width: 600px) {
+/* Responsive (1 column on mobile) */
+@media (max-width: 768px) {
   form {
-    grid-template-columns: 1fr; /* stack columns on small screens */
+    grid-template-columns: 1fr;
   }
-
-  .form-container {
-    padding: 20px;
-    max-width: 100%;
-  }
-
-  .form-container h2 {
-    font-size: 20px;
-  }
-
-  .btn {
-    font-size: 14px;
-    padding: 10px;
-  }
-}
-.navbar{
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background-color: black;
-    padding:  12px 20px;
-    z-index: 1000;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-  }
-
-  .navbar ul {
-    list-style:  none;
-    margin: 0;
-    padding: flex;
-    gap: 20px;
-  }
-  .navbar ul li {
-    display: inline;
-}
-
-.navbar ul li a {
-    color: #ecf0f1;            /* light gray text */
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 16px;
-    padding: 8px 14px;
-    border-radius: 6px;
-    transition: background 0.3s ease, color 0.3s ease;
-}
-
-.navbar ul li a:hover {
-    background-color: #34495e; /* hover effect */
-    color: #ffffff;
-
 }
