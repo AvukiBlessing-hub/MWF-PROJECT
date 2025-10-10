@@ -19,19 +19,20 @@ document.addEventListener("DOMContentLoaded", function () {
       },
       options: {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: { legend: { position: "bottom" } }
       }
     });
   }
 
   // === BAR CHART ===
-  const barEl = document.getElementById("lineChart"); // still using id "lineChart"
+  const barEl = document.getElementById("barChart");
   if (barEl) {
     const barLabels = JSON.parse(barEl.dataset.labels || "[]");
     const barData = JSON.parse(barEl.dataset.data || "[]");
 
     new Chart(barEl, {
-      type: "bar", // <-- key change
+      type: "bar",
       data: {
         labels: barLabels,
         datasets: [{
@@ -45,10 +46,11 @@ document.addEventListener("DOMContentLoaded", function () {
       },
       options: {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
           title: {
             display: true,
-            text: "Daily Sales Revenue (by Month)",
+            text: "",
             font: { size: 16 }
           },
           legend: { display: false }
@@ -60,7 +62,7 @@ document.addEventListener("DOMContentLoaded", function () {
             grid: { display: false }
           },
           y: {
-            title: { display: true, text: "Revenue ($)" },
+            title: { display: true, text: "" },
             beginAtZero: true
           }
         }

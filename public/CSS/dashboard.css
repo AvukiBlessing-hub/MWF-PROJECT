@@ -1,37 +1,32 @@
-/* ===== Global Styles ===== */
+/* =====================
+   Global Styles
+===================== */
 * {
   box-sizing: border-box;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Poppins', Arial, sans-serif;
 }
 
 body {
   margin: 0;
-  padding: 0;
-  background-color: #f4f4f4;
+  padding: 80px 20px 20px;
+  background: url(../image/lates.jpg) no-repeat center center fixed;
+  background-size: cover;
   color: #222;
-  font-size: 15px;
 }
 
-/* ===== Header ===== */
-header {
-  padding: 15px;
-  text-align: center;
-  background-color: #444;
-  color: white;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-  font-size: 18px;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-}
-
-/* ===== Navbar ===== */
+/* =====================
+   Navbar
+===================== */
 nav.navbar {
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.95);
+  padding: 12px 20px;
   z-index: 1000;
-  background-color: #000;
-  padding: 10px 0;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(6px);
 }
 
 nav.navbar ul {
@@ -39,74 +34,97 @@ nav.navbar ul {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 30px;
+  gap: 25px;
   margin: 0;
   padding: 0;
 }
 
-nav.navbar li {
-  display: inline-block;
-}
-
 nav.navbar a {
-  color: #fff;
+  color: #ecf0f1;
   text-decoration: none;
-  font-size: 16px;
-  font-weight: 500;
-  padding: 8px 15px;
-  border-radius: 6px;
-  transition: background 0.3s ease, transform 0.2s ease;
+  font-weight: 600;
+  font-size: 15px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
 }
 
 nav.navbar a:hover {
-  background-color: #222;
+  background-color: #34495e;
+  color: #ffffff;
   transform: translateY(-2px);
 }
 
 nav.navbar a.active {
-  background-color: #444;
-  font-weight: 600;
+  background-color: #1abc9c;
+  color: #fff;
 }
 
-/* ===== Cards Section ===== */
+/* =====================
+   Header
+===================== */
+header {
+  text-align: center;
+  background: rgba(255, 255, 255, 0.85);
+  color: #000;
+  padding: 15px;
+  border-radius: 10px;
+  width: 95%;
+  max-width: 1200px;
+  margin: 20px auto;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+/* =====================
+   Cards Section
+===================== */
 .cards-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 15px;
-  padding: 20px 25px;
+  padding: 15px;
+  width: 95%;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .card {
-  background: #666;
-  color: white;
-  padding: 12px 15px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #222;
+  padding: 10px 12px;
   border-radius: 10px;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   cursor: pointer;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-  font-size: 14px;
+  transition: all 0.3s ease;
   text-align: center;
-  min-height: 90px;
+  min-height: 80px;
 }
 
 .card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.3);
 }
 
 .card h3 {
-  font-size: 14px;
+  font-size: 13px;
   margin-bottom: 6px;
+  color: #000;
 }
 
 .card p {
-  font-size: 16px;
-  font-weight: bold;
+  font-size: 15px;
+  font-weight: 600;
   margin: 0;
+  color: #1e272e;
 }
 
+/* Alert Card (Red Glassy) */
 .alert-card {
-  background-color: #b93737;
+ background: rgba(255, 255, 255, 0.9);
+  color: black;
+  box-shadow: 0 4px 10px rgba(192, 57, 43, 0.4);
 }
 
 .alert-card ul {
@@ -116,38 +134,54 @@ nav.navbar a.active {
 
 .alert-card li {
   font-size: 13px;
-  margin-bottom: 4px;
   font-weight: 500;
+  margin-bottom: 4px;
 }
 
-/* ===== Charts Section ===== */
+/* =====================
+   Charts Section
+===================== */
 .charts-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 40px;
-  padding: 40px 30px;
+  gap: 25px;
+  width: 95%;
+  max-width: 1200px;
+  margin: 35px auto;
 }
 
 .chart {
-  background: white;
-  color: black;
-  padding: 20px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #000;
+  padding: 15px;
   border-radius: 12px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
   flex: 1 1 48%;
   max-width: 48%;
-  min-width: 400px;
+  min-width: 360px;
 }
 
 .chart h3 {
   text-align: center;
-  font-size: 16px;
-  margin-bottom: 15px;
+  font-size: 15px;
+  margin-bottom: 10px;
+  color: #000;
 }
 
-/* ===== Responsive ===== */
+/* Equal chart sizing */
+.chart canvas {
+  width: 100% !important;
+  height: 350px !important;
+  max-width: 350px;
+  margin: 0 auto;
+  display: block;
+}
+
+/* =====================
+   Responsive
+===================== */
 @media (max-width: 900px) {
   .charts-container {
     flex-direction: column;
@@ -160,18 +194,22 @@ nav.navbar a.active {
   }
 
   .cards-container {
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    padding: 15px;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    padding: 10px;
   }
 }
 
 @media (max-width: 768px) {
   header {
-    font-size: 16px;
+    font-size: 14px;
   }
 
   .card {
-    padding: 15px;
-    font-size: 14px;
+    padding: 10px;
+  }
+
+  nav.navbar ul {
+    flex-wrap: wrap;
+    gap: 15px;
   }
 }

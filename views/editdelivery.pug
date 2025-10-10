@@ -3,17 +3,27 @@ meta(name="viewport", content="width=device-width, initial-scale=1")
 title= product ? "Edit Delivery" : "Add Delivery"
 link(rel="stylesheet", href="/CSS/delivery.css")
 
-// Navigation Bar 
+// ===== Navbar =====
 nav.navbar
   ul
     li
+      a(href="/dashboard") Dashboard 
+    li
+      a(href="/signup") Register users
+    li
+      a(href="/userlist") Registered users 
+    li
       a(href="/stock") Stock
     li
-      a(href="/stocklist") Stock Table
+      a(href="/stocklist") Stocklist
+    li
+      a(href="/sales") Sales 
+    li
+      a(href="/saleslist") Saleslist
     li
       a(href="/delivery") Delivery
     li
-      a(href="/deliverylist") Delivery Table
+      a(href="/deliverylist") Deliverylist
 
 .container
   h1= product ? "Edit Delivery" : "Add New Delivery"
@@ -21,19 +31,43 @@ nav.navbar
   form(action=product ? `/delivery/editdelivery/${product._id}?_method=PUT` : '/delivery', method="post")
     // Customer Name
     label(for="customerName") Customer Name
-    input#customerName(type="text", name="customerName", value=product ? product.customerName : '', placeholder="Enter customer name", required)
+    input#customerName(
+      type="text",
+      name="customerName",
+      value=product ? product.customerName : '',
+      placeholder="Enter customer name",
+      required
+    )
 
     // Delivery Address
     label(for="customerAddress") Delivery Address
-    input#customerAddress(type="text", name="customerAddress", value=product ? product.customerAddress : '', placeholder="Enter address", required)
+    input#customerAddress(
+      type="text",
+      name="customerAddress",
+      value=product ? product.customerAddress : '',
+      placeholder="Enter address",
+      required
+    )
 
     // Product Name
     label(for="productName") Product Name
-    input#productName(type="text", name="productName", value=product ? product.productName : '', placeholder="Enter product name", required)
+    input#productName(
+      type="text",
+      name="productName",
+      value=product ? product.productName : '',
+      placeholder="Enter product name",
+      required
+    )
 
     // Quantity
     label(for="quantity") Quantity
-    input#quantity(type="number", name="quantity", value=product ? product.quantity : '', placeholder="Enter quantity", required)
+    input#quantity(
+      type="number",
+      name="quantity",
+      value=product ? product.quantity : '',
+      placeholder="Enter quantity",
+      required
+    )
 
     // Payment Method
     label(for="paymentType") Payment Method
@@ -45,7 +79,13 @@ nav.navbar
 
     // Base Price
     label(for="basePrice") Base Price
-    input#basePrice(type="number", name="basePrice", value=product ? product.basePrice : '', placeholder="Enter base price", required)
+    input#basePrice(
+      type="number",
+      name="basePrice",
+      value=product ? product.basePrice : '',
+      placeholder="Enter base price",
+      required
+    )
 
     // Transport Fee
     .checkbox

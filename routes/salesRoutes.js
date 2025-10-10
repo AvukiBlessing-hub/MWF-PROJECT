@@ -1,23 +1,25 @@
 const express = require("express");
 const router = express.Router();
-const { isAuthenticated, isAttendant } = require("../middleware/auth");
+const { isAuthenticated, isAttendantOrManager } = require("../middleware/auth"); // updated middleware
 const salesModel = require("../models/salesModel");
 const stockModel = require("../models/stockModel");
 const moment = require("moment");
 
 // ================= Show Add Sales Page =================
-router.get("/sales", isAuthenticated, isAttendant, async (req, res) => {
+router.get("/sales", isAuthenticated, isAttendantOrManager, async (req, res) => {
+  console.log("Logged in user:", req.user); // <--- add this
   try {
     const stocks = await stockModel.find().lean();
     res.render("sales", { stocks, user: req.user });
   } catch (error) {
     console.error("Error loading sales page:", error.message);
-    res.redirect("/"); // redirect to landing page if error
+    res.redirect("/");
   }
 });
 
+
 // ================= Handle Sales Submission =================
-router.post("/sales", isAuthenticated, isAttendant, async (req, res) => {
+router.post("/sales", isAuthenticated, isAttendantOrManager, async (req, res) => {
   try {
     const { stockId, customerName, quantity, costPrice, transportCheck, paymentMethod, quality } = req.body;
 

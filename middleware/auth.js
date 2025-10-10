@@ -24,8 +24,18 @@ function isAttendant(req, res, next) {
   return res.status(403).render("nonUser");
 }
 
+// Ensure user is either Attendant or Manager
+function isAttendantOrManager(req, res, next) {
+  if (!req.isAuthenticated()) return res.redirect("/signin");
+
+  if (req.user.role === "Attendant" || req.user.role === "Manager") return next();
+
+  return res.status(403).render("nonUser");
+}
+
 module.exports = {
   isAuthenticated,
   isManager,
-  isAttendant
+  isAttendant,
+  isAttendantOrManager
 };

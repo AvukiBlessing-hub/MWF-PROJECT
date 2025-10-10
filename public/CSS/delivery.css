@@ -1,127 +1,212 @@
+/* =====================
+   Global Styles
+===================== */
 body {
-  font-family: Arial, sans-serif;
-  background: #f9fafb;
+  font-family: 'Poppins', Arial, sans-serif;
+  background: url(../image/lates.jpg) no-repeat center center fixed;
+  background-size: cover;
   margin: 0;
-  padding: 0;
-  background: url(../image/lates.jpg);
+  padding: 80px 15px 20px;
+  color: #222;
 }
+
 .container {
-  max-width: 700px;
-  margin: 30px auto;
-  background: gray;
-  padding: 20px 30px;
+  width: 90%;
+  max-width: 800px; /* reduced from 1200px */
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 20px; /* reduced from 25px */
   border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
-
-/* Make table wider */
-.add-delivery-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-/* Compact table rows */
-.add-delivery-table td, .add-delivery-table th {
-  padding: 5px 10px;
-  text-align: center;
-}
-
-/* Compact form elements */
-.add-delivery-form .compact-checkbox,
-.add-delivery-form .compact-select,
-.add-delivery-form .compact-btn {
-  height: 25px;
-  font-size: 0.85rem;
-  margin: 2px;
-}
-
-/* Optional: shrink button width */
-.add-delivery-form .compact-btn {
-  min-width: 80px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
 }
 
 h1 {
   text-align: center;
-  margin-bottom: 20px;
-  color: #333;
+  margin-bottom: 20px; /* slightly smaller margin */
+  color: #000;
 }
-label {
-  display: block;
-  margin-top: 12px;
+
+/* =====================
+   Navbar
+===================== */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #000;
+  padding: 10px 15px; /* slightly reduced */
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.navbar ul {
+  list-style: none;
+  display: flex;
+  justify-content: flex-start;
+  gap: 15px; /* reduced gap */
+  margin: 0;
+  padding: 0;
+}
+
+.navbar ul li a {
+  color: #ecf0f1;
+  text-decoration: none;
   font-weight: bold;
+  font-size: 15px; /* slightly smaller font */
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.navbar ul li a:hover {
+  background-color: #34495e;
+  color: #ffffff;
+}
+
+/* =====================
+   Table Styles
+===================== */
+#deliveryTable, .add-delivery-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  border: 2px solid #000;
+  font-size: 14px; /* slightly smaller text */
+}
+
+#deliveryTable th, #deliveryTable td,
+.add-delivery-table th, .add-delivery-table td {
+  border: 1px solid #000;
+  padding: 8px 6px; /* reduced padding */
+  text-align: center;
+  word-wrap: break-word;
+}
+
+#deliveryTable th, .add-delivery-table th {
+  background-color: black;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+#deliveryTable tr:nth-child(even), .add-delivery-table tr:nth-child(even) {
+  background-color: #f8f9fa;
+}
+
+#deliveryTable tr:hover, .add-delivery-table tr:hover {
+  background-color: #e6f0ff;
+  transition: 0.3s ease;
+}
+
+/* =====================
+   Buttons
+===================== */
+.btn {
+  display: inline-block;
+  padding: 6px 12px; /* reduced padding */
+  font-size: 13px;   /* smaller font */
+  font-weight: 500;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+/* Add Delivery / Add Sales Button */
+.btn.add-delivery, .btn.add-sales {
+  background-color: darkgreen;
+  color: #fff;
+  font-weight: bold;
+  width: auto; /* smaller width for compact form */
+  margin-top: 10px; /* reduced margin */
+  padding: 8px 16px; /* adjusted padding */
+}
+
+.btn.add-delivery:hover, .btn.add-sales:hover {
+  background-color: #218838;
+  transform: translateY(-1px);
+}
+
+/* Edit Button (Manager) */
+.btn-warning {
+  background-color: darkgreen;
+  color: #fff;
+}
+
+.btn-warning:hover {
+  background-color: #218838;
+  transform: scale(1.05);
+}
+
+/* Delete Button (Manager) */
+.btn-danger {
+  background-color: #d9534f;
   color: white;
 }
+
+.btn-danger:hover {
+  background-color: #c9302c;
+  transform: scale(1.05);
+}
+
+/* Add spacing between inline buttons */
+td .btn {
+  margin-right: 4px;
+}
+
+/* =====================
+   Form Inputs
+===================== */
 input, select {
-  width: 100%;
-  padding: 8px;
+  width: 95%; /* slightly narrower */
+  padding: 6px; /* reduced padding */
   margin-top: 5px;
   border-radius: 6px;
   border: 1px solid #ccc;
 }
-.checkbox {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 12px;
-}
-.total {
-  margin-top: 15px;
-  font-size: 1.2em;
+
+label {
+  display: block;
+  margin-top: 10px; /* smaller margin */
   font-weight: bold;
-  color: black;
+  color: #222;
 }
-button {
-  margin-top: 20px;
-  padding: 10px;
-  width: 100%;
-  background: peru;
-  color: black;
-  border: none;
-  border-radius: 6px;
-  font-size: 1em;
-  cursor: pointer;
-}
-button:hover {
-  background: plum;
-}
+
+/* =====================
+   Status & Total
+===================== */
 .status {
-  margin-top: 15px;
-  font-size: 1em;
+  margin-top: 12px;
+  font-size: 0.95em;
   color: #555;
 }
-.navbar{
-    position: fixed;
-    top: 0;
-    left: 0;
+
+.total {
+  margin-top: 12px;
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #000;
+}
+
+/* =====================
+   Responsive
+===================== */
+@media (max-width: 900px) {
+  .container {
     width: 100%;
-    background-color: black;
-    padding:  12px 20px;
-    z-index: 1000;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    padding: 10px; /* smaller padding for mobile */
   }
 
-  .navbar ul {
-    list-style:  none;
-    margin: 0;
-    padding: flex;
-    gap: 20px;
+  #deliveryTable, .add-delivery-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
   }
-  .navbar ul li {
-    display: inline;
-}
 
-.navbar ul li a {
-    color: #ecf0f1;            /* light gray text */
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 16px;
-    padding: 8px 14px;
-    border-radius: 6px;
-    transition: background 0.3s ease, color 0.3s ease;
-}
-
-.navbar ul li a:hover {
-    background-color: #34495e; /* hover effect */
-    color: #ffffff;
-
+  th, td {
+    font-size: 12px;
+    padding: 8px 5px;
+  }
 }

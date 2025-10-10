@@ -7,9 +7,31 @@ html
     link(rel="stylesheet", href="/CSS/deliverytable.css")
 
   body
-    h1 Deliverylist Page
+    // ===== Navbar =====
+    nav.navbar
+      ul
+        li
+          a(href="/dashboard") Dashboard 
+        li
+          a(href="/signup") Register users
+        li
+          a(href="/userlist") Registered users 
+        li
+          a(href="/stock") Stock
+        li
+          a(href="/stocklist") Stocklist
+        li
+          a(href="/sales") Sales 
+        li
+          a(href="/saleslist") Saleslist
+        li
+          a(href="/delivery") Delivery
+        li
+          a(href="/deliverylist") Deliverylist
+
     .container
       h1 Delivery Management
+
       table#deliveryTable
         thead
           tr

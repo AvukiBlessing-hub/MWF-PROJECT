@@ -12,13 +12,19 @@ html(lang="en")
     nav.navbar
       ul
         li
-          a(href="/sales") Sales
+          a(href="/dashboard") Dashboard 
         li
-          a(href="/salestable") Saleslist
+          a(href="/signup") Register users
+        li
+          a(href="/userlist") Registered users 
         li
           a(href="/stock") Stock
         li
           a(href="/stocklist") Stocklist
+        li
+          a(href="/sales") Sales 
+        li
+          a(href="/saleslist") Saleslist
         li
           a(href="/delivery") Delivery
         li
@@ -68,8 +74,8 @@ html(lang="en")
 
       .chart
         h3 Daily Sales Revenue
-        canvas#lineChart(
-          width="800",
+        canvas#barChart(
+          width="400",
           height="400",
           data-labels=salesTrendLabels,
           data-data=salesTrendData

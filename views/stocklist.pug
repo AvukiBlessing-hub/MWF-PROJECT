@@ -3,28 +3,50 @@ meta(name="viewport", content="width=device-width, initial-scale=1")
 title Stock Table
 link(rel="stylesheet", href="/css/stocklist.css")
 
-.form-container
-  h2 Stocklist
+// ===== Navbar =====
+nav.navbar
+  ul
+    li
+      a(href="/dashboard") Dashboard 
+    li
+      a(href="/signup") Register users
+    li
+      a(href="/userlist") Registered users 
+    li
+      a(href="/stock") Stock
+    li
+      a(href="/stocklist") Stocklist
+    li
+      a(href="/sales") Sales 
+    li
+      a(href="/saleslist") Saleslist
+    li
+      a(href="/delivery") Delivery
+    li
+      a(href="/deliverylist") Deliverylist
 
-  p(style="text-align:left; margin-bottom:10px;")
-    a(href="/stock") Add More Stock
+.container
+  h1 Stock List
+
+  .action-buttons(style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;")
+    a(href="/stock", class="btn btn-black") + Add More Stock
+    button#generateAllReport.btn.btn-report(onclick="generateFullReport()") 📊 Generate Full Report
 
   table#stockTable
     thead
       tr
         th Product Name
-        th Product Type
-        th Total Quantity
-        th Available Quantity
+        th Type
+        th Total Qty
+        th Available
         th Quality
-        th Cost Price (shs)
-        th Selling Price (shs)
-        th Supplier Name
-        th Supplier Contact
-        th Total Value (shs)
+        th Cost (shs)
+        th Selling (shs)
+        th Supplier
+        th Contact
+        th Total Value
         th Date
-        th Edit
-        th Delete
+        th Actions
 
     tbody
       - var grandTotal = 0
@@ -48,11 +70,205 @@ link(rel="stylesheet", href="/css/stocklist.css")
             td #{item.supplierContact || '-'}
             td #{totalValue.toFixed(2)}
             td #{item.date ? moment(item.date).format("DD-MM-YYYY") : '-'}
-            td
-              a.btn.btn-warning(href=`/editstock/${item._id}`) Edit
-            td
-              form(method='post', action=`/deletestock/${item._id}`)
-                button.btn.btn-danger(type='submit') Delete
+            td.action-cell
+              a.btn.btn-warning(href=`/editstock/${item._id}`, title="Edit") ✏️
+              form(method='post', action=`/deletestock/${item._id}`, style="display:inline;")
+                button.btn.btn-danger(type='submit', title="Delete") 🗑️
+              button.btn.btn-info(onclick=`generateItemReport('${item._id}', '${item.productName}')`, title="Generate Report") 📄
       else
         tr
-          td(colspan="13", style="text-align:center; color: gray") No stock available
+          td(colspan="12", style="text-align:center; color: gray; padding: 30px;") No stock available
+
+    tfoot
+      tr(style="background-color: #000; color: #fff; font-weight: bold;")
+        td(colspan="9", style="text-align: right; padding-right: 15px;") GRAND TOTAL:
+        td #{grandTotal.toFixed(2)}
+        td(colspan="2")
+
+script.
+  function generateItemReport(itemId, productName) {
+    const row = event.target.closest('tr');
+    const cells = row.querySelectorAll('td');
+    
+    const reportData = {
+      productName: cells[0].textContent,
+      productType: cells[1].textContent,
+      totalQuantity: cells[2].textContent,
+      availableQuantity: cells[3].textContent,
+      quality: cells[4].textContent,
+      costPrice: cells[5].textContent,
+      sellingPrice: cells[6].textContent,
+      supplierName: cells[7].textContent,
+      supplierContact: cells[8].textContent,
+      totalValue: cells[9].textContent,
+      date: cells[10].textContent
+    };
+    
+    printReport([reportData], `Stock Report - ${productName}`);
+  }
+
+  function generateFullReport() {
+    const table = document.getElementById('stockTable');
+    const rows = table.querySelectorAll('tbody tr');
+    const reportData = [];
+    
+    rows.forEach(row => {
+      const cells = row.querySelectorAll('td');
+      if (cells.length > 1) {
+        reportData.push({
+          productName: cells[0].textContent,
+          productType: cells[1].textContent,
+          totalQuantity: cells[2].textContent,
+          availableQuantity: cells[3].textContent,
+          quality: cells[4].textContent,
+          costPrice: cells[5].textContent,
+          sellingPrice: cells[6].textContent,
+          supplierName: cells[7].textContent,
+          supplierContact: cells[8].textContent,
+          totalValue: cells[9].textContent,
+          date: cells[10].textContent
+        });
+      }
+    });
+    
+    const grandTotal = document.querySelector('tfoot td:nth-child(2)').textContent;
+    printReport(reportData, 'Complete Stock Report', grandTotal);
+  }
+
+  function printReport(data, title, grandTotal = null) {
+    const printWindow = window.open('', '', 'width=900,height=650');
+    
+    let html = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>${title}</title>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            padding: 30px;
+            background: #fff;
+          }
+          .report-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #000;
+            padding-bottom: 15px;
+          }
+          .report-header h1 {
+            margin: 0;
+            font-size: 24px;
+            text-transform: uppercase;
+          }
+          .report-header p {
+            margin: 5px 0;
+            color: #666;
+          }
+          table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+          }
+          th, td {
+            border: 1px solid #000;
+            padding: 10px;
+            text-align: left;
+            font-size: 12px;
+          }
+          th {
+            background-color: #000;
+            color: #fff;
+            font-weight: bold;
+          }
+          tr:nth-child(even) {
+            background-color: #f5f5f5;
+          }
+          .total-row {
+            background-color: #000 !important;
+            color: #fff;
+            font-weight: bold;
+          }
+          .footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 11px;
+            color: #888;
+          }
+          @media print {
+            body { padding: 15px; }
+            .no-print { display: none; }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="report-header">
+          <h1>${title}</h1>
+          <p>Generated on: ${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}</p>
+        </div>
+        
+        <table>
+          <thead>
+            <tr>
+              <th>Product Name</th>
+              <th>Type</th>
+              <th>Total Qty</th>
+              <th>Available</th>
+              <th>Quality</th>
+              <th>Cost Price</th>
+              <th>Selling Price</th>
+              <th>Supplier</th>
+              <th>Contact</th>
+              <th>Total Value</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+    `;
+    
+    data.forEach(item => {
+      html += `
+        <tr>
+          <td>${item.productName}</td>
+          <td>${item.productType}</td>
+          <td>${item.totalQuantity}</td>
+          <td>${item.availableQuantity}</td>
+          <td>${item.quality}</td>
+          <td>${item.costPrice}</td>
+          <td>${item.sellingPrice}</td>
+          <td>${item.supplierName}</td>
+          <td>${item.supplierContact}</td>
+          <td>${item.totalValue}</td>
+          <td>${item.date}</td>
+        </tr>
+      `;
+    });
+    
+    if (grandTotal) {
+      html += `
+        <tr class="total-row">
+          <td colspan="9" style="text-align: right;">GRAND TOTAL:</td>
+          <td><strong>${grandTotal}</strong></td>
+          <td></td>
+        </tr>
+      `;
+    }
+    
+    html += `
+          </tbody>
+        </table>
+        
+        <div class="footer">
+          <p>This is an automated stock report. For queries, contact your administrator.</p>
+        </div>
+        
+        <div class="no-print" style="text-align: center; margin-top: 30px;">
+          <button onclick="window.print()" style="padding: 10px 20px; background: #000; color: #fff; border: none; cursor: pointer; border-radius: 5px; margin-right: 10px;">Print Report</button>
+          <button onclick="window.close()" style="padding: 10px 20px; background: #666; color: #fff; border: none; cursor: pointer; border-radius: 5px;">Close</button>
+        </div>
+      </body>
+      </html>
+    `;
+    
+    printWindow.document.write(html);
+    printWindow.document.close();
+  }

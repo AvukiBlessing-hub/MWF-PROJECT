@@ -1,107 +1,143 @@
 /* Body styling */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Poppins', Arial, sans-serif;
     background: url(../image/lates.jpg) no-repeat center center fixed;
     background-size: cover;
     display: flex;
-    flex-direction: column; /* stack navbar and container vertically */
-    align-items: center; /* center only the container, navbar will override */
-    margin: 0;
-    padding: 0;
-}
-
-/* Navbar full-width fix */
-nav {
-    width: 100%;
-    background: black; /* adjust as needed */
-    color: white;
-    display: flex;
-    justify-content: space-between; /* adjust nav items */
+    justify-content: center;
     align-items: center;
-    padding: 15px 30px;
-    box-sizing: border-box;
+    height: 100vh;
+    margin: 0;
+    padding: 80px 20px 20px;
+    color: #222;
 }
 
 /* Container styling */
 .container {
-    background: gray;
-    padding: 30px 40px;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    background: rgba(255, 255, 255, 0.9);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+    width: 350px;
+}
+
+/* Password container */
+.password-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-container input {
     width: 100%;
-    max-width: 600px;
-    margin: 20px 0; /* spacing below navbar */
+    padding-right: 2rem;
+}
+
+.password-container i {
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+    color: #555;
+}
+
+.password-container i:hover {
+    color: #000;
 }
 
 /* Form title */
 h2 {
     text-align: center;
     margin-bottom: 20px;
+    color: #000;
 }
 
-/* Form styling */
-form label {
+/* Labels */
+label {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 6px;
     font-weight: bold;
+    color: #222;
 }
 
-form input,
-form select {
+/* Inputs */
+input {
     width: 100%;
     padding: 10px;
-    margin-bottom: 15px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
+    margin-bottom: 10px;
+    border: 1px solid #000;
+    border-radius: 6px;
     font-size: 14px;
 }
 
-form select {
-    appearance: none; 
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    background: #fff url("data:image/svg+xml,%3Csvg fill='gray' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3C/svg%3E") no-repeat right 10px center;
-    background-size: 16px;
-}
-
-/* Button styling */
-form button {
-    width: 100%;
-    padding: 12px;
-    border: none;
-    border-radius: 5px;
-    background: black;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    margin-top: 10px;
-}
-
-form button:hover {
-    background: plum;
+input:focus {
+    border-color: #218838;
+    outline: none;
 }
 
 /* Error messages */
 .error {
-    color: red;
+    color: #d9534f;
     font-size: 12px;
-    margin-top: -10px;
     margin-bottom: 10px;
+}
+
+/* Button styling */
+button {
+    width: 100%;
+    padding: 12px;
+    background: #000;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background: #218838;
 }
 
 /* Paragraph styling */
 p {
     text-align: center;
-    margin-top: 15px;
+    margin-top: 12px;
     font-size: 14px;
+    color: #222;
 }
 
-p a {
-    color: white;
+/* Links */
+a {
+    color: #218838;
     text-decoration: none;
 }
 
-p a:hover {
+a:hover {
     text-decoration: underline;
+    color: #1e7e34;
 }
+
+
+/* Select (Role dropdown) styling */
+select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #000; /* same as inputs */
+    border-radius: 6px;
+    font-size: 14px;
+    background-color: #fff;
+    color: #222;
+    appearance: none; /* remove default arrow */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg fill='%23222' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px;
+}
+
+select:focus {
+    border-color: #218838; /* same as input focus */
+    outline: none;
+}
+

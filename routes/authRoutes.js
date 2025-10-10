@@ -3,6 +3,7 @@ const router = express.Router();
 const passport = require("passport");
 const UserModel = require("../models/userModel");
 const { isAuthenticated, isManager } = require("../middleware/auth");
+const flash = require("connect-flash");
 
 // ================= Landing Page =================
 router.get("/", (req, res) => {
@@ -14,52 +15,64 @@ router.get("/signup", isManager, (req, res) => {
   res.render("signup", { title: "Register User", user: req.user });
 });
 
-router.post("/signup", isManager, (req, res) => {
+router.post("/signup", isManager, async (req, res) => {
   const { fullname, email, role, password } = req.body;
 
   if (!email || !password || !role) {
     return res.status(400).send("All fields are required");
   }
 
-  const newUser = new UserModel({ fullname, email, role });
-
-  UserModel.register(newUser, password, (err) => {
-    if (err) {
-      console.error("Error registering user:", err);
-      return res.status(500).send("Error registering user");
-    }
+  try {
+    const newUser = new UserModel({ fullname, email, role });
+    await UserModel.register(newUser, password);
     res.redirect("/userlist");
-  });
+  } catch (err) {
+    console.error("Error registering user:", err);
+    res.status(500).send("Error registering user");
+  }
 });
 
 // ================= Sign In =================
+
+// GET login page
 router.get("/signin", (req, res) => {
-  res.render("signin", { title: "Login Page" });
+  res.render("signin", {
+    title: "Login Page",
+    error: req.flash("error"),
+  });
 });
 
+// POST login
 router.post("/signin", (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) return next(err);
-    if (!user) return res.redirect("/signin");
 
-    // ✅ Proper session handling
+    if (!user) {
+      req.flash("error", info?.message || "Invalid email or password");
+      return res.redirect("/signin");
+    }
+
     req.logIn(user, (err) => {
       if (err) return next(err);
 
-      // ✅ Redirect based on role
-      if (user.role === "Manager") return res.redirect("/stocklist");
-      if (user.role === "Attendant") return res.redirect("/saleslist");
-      return res.render("nonUser");
+      //  DEBUG: check user role
+      console.log("Logged in user:", user);
+
+      // Redirect based on role
+      if (user.role === "Manager") return res.redirect("/dashboard");
+      if (user.role === "Attendant") return res.redirect("/sales");
+
+      return res.render("nonUser", { title: "Access Denied" });
     });
   })(req, res, next);
 });
+
 
 // ================= Logout =================
 router.get("/logout", (req, res, next) => {
   req.logout(function (err) {
     if (err) return next(err);
 
-    // ✅ Completely destroy the session
     req.session.destroy(() => {
       res.clearCookie("connect.sid");
       res.redirect("/signin");

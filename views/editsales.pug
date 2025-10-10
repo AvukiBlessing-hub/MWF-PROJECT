@@ -3,16 +3,27 @@ meta(name="viewport", content="width=device-width,initial-scale=1")
 title Edit Sale
 link(rel="stylesheet", href="/CSS/sales.css")
 
+// ===== Navbar =====
 nav.navbar
   ul
     li
+      a(href="/dashboard") Dashboard 
+    li
+      a(href="/signup") Register users
+    li
+      a(href="/userlist") Registered users 
+    li
       a(href="/stock") Stock
     li
-      a(href="/stocklist") Stock Table
+      a(href="/stocklist") Stocklist
+    li
+      a(href="/sales") Sales 
+    li
+      a(href="/saleslist") Saleslist
     li
       a(href="/delivery") Delivery
     li
-      a(href="/deliverylist") Delivery Table
+      a(href="/deliverylist") Deliverylist
 
 .container
   h1 Edit Sale Form
@@ -82,6 +93,6 @@ nav.navbar
     input#totalPrice(type="text", name="totalPrice", value=item.totalPrice, readonly)
 
     // Submit
-    button.btn(type="submit")  Update Sale
+    button.btn(type="submit") Update Sale
 
 script(src="/public/sales.js")

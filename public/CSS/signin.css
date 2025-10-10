@@ -1,72 +1,75 @@
 body {
-    font-family: Arial, sans-serif;
-    background: #f4f4f9;
+    font-family: 'Poppins', Arial, sans-serif;
+    background: url(../image/lates.jpg) no-repeat center center fixed;
+    background-size: cover;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
-    background: url(../image/lates.jpg);
+    padding: 80px 20px 20px;
+    color: #222;
 }
 
 .container {
-    background:gray;
+    background: rgba(255, 255, 255, 0.9);
     padding: 2rem;
     border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
     width: 350px;
 }
+
 .password-container {
-  position: relative;
-  display: flex;
-  align-items: center;
+    position: relative;
+    display: flex;
+    align-items: center;
 }
 
 .password-container input {
-  width: 100%;
-  padding-right: 2rem;
+    width: 100%;
+    padding-right: 2rem;
 }
 
 .password-container i {
-  position: absolute;
-  right: 10px;
-  cursor: pointer;
-  color: #555;
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+    color: #555;
 }
 
 .password-container i:hover {
-  color: #000;
+    color: #000;
 }
-
 
 h2 {
     text-align: center;
     margin-bottom: 20px;
-    color: white;
+    color: #000; /* changed from white */
 }
 
 label {
     display: block;
     margin-bottom: 6px;
     font-weight: bold;
+    color: #222; /* changed label color */
 }
 
 input {
     width: 100%;
     padding: 10px;
     margin-bottom: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid #000; /* changed border color */
     border-radius: 6px;
     font-size: 14px;
 }
 
 input:focus {
-    border-color: plum;
+    border-color: #218838; /* changed to match button hover green */
     outline: none;
 }
 
 .error {
-    color: red;
+    color: #d9534f; /* changed to match delete button red */
     font-size: 12px;
     margin-bottom: 10px;
 }
@@ -74,8 +77,8 @@ input:focus {
 button {
     width: 100%;
     padding: 12px;
-    background: black;
-    color: white;
+    background: #000; /* black button */
+    color: #fff; /* white text */
     border: none;
     border-radius: 6px;
     cursor: pointer;
@@ -83,20 +86,22 @@ button {
 }
 
 button:hover {
-    background: white;
+    background: #218838; /* green hover like edit button */
 }
 
 p {
     text-align: center;
     margin-top: 12px;
     font-size: 14px;
+    color: #222; /* change paragraph text color */
 }
 
 a {
-    color: white;
+    color: #218838; /* green link color */
     text-decoration: none;
 }
 
 a:hover {
     text-decoration: underline;
+    color: #1e7e34; /* darker green on hover */
 }

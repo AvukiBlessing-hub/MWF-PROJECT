@@ -5,25 +5,33 @@ html(lang="en")
     meta(name="viewport", content="width=device-width, initial-scale=1")
     title Login Page
     link(rel="stylesheet", href="/CSS/signin.css")
+    script(src="https://kit.fontawesome.com/a076d05399.js", crossorigin="anonymous") // Font Awesome for eye icon
   body
     .container
       h2 Login here
+
+      //- Flash error message
+      if error && error.length
+        p#errorMsg.error #{error[0]}
+
       form#loginForm(action="/signin", method="POST")
-        // Username (login via email)
+        // Email
         label(for="email") Email
-        input#email(type="email", name="email", placeholder="", required)
+        input#email(type="email", name="email", placeholder="Enter your email", required)
         #userError.error
 
-        // Password
+        // Password with eye icon
         label(for="password") Password
-        input#password(type="password", name="password", placeholder="", required)
+        .password-container
+          input#password(type="password", name="password", placeholder="Enter your password", required)
+          i.fas.fa-eye#togglePassword(style="cursor:pointer")
         #passError.error
 
         // Submit
         button(type="submit") Login
 
       p
-        | Do not have an account? 
-        a(href="/signup") Sign up
+        //- | Do not have an account? 
+        //- a(href="/signup") Sign up
 
-    script(src="signin.js")
+    script(src="/js/signin.js")

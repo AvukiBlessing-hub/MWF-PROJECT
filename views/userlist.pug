@@ -2,12 +2,34 @@ doctype html
 html
   head
     meta(charset="UTF-8")
-    meta(name="viewport", content="width=device-width,initial-scale=1")
+    meta(name="viewport", content="width=device-width, initial-scale=1")
     title User Table
     link(rel="stylesheet", href="/CSS/userlist.css")
     //- link(rel="stylesheet", href="/CSS/navbar.css")
 
   body
+    // ===== Navbar =====
+    nav.navbar
+      ul
+        li
+          a(href="/dashboard") Dashboard 
+        li
+          a(href="/signup") Register users
+        li
+          a(href="/userlist") Registered users 
+        li
+          a(href="/stock") Stock
+        li
+          a(href="/stocklist") Stocklist
+        li
+          a(href="/sales") Sales 
+        li
+          a(href="/saleslist") Saleslist
+        li
+          a(href="/delivery") Delivery
+        li
+          a(href="/deliverylist") Deliverylist
+
     .container
       h2(style="text-align:center;") Registered Users
 

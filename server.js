@@ -7,6 +7,7 @@ const expressSession = require("express-session");
 const MongoStore = require("connect-mongo");
 const methodOverride = require("method-override");
 const moment = require("moment");
+const flash = require("connect-flash"); // ✅ added flash
 
 // Import routes
 const authRoutes = require("./routes/authRoutes");
@@ -47,6 +48,9 @@ app.use(
   })
 );
 
+// Flash messages
+app.use(flash());
+
 // Passport
 app.use(passport.initialize());
 app.use(passport.session());
@@ -54,23 +58,18 @@ passport.use(userModel.createStrategy());
 passport.serializeUser(userModel.serializeUser());
 passport.deserializeUser(userModel.deserializeUser());
 
+// Make flash messages available in all templates
+app.use((req, res, next) => {
+  res.locals.error = req.flash("error");   // for signin errors
+  res.locals.success = req.flash("success"); // optional
+  next();
+});
+
 // Debug middleware
 app.use((req, res, next) => {
   console.log("Request URL:", req.url, "at", new Date().toISOString());
   next();
 });
-
-
-// --- Individual page routes
-// app.get('/dashboard', (req, res) => res.render('dashboard', { page: 'dashboard' }));
-// app.get('/stock', (req, res) => res.render('stock', { page: 'stock' }));
-// app.get('/stocklist', (req, res) => res.render('stocklist', { page: 'stocklist' }));
-// app.get('/sales', (req, res) => res.render('sales', { page: 'sales' }));
-// app.get('/saleslist', (req, res) => res.render('saleslist', { page: 'saleslist' }));
-// app.get('/delivery', (req, res) => res.render('delivery', { page: 'delivery' }));
-// app.get('/deliverylist', (req, res) => res.render('deliverylist', { page: 'deliverylist' }));
-// app.get('/signup', (req, res) => res.render('signup', { page: 'signup' }));
-// app.get('/userlist', (req, res) => res.render('userlist', { page: 'userlist' }));
 
 
 // Mount routes

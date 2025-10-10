@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const moment = require("moment");
 const { isAuthenticated, isManager } = require("../middleware/auth");
 const stockModel = require("../models/stockModel");
 const salesModel = require("../models/salesModel");
@@ -38,28 +39,32 @@ router.get("/dashboard", isAuthenticated, isManager, async (req, res) => {
     // ===== Pending Deliveries =====
     const pendingDeliveries = await deliveryModel.countDocuments({ deliveryStatus: { $ne: "Delivered" } });
 
-    // ===== Chart Data =====
-    const chartLabels = stockSummary.map(item => item.productName);
-    const chartData = stockSummary.map(item => item.totalAvailable);
+    // ===== Most Sold Products (Pie Chart) =====
+    const mostBought = await salesModel.aggregate([
+      { $group: { _id: "$productName", totalQuantity: { $sum: "$quantity" } } },
+      { $sort: { totalQuantity: -1 } },
+      { $limit: 5 }
+    ]);
+    const pieLabels = mostBought.map(item => item._id);
+    const pieData = mostBought.map(item => item.totalQuantity);
 
-    const salesPerDay = await salesModel.aggregate([
+    // ===== Daily Sales for Current Month (Bar Chart) =====
+    const startOfMonth = moment().startOf("month").toDate();
+    const endOfMonth = moment().endOf("month").toDate();
+
+    const dailySales = await salesModel.aggregate([
+      { $match: { date: { $gte: startOfMonth, $lte: endOfMonth } } }, // uses your existing `date` field
       {
         $group: {
-          _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
-          totalSales: { $sum: "$totalPrice" }
+          _id: { $dateToString: { format: "%Y-%m-%d", date: "$date" } },
+          totalRevenue: { $sum: "$totalPrice" }
         }
       },
       { $sort: { _id: 1 } }
     ]);
-    const salesTrendLabels = salesPerDay.map(s => s._id);
-    const salesTrendData = salesPerDay.map(s => s.totalSales);
 
-    const mostBought = await salesModel.aggregate([
-      { $group: { _id: "$productName", totalQuantity: { $sum: "$quantity" } } },
-      { $sort: { totalQuantity: -1 } }
-    ]);
-    const pieLabels = mostBought.map(item => item._id);
-    const pieData = mostBought.map(item => item.totalQuantity);
+    const salesTrendLabels = dailySales.map(s => s._id);
+    const salesTrendData = dailySales.map(s => s.totalRevenue);
 
     // ===== Render Dashboard =====
     res.render("dashboard", {
@@ -69,12 +74,10 @@ router.get("/dashboard", isAuthenticated, isManager, async (req, res) => {
       stockAvailable,
       stockAlerts,
       pendingDeliveries,
-      chartLabels: JSON.stringify(chartLabels),
-      chartData: JSON.stringify(chartData),
-      salesTrendLabels: JSON.stringify(salesTrendLabels),
-      salesTrendData: JSON.stringify(salesTrendData),
       pieLabels: JSON.stringify(pieLabels),
-      pieData: JSON.stringify(pieData)
+      pieData: JSON.stringify(pieData),
+      salesTrendLabels: JSON.stringify(salesTrendLabels),
+      salesTrendData: JSON.stringify(salesTrendData)
     });
 
   } catch (err) {
