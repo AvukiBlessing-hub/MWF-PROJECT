@@ -1059,7 +1059,7 @@
       html += '</style></head><body>';
       
       html += '<div class="report-header">';
-      html += '<h1>📊 Stock Overview Report</h1>';
+      html += '<h1> Stock Overview Report</h1>';
       html += '<p>Consolidated Stock Analysis by Product Name & Type</p>';
       html += '<p>Generated on: ' + new Date().toLocaleDateString('en-GB') + ' at ' + new Date().toLocaleTimeString() + '</p>';
       html += '</div>';

@@ -15,31 +15,27 @@
       loadStockOverview();
       setupQuantityValidation();
       setupProductTypeFilter();
-      setupSalesDataLoader(); // ✅ Added backend loader init
+      setupSalesDataLoader();
       console.log('Sales: Initialization complete');
     } catch (error) {
       console.error('Sales Init Error:', error);
     }
   }
 
-  /* ---------------- STOCK OVERVIEW HANDLING ---------------- */
-
+  /* ---------------- STOCK OVERVIEW ---------------- */
   function loadStockOverview() {
     const productSelect = document.getElementById('stockId');
     if (!productSelect) return;
 
     fetch('/api/stocklist')
-      .then(res => {
-        if (!res.ok) throw new Error('Failed to fetch stock data');
-        return res.json();
-      })
+      .then(res => res.ok ? res.json() : Promise.reject('Failed to fetch stock'))
       .then(stockItems => {
         const overviewData = generateStockOverviewData(stockItems);
         window.stockOverviewData = overviewData;
         populateProductDropdown(overviewData);
       })
       .catch(err => {
-        console.error('Error loading stock data:', err);
+        console.error('Error loading stock:', err);
         productSelect.innerHTML = '<option value="">Unable to load products</option>';
       });
   }
@@ -62,18 +58,13 @@
   function populateProductDropdown(overviewData, filterType) {
     const select = document.getElementById('stockId');
     if (!select) return;
-
     select.innerHTML = '<option value="">-- Select Product --</option>';
     let filtered = overviewData;
-    if (filterType) {
-      filtered = overviewData.filter(i => i.productType.toLowerCase() === filterType.toLowerCase());
-    }
-
+    if (filterType) filtered = overviewData.filter(i => i.productType.toLowerCase() === filterType.toLowerCase());
     if (filtered.length === 0) {
       select.innerHTML = '<option value="">No stock available</option>';
       return;
     }
-
     filtered.forEach(item => {
       const opt = document.createElement('option');
       opt.value = `${item.productName}|||${item.productType}`;
@@ -94,9 +85,7 @@
     if (!select) return;
     select.addEventListener('change', () => {
       const type = select.value;
-      if (window.stockOverviewData) {
-        populateProductDropdown(window.stockOverviewData, type);
-      }
+      if (window.stockOverviewData) populateProductDropdown(window.stockOverviewData, type);
     });
   }
 
@@ -130,8 +119,7 @@
     }
   }
 
-  /* ---------------- SALES TABLE FILTER & REPORT ---------------- */
-
+  /* ---------------- SALES TABLE FILTER ---------------- */
   window.filterSalesTable = function () {
     const input = document.getElementById('searchInput');
     const filter = input.value.toLowerCase().trim();
@@ -148,8 +136,8 @@
       const cells = row.getElementsByTagName('td');
       if (!cells.length) continue;
 
-      const [customer, type, name, qty, , cost, , agent, total] = Array.from(cells).map(td => td.textContent.toLowerCase());
-      const match = [customer, type, name, cells[4].textContent.toLowerCase(), agent].some(field => field.includes(filter));
+      const [customer, type, name, , , , , agent, total] = Array.from(cells).map(td => td.textContent.toLowerCase());
+      const match = [customer, type, name, agent].some(field => field.includes(filter));
 
       if (match) {
         row.style.display = '';
@@ -166,10 +154,11 @@
     document.getElementById('totalCostPrice').textContent = totalCost.toFixed(2);
     document.getElementById('totalTotalPrice').textContent = totalPrice.toFixed(2);
 
-    noResultsMsg.style.display = visibleCount === 0 && filter !== '' ? 'block' : 'none';
+    if (noResultsMsg) noResultsMsg.style.display = visibleCount === 0 && filter !== '' ? 'block' : 'none';
   };
 
-  window.generateSaleReport = function (saleId, customerName) {
+  /* ---------------- GENERATE REPORT ---------------- */
+  window.generateSaleReport = function (event, saleId, customerName) {
     const row = event.target.closest('tr');
     const cells = row.querySelectorAll('td');
     const data = [{
@@ -224,18 +213,18 @@
       <head>
         <title>${title}</title>
         <style>
-          * {margin:0; padding:0; box-sizing:border-box;}
-          body {font-family:Arial,sans-serif; padding:25px; background:#fff;}
-          .report-header {text-align:center; margin-bottom:25px; border-bottom:3px solid #000; padding-bottom:12px;}
-          .report-header h1 {font-size:22px; text-transform:uppercase;}
-          .report-header p {color:#555; font-size:12px;}
-          table {width:100%; border-collapse:collapse; margin-top:15px;}
-          th,td {border:1px solid #000; padding:8px; font-size:11px;}
-          th {background:#000; color:#fff; text-transform:uppercase;}
+          *{margin:0;padding:0;box-sizing:border-box;}
+          body{font-family:Arial,sans-serif;padding:25px;background:#fff;}
+          .report-header{text-align:center;margin-bottom:25px;border-bottom:3px solid #000;padding-bottom:12px;}
+          .report-header h1{font-size:22px;text-transform:uppercase;}
+          .report-header p{color:#555;font-size:12px;}
+          table{width:100%;border-collapse:collapse;margin-top:15px;}
+          th,td{border:1px solid #000;padding:8px;font-size:11px;}
+          th{background:#000;color:#fff;text-transform:uppercase;}
           tr:nth-child(even){background:#f5f5f5;}
-          .total-row {background:#000 !important; color:#fff; font-weight:bold;}
-          .footer {margin-top:30px; text-align:center; font-size:10px; color:#888;}
-          @media print {.no-print{display:none;}}
+          .total-row{background:#000!important;color:#fff;font-weight:bold;}
+          .footer{margin-top:30px;text-align:center;font-size:10px;color:#888;}
+          @media print{.no-print{display:none;}}
         </style>
       </head>
       <body>
@@ -246,95 +235,54 @@
         <table>
           <thead>
             <tr>
-              <th>Customer</th>
-              <th>Product Type</th>
-              <th>Product Name</th>
-              <th>Quantity</th>
-              <th>Quality</th>
-              <th>Cost Price</th>
-              <th>Transport</th>
-              <th>Sales Agent</th>
-              <th>Total Price</th>
+              <th>Customer</th><th>Product Type</th><th>Product Name</th>
+              <th>Quantity</th><th>Quality</th><th>Cost Price</th>
+              <th>Transport</th><th>Sales Agent</th><th>Total Price</th>
             </tr>
           </thead>
           <tbody>`;
 
     data.forEach(i => {
-      html += `
-        <tr>
-          <td>${i.customerName}</td>
-          <td>${i.productType}</td>
-          <td>${i.productName}</td>
-          <td>${i.quantity}</td>
-          <td>${i.quality}</td>
-          <td>${i.costPrice}</td>
-          <td>${i.transport}</td>
-          <td>${i.agent}</td>
-          <td>${i.totalPrice}</td>
-        </tr>`;
+      html += `<tr>
+        <td>${i.customerName}</td><td>${i.productType}</td><td>${i.productName}</td>
+        <td>${i.quantity}</td><td>${i.quality}</td><td>${i.costPrice}</td>
+        <td>${i.transport}</td><td>${i.agent}</td><td>${i.totalPrice}</td>
+      </tr>`;
     });
 
     if (totals) {
-      html += `
-        <tr class="total-row">
-          <td colspan="3" style="text-align:right;"><strong>TOTALS:</strong></td>
-          <td><strong>${totals.quantity}</strong></td>
-          <td></td>
-          <td><strong>${totals.costPrice}</strong></td>
-          <td></td>
-          <td></td>
-          <td><strong>${totals.totalPrice}</strong></td>
-        </tr>`;
+      html += `<tr class="total-row">
+        <td colspan="3" style="text-align:right;"><strong>TOTALS:</strong></td>
+        <td><strong>${totals.quantity}</strong></td><td></td>
+        <td><strong>${totals.costPrice}</strong></td><td></td><td></td>
+        <td><strong>${totals.totalPrice}</strong></td>
+      </tr>`;
     }
 
-    html += `
-          </tbody>
-        </table>
-        <div class="footer">
-          <p>This is an automated sales report. For queries, contact your administrator.</p>
-        </div>
-        <div class="no-print" style="text-align:center; margin-top:25px;">
-          <button onclick="window.print()" style="padding:8px 18px; background:#000; color:#fff; border:none; border-radius:5px; margin-right:8px;">Print Report</button>
-          <button onclick="window.close()" style="padding:8px 18px; background:#666; color:#fff; border:none; border-radius:5px;">Close</button>
-        </div>
-      </body>
-      </html>`;
+    html += `</tbody></table>
+      <div class="footer"><p>This is an automated sales report. For queries, contact your administrator.</p></div>
+      <div class="no-print" style="text-align:center;margin-top:25px;">
+        <button onclick="window.print()" style="padding:8px 18px;background:#000;color:#fff;border:none;border-radius:5px;margin-right:8px;">Print Report</button>
+        <button onclick="window.close()" style="padding:8px 18px;background:#666;color:#fff;border:none;border-radius:5px;">Close</button>
+      </div>
+    </body></html>`;
     printWindow.document.write(html);
     printWindow.document.close();
   }
 
-  /* ---------------- BACKEND SALES DATA LOADER ---------------- */
-
   function setupSalesDataLoader() {
-    console.log('Sales table ready. Connect backend later.');
-
-    async function loadSalesData() {
-      try {
-        const response = await fetch('/api/sales');
-        const data = await response.json();
-        const tableBody = document.querySelector('#salesTable tbody');
-        tableBody.innerHTML = '';
-
-        data.forEach(sale => {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${sale.productType}</td>
-            <td>${sale.productName}</td>
-            <td>${sale.quantity}</td>
-            <td>${sale.quality}</td>
-            <td>$${sale.costPrice.toFixed(2)}</td>
-            <td>$${(sale.quantity * sale.costPrice).toFixed(2)}</td>
-          `;
-          tableBody.appendChild(row);
-        });
-      } catch (err) {
-        console.error('Error fetching sales data:', err);
-      }
-    }
-
-    // Uncomment when backend API is live:
-    // loadSalesData();
+    console.log('Sales table ready. Backend loader ready.');
   }
 
   console.log('Sales Script: Loaded ✅');
+
 })();
+
+// Confirm delete
+function confirmDelete(event) {
+  if (!confirm("Are you sure you want to delete this sale?")) {
+    event.preventDefault();
+    return false;
+  }
+  return true;
+}

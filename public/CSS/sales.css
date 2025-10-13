@@ -174,3 +174,98 @@ button.btn:hover {
   font-style: italic;
 }
 
+/* Add these styles to your existing sales.css file */
+
+/* Error message styling */
+.error-message {
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  display: block;
+  animation: slideDown 0.3s ease-out;
+}
+
+/* Invalid input styling */
+input.invalid,
+select.invalid {
+  border-color: #dc3545;
+  background-color: #fff5f5;
+}
+
+input.invalid:focus,
+select.invalid:focus {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+  outline: none;
+}
+
+/* Animation for error messages */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Valid input styling (optional - adds green border when valid) */
+input.valid,
+select.valid {
+  border-color: #28a745;
+}
+
+/* Form spacing adjustments to accommodate error messages */
+.container form label {
+  margin-top: 1rem;
+  display: block;
+  font-weight: 600;
+}
+
+.container form input,
+.container form select {
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 0.25rem;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.3s, background-color 0.3s;
+}
+
+.container form input:focus,
+.container form select:focus {
+  border-color: black;
+  outline: none;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Ensure error messages don't break layout */
+.container form > * {
+  margin-bottom: 0.5rem;
+}
+
+/* Button styling to ensure it stands out */
+.btn {
+  margin-top: 1.5rem;
+  padding: 0.75rem 1.5rem;
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn:hover {
+  background-color: black;
+}
+
+.btn:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+

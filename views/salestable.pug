@@ -10,12 +10,12 @@ html(lang="en")
     // ===== Navbar =====
     nav.navbar
       ul
-        li: a(href="/dashboard") Dashboard
+        li: a(href="/dashboard") Dashboard 
         li: a(href="/signup") Register users
-        li: a(href="/userlist") Registered users
+        li: a(href="/userlist") Registered users 
         li: a(href="/stock") Stock
         li: a(href="/stocklist") Stocklist
-        li: a(href="/sales") Sales
+        li: a(href="/sales") Sales 
         li: a(href="/saleslist") Saleslist
         li: a(href="/delivery") Delivery
         li: a(href="/deliverylist") Deliverylist
@@ -25,16 +25,7 @@ html(lang="en")
 
       .action-buttons
         a.btn.btn-black(href="/sales") Add More Sales
-        button#generateAllReport.btn.btn-report(onclick="generateFullSalesReport()") Generate Full Report
-
-      // ===== Search Bar =====
-      .search-container
-        input#searchInput(
-          type="text"
-          placeholder="Search by customer, product, type, quality, or agent..."
-          onkeyup="filterSalesTable()"
-        )
-        span.search-icon 🔍
+        button#generateAllReport.btn.btn-report(type="button", onclick="generateFullSalesReport()") Generate Full Report
 
       table#salesTable
         thead
@@ -56,34 +47,43 @@ html(lang="en")
           - var totalCostPrice = 0
           - var totalTotalPrice = 0
 
-          if items && items.length
-            each item in items
-              - totalQuantity += item.quantity || 0
-              - totalCostPrice += item.costPrice || 0
-              - totalTotalPrice += item.totalPrice || 0
+          //  Ensure items is always an array
+          - var safeItems = Array.isArray(items) ? items : []
+
+          if safeItems.length
+            each item in safeItems
+              - var qty = item.quantity || 0
+              - var cost = item.costPrice || 0
+              - var total = item.totalPrice || 0
+              - totalQuantity += qty
+              - totalCostPrice += cost
+              - totalTotalPrice += total
               tr
-                td #{item.customerName}
-                td #{item.productType}
-                td #{item.productName}
-                td #{item.quantity}
-                td #{item.quality}
-                td #{item.costPrice.toFixed(2)}
+                td #{item.customerName || 'N/A'}
+                td #{item.productType || 'N/A'}
+                td #{item.productName || 'N/A'}
+                td #{qty}
+                td #{item.quality || 'N/A'}
+                td #{cost.toFixed(2)}
                 td #{item.transportFee ? 'Yes' : 'No'}
-                td #{item.Attendant ? (item.Attendant.fullname || item.Attendant.name) : 'N/A'}
-                td #{item.totalPrice.toFixed(2)}
+                td #{item.Attendant ? (item.Attendant.fullname || item.Attendant.name || 'N/A') : 'N/A'}
+                td #{total.toFixed(2)}
+
                 if currentUser && currentUser.role === 'Manager'
                   td.action-cell
                     a.btn.btn-warning(href=`/editsales/${item._id}`, title="Edit") ✏️
-                    form(method='post', action=`/deletesales/${item._id}`, style="display:inline;")
+                    form(method='POST', action=`/deletesales/${item._id}`, style="display:inline;", onsubmit="return confirmDelete(event)")
                       button.btn.btn-danger(type='submit', title="Delete") 🗑️
-                    button.btn.btn-info(onclick=`generateSaleReport('${item._id}', '${item.customerName}')`, title="Generate Report") 📄
-                if currentUser && currentUser.role === 'Attendant'
+                    button.btn.btn-info(type='button', onclick=`generateSaleReport(event, '${item._id}', '${item.customerName || ''}')`, title="Generate Report") 📄
+
+                else if currentUser && currentUser.role === 'Attendant'
                   td.action-cell
                     a.btn.btn-receipt(href=`/salesreceipt/${item._id}`, title="Receipt") 🧾
-                    button.btn.btn-info(onclick=`generateSaleReport('${item._id}', '${item.customerName}')`, title="Generate Report") 📄
+                    button.btn.btn-info(type='button', onclick=`generateSaleReport(event, '${item._id}', '${item.customerName || ''}')`, title="Generate Report") 📄
+
           else
             tr#noSalesRow
-              td(colspan=10, style="text-align:center; color:gray; padding:30px;") No sales available
+              td(colspan="10", style="text-align:center; color:gray; padding:30px;") No sales available
 
         tfoot
           tr(style="background-color:#000; color:#fff; font-weight:bold;")
@@ -96,10 +96,6 @@ html(lang="en")
             td#totalTotalPrice #{totalTotalPrice.toFixed(2)}
             if currentUser && (currentUser.role === 'Manager' || currentUser.role === 'Attendant')
               td
-
-      // No results message
-      #noResultsMessage(style="display:none; text-align:center; padding:20px; color:#888; font-style:italic;")
-        | No sales found matching your search criteria.
 
     // ===== External JS =====
     script(src="/js/salestable.js")

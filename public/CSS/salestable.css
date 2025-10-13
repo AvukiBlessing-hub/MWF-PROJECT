@@ -188,7 +188,7 @@ tfoot td {
 
 /* Report button (blue) */
 .btn-report {
-  background-color: #007bff;
+  background-color: darkgreen;
   color: white;
   padding: 5px 10px;
   font-weight: 600;
@@ -197,21 +197,21 @@ tfoot td {
 }
 
 .btn-report:hover {
-  background-color: #0056b3;
+  background-color: darkgreen;
   box-shadow: 0 3px 8px rgba(0, 123, 255, 0.4);
   transform: translateY(-1px);
 }
 
 /* Edit button (green) */
 .btn-warning {
-  background-color: #28a745;
+  background-color: darkgreen;
   color: white;
   font-size: 11px;
   padding: 3px 6px;
 }
 
 .btn-warning:hover {
-  background-color: #218838;
+  background-color: darkgreen;
   transform: scale(1.05);
 }
 
@@ -230,14 +230,14 @@ tfoot td {
 
 /* Info/Report button (teal) */
 .btn-info {
-  background-color: #17a2b8;
+  background-color: darkgreen;
   color: white;
   font-size: 11px;
   padding: 3px 6px;
 }
 
 .btn-info:hover {
-  background-color: #138496;
+  background-color: darkgreen;
   transform: scale(1.05);
 }
 
