@@ -404,3 +404,50 @@ td .btn, td form button {
     border-top: 2px solid #000;
   }
 }
+
+
+.search-container {
+  position: relative;
+  margin: 20px 0;
+  max-width: 600px;
+}
+
+#searchInput {
+  width: 100%;
+  padding: 12px 45px 12px 15px;
+  font-size: 15px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  outline: none;
+  transition: all 0.3s ease;
+  font-family: Arial, sans-serif;
+}
+
+#searchInput:focus {
+  border-color: #000;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.search-icon {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+  pointer-events: none;
+}
+
+#searchInput::placeholder {
+  color: #999;
+}
+
+#noResultsMessage {
+  display: none;
+  text-align: center;
+  padding: 20px;
+  color: #888;
+  font-style: italic;
+}
+
+
+

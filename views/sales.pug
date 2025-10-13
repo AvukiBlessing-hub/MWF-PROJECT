@@ -39,12 +39,13 @@ nav.navbar
       option(value="wood") Wood
       option(value="furniture") Furniture
 
-    // Product Name (from stock)
+
+    // Product Name (will be populated by sales.js from stock overview)
     label(for="stockId") Product
-    select#stockId(name="stockId", required)
+    select#stockId(name="stockId", required) 
       option(value) -- Select Product --
-      each stock in stocks
-        option(value=stock._id) #{stock.productName} (Available: #{stock.quantity})
+      // Products loaded dynamically from stock overview
+
 
     // Quantity
     label(for="quantity") Quantity
@@ -78,4 +79,4 @@ nav.navbar
     // Submit
     button.btn(type="submit") Add Sale
 
-//- script(src="/js/sales.js")
+script(src="/js/sales.js")

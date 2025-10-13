@@ -144,4 +144,59 @@ router.get("/stock/test", async (req, res) => {
   }
 });
 
+// ================= API Routes =================
+
+// API Route: Get all stock items (for sales page)
+router.get('/api/stocklist', async function(req, res) {
+  try {
+    console.log('API: Fetching stock list...');
+    
+    // Fetch all stock items from database
+    const stockItems = await stockModel.find({})
+      .select('productName productType totalQuantity availableQuantity costPrice sellingPrice quality supplierName date')
+      .lean();
+    
+    console.log('API: Found ' + stockItems.length + ' stock items');
+    
+    res.json(stockItems);
+    
+  } catch (error) {
+    console.error('API Error - Stock List:', error);
+    res.status(500).json({ 
+      error: 'Failed to fetch stock list',
+      message: error.message 
+    });
+  }
+});
+
+// API Route: Get aggregated stock overview (original MongoDB aggregation)
+router.get('/api/stockoverview', async function(req, res) {
+  try {
+    console.log('API: Generating stock overview...');
+    
+    // Use MongoDB aggregation for server-side grouping
+    const stockAggregation = await stockModel.aggregate([
+      {
+        $group: {
+          _id: { productName: "$productName", productType: "$productType" },
+          totalAvailable: { $sum: "$totalQuantity" }
+        }
+      },
+      { $match: { totalAvailable: { $gt: 0 } } },
+      { $sort: { "_id.productName": 1, "_id.productType": 1 } }
+    ]);
+    
+    console.log('API: Generated ' + stockAggregation.length + ' overview items');
+    
+    res.json(stockAggregation);
+    
+  } catch (error) {
+    console.error('API Error - Stock Overview:', error);
+    res.status(500).json({ 
+      error: 'Failed to generate stock overview',
+      message: error.message 
+    });
+  }
+});
+
 module.exports = router;

@@ -4,30 +4,21 @@ html(lang="en")
     meta(charset="UTF-8")
     meta(name="viewport", content="width=device-width, initial-scale=1")
     title Sales Table
-    link(rel="stylesheet", href="/CSS/salestable.css")
+    link(rel="stylesheet", href="/css/salestable.css")
 
   body
     // ===== Navbar =====
     nav.navbar
       ul
-        li
-          a(href="/dashboard") Dashboard 
-        li
-          a(href="/signup") Register users
-        li
-          a(href="/userlist") Registered users 
-        li
-          a(href="/stock") Stock
-        li
-          a(href="/stocklist") Stocklist
-        li
-          a(href="/sales") Sales 
-        li
-          a(href="/saleslist") Saleslist
-        li
-          a(href="/delivery") Delivery
-        li
-          a(href="/deliverylist") Deliverylist
+        li: a(href="/dashboard") Dashboard
+        li: a(href="/signup") Register users
+        li: a(href="/userlist") Registered users
+        li: a(href="/stock") Stock
+        li: a(href="/stocklist") Stocklist
+        li: a(href="/sales") Sales
+        li: a(href="/saleslist") Saleslist
+        li: a(href="/delivery") Delivery
+        li: a(href="/deliverylist") Deliverylist
 
     .container
       h1 Sales Table
@@ -35,6 +26,15 @@ html(lang="en")
       .action-buttons
         a.btn.btn-black(href="/sales") Add More Sales
         button#generateAllReport.btn.btn-report(onclick="generateFullSalesReport()") Generate Full Report
+
+      // ===== Search Bar =====
+      .search-container
+        input#searchInput(
+          type="text"
+          placeholder="Search by customer, product, type, quality, or agent..."
+          onkeyup="filterSalesTable()"
+        )
+        span.search-icon 🔍
 
       table#salesTable
         thead
@@ -48,9 +48,7 @@ html(lang="en")
             th Transport
             th Agent
             th Total (shs)
-            if currentUser && currentUser.role === 'Manager'
-              th Actions
-            if currentUser && currentUser.role === 'Attendant'
+            if currentUser && (currentUser.role === 'Manager' || currentUser.role === 'Attendant')
               th Actions
 
         tbody
@@ -84,215 +82,24 @@ html(lang="en")
                     a.btn.btn-receipt(href=`/salesreceipt/${item._id}`, title="Receipt") 🧾
                     button.btn.btn-info(onclick=`generateSaleReport('${item._id}', '${item.customerName}')`, title="Generate Report") 📄
           else
-            tr
-              td(colspan=(currentUser && currentUser.role === 'Manager' ? 10 : 10), style="text-align:center; color:gray; padding:30px;") No sales available
+            tr#noSalesRow
+              td(colspan=10, style="text-align:center; color:gray; padding:30px;") No sales available
 
         tfoot
-          tr(style="background-color: #000; color: #fff; font-weight: bold;")
+          tr(style="background-color:#000; color:#fff; font-weight:bold;")
             td(colspan="3", style="text-align:right; padding-right:15px;") TOTALS:
-            td #{totalQuantity}
+            td#totalQuantity #{totalQuantity}
             td
-            td #{totalCostPrice.toFixed(2)}
+            td#totalCostPrice #{totalCostPrice.toFixed(2)}
             td
             td
-            td #{totalTotalPrice.toFixed(2)}
-            if currentUser && currentUser.role === 'Manager'
-              td
-            if currentUser && currentUser.role === 'Attendant'
+            td#totalTotalPrice #{totalTotalPrice.toFixed(2)}
+            if currentUser && (currentUser.role === 'Manager' || currentUser.role === 'Attendant')
               td
 
-    script.
-      function generateSaleReport(saleId, customerName) {
-        const row = event.target.closest('tr');
-        const cells = row.querySelectorAll('td');
+      // No results message
+      #noResultsMessage(style="display:none; text-align:center; padding:20px; color:#888; font-style:italic;")
+        | No sales found matching your search criteria.
 
-        const reportData = {
-          customerName: cells[0].textContent,
-          productType: cells[1].textContent,
-          productName: cells[2].textContent,
-          quantity: cells[3].textContent,
-          quality: cells[4].textContent,
-          costPrice: cells[5].textContent,
-          transport: cells[6].textContent,
-          agent: cells[7].textContent,
-          totalPrice: cells[8].textContent
-        };
-
-        printSalesReport([reportData], `Sales Report - ${customerName}`);
-      }
-
-      function generateFullSalesReport() {
-        const table = document.getElementById('salesTable');
-        const rows = table.querySelectorAll('tbody tr');
-        const reportData = [];
-
-        rows.forEach(row => {
-          const cells = row.querySelectorAll('td');
-          if (cells.length > 1) {
-            reportData.push({
-              customerName: cells[0].textContent,
-              productType: cells[1].textContent,
-              productName: cells[2].textContent,
-              quantity: cells[3].textContent,
-              quality: cells[4].textContent,
-              costPrice: cells[5].textContent,
-              transport: cells[6].textContent,
-              agent: cells[7].textContent,
-              totalPrice: cells[8].textContent
-            });
-          }
-        });
-
-        const footerCells = table.querySelectorAll('tfoot td');
-        const totals = {
-          quantity: footerCells[1].textContent,
-          costPrice: footerCells[2].textContent,
-          totalPrice: footerCells[4].textContent
-        };
-
-        printSalesReport(reportData, 'Complete Sales Report', totals);
-      }
-
-      function printSalesReport(data, title, totals = null) {
-        const printWindow = window.open('', '', 'width=900,height=650');
-
-        let html = `
-          <!DOCTYPE html>
-          <html>
-          <head>
-            <title>${title}</title>
-            <style>
-              * { margin: 0; padding: 0; box-sizing: border-box; }
-              body {
-                font-family: 'Arial', sans-serif;
-                padding: 25px;
-                background: #fff;
-              }
-              .report-header {
-                text-align: center;
-                margin-bottom: 25px;
-                border-bottom: 3px solid #000;
-                padding-bottom: 12px;
-              }
-              .report-header h1 {
-                margin: 0;
-                font-size: 22px;
-                text-transform: uppercase;
-                letter-spacing: 1px;
-              }
-              .report-header p {
-                margin: 5px 0;
-                color: #555;
-                font-size: 12px;
-              }
-              table {
-                width: 100%;
-                border-collapse: collapse;
-                margin-top: 15px;
-              }
-              th, td {
-                border: 1px solid #000;
-                padding: 8px;
-                text-align: left;
-                font-size: 11px;
-              }
-              th {
-                background-color: #000;
-                color: #fff;
-                font-weight: bold;
-                text-transform: uppercase;
-              }
-              tr:nth-child(even) {
-                background-color: #f5f5f5;
-              }
-              .total-row {
-                background-color: #000 !important;
-                color: #fff;
-                font-weight: bold;
-              }
-              .footer {
-                margin-top: 30px;
-                text-align: center;
-                font-size: 10px;
-                color: #888;
-              }
-              @media print {
-                body { padding: 10px; }
-                .no-print { display: none; }
-              }
-            </style>
-          </head>
-          <body>
-            <div class="report-header">
-              <h1>${title}</h1>
-              <p>Generated on: ${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}</p>
-            </div>
-
-            <table>
-              <thead>
-                <tr>
-                  <th>Customer</th>
-                  <th>Product Type</th>
-                  <th>Product Name</th>
-                  <th>Quantity</th>
-                  <th>Quality</th>
-                  <th>Cost Price</th>
-                  <th>Transport</th>
-                  <th>Sales Agent</th>
-                  <th>Total Price</th>
-                </tr>
-              </thead>
-              <tbody>
-        `;
-
-        data.forEach(item => {
-          html += `
-            <tr>
-              <td>${item.customerName}</td>
-              <td>${item.productType}</td>
-              <td>${item.productName}</td>
-              <td>${item.quantity}</td>
-              <td>${item.quality}</td>
-              <td>${item.costPrice}</td>
-              <td>${item.transport}</td>
-              <td>${item.agent}</td>
-              <td>${item.totalPrice}</td>
-            </tr>
-          `;
-        });
-
-        if (totals) {
-          html += `
-            <tr class="total-row">
-              <td colspan="3" style="text-align: right;"><strong>TOTALS:</strong></td>
-              <td><strong>${totals.quantity}</strong></td>
-              <td></td>
-              <td><strong>${totals.costPrice}</strong></td>
-              <td></td>
-              <td></td>
-              <td><strong>${totals.totalPrice}</strong></td>
-            </tr>
-          `;
-        }
-
-        html += `
-              </tbody>
-            </table>
-
-            <div class="footer">
-              <p>This is an automated sales report. For queries, contact your administrator.</p>
-            </div>
-
-            <div class="no-print" style="text-align: center; margin-top: 25px;">
-              <button onclick="window.print()" style="padding: 8px 18px; background: #000; color: #fff; border: none; cursor: pointer; border-radius: 5px; margin-right: 8px; font-size: 13px;">Print Report</button>
-              <button onclick="window.close()" style="padding: 8px 18px; background: #666; color: #fff; border: none; cursor: pointer; border-radius: 5px; font-size: 13px;">Close</button>
-            </div>
-          </body>
-          </html>
-        `;
-
-        printWindow.document.write(html);
-        printWindow.document.close();
-      }
-
-    script(src="/salestable.js")
+    // ===== External JS =====
+    script(src="/js/salestable.js")
