@@ -1,120 +1,93 @@
 const express = require("express");
 const router = express.Router();
-const mongoose = require("mongoose");
-const { isAuthenticated } = require("../middleware/auth");
+const { isAuthenticated, isManager } = require("../middleware/auth");
+const stockModel = require("../models/stockModel");
 const salesModel = require("../models/salesModel");
-const stockModel = require("../models/stockModel"); // Assuming you have a stock model
-const moment = require("moment");
+const moment = require("moment"); // <-- needed for formatting dates in Pug
 
-// ===== Helper function to fetch sales safely =====
-async function getSalesForUser(user) {
-  const role = user.role.toLowerCase();
-
-  if (role === "manager") {
-    return await salesModel.find().populate("Attendant", "fullname").lean();
-  } else if (role === "attendant") {
-    return await salesModel
-      .find({ Attendant: new mongoose.Types.ObjectId(user._id) })
-      .populate("Attendant", "fullname")
-      .lean();
-  } else {
-    throw new Error("Access denied");
-  }
-}
-
-// ===== Record Sale Form Page =====
-router.get("/sales/add", isAuthenticated, async (req, res) => {
+// ================= Sales Page =================
+router.get("/sales", isAuthenticated, async (req, res) => {
   try {
-    const stocks = await stockModel.find().lean(); // pass stock data for dropdown
+    const stocks = await stockModel.find().lean();
     res.render("sales", { stocks, currentUser: req.user });
   } catch (err) {
-    console.error("Error loading sales form:", err.message);
-    res.status(500).send("Error loading sales form");
+    console.error("Error loading sales page:", err);
+    res.status(500).send("Error loading sales page");
   }
 });
 
-// ===== Create Sale (POST) =====
+// ================= Add Sale =================
 router.post("/sales", isAuthenticated, async (req, res) => {
   try {
-    const data = {
-      ...req.body,
-      Attendant: req.user._id // attach current user
-    };
-    await salesModel.create(data);
-    res.redirect("/saleslist"); // ✅ redirect to sales list after creating
-  } catch (err) {
-    console.error("Error creating sale:", err.message);
-    res.status(500).send("Error creating sale");
-  }
-});
+    const { customerName, stockId, quantity, quality, costPrice, paymentMethod, transportCheck } = req.body;
 
-// ===== Sales Pages =====
-router.get(["/saleslist", "/sales"], isAuthenticated, async (req, res) => {
-  try {
-    const sales = await getSalesForUser(req.user);
-    res.render("salestable", { items: sales, currentUser: req.user, moment });
-  } catch (error) {
-    console.error("Error fetching sales:", error.message);
-    res.status(403).send("Access denied");
-  }
-});
-
-// ===== Edit Sale Page (GET) =====
-router.get("/editsales/:id", isAuthenticated, async (req, res) => {
-  try {
-    const { id } = req.params;
-    if (!mongoose.Types.ObjectId.isValid(id)) return res.status(400).send("Invalid sale ID");
-
-    const sale = await salesModel.findById(id).populate("Attendant", "fullname").lean();
-    if (!sale) return res.status(404).send("Sale not found");
-
-    if (req.user.role.toLowerCase() === "attendant" &&
-        sale.Attendant._id.toString() !== req.user._id.toString()) {
-      return res.status(403).send("Access denied");
+    if (!customerName || !stockId || !quantity || !costPrice) {
+      return res.status(400).send("Required fields missing");
     }
 
-    res.render("editsales", { item: sale, currentUser: req.user });
-  } catch (error) {
-    console.error("Error loading edit page:", error.message);
-    res.status(500).send("Error loading edit page");
+    const stockItem = await stockModel.findById(stockId);
+    if (!stockItem) return res.status(404).send("Stock not found");
+
+    const totalPrice = Number(costPrice) * Number(quantity);
+    const transportFee = transportCheck ? totalPrice * 0.05 : 0;
+
+    const newSale = new salesModel({
+      customerName,
+      productName: stockItem.productName,
+      productType: stockItem.productType,
+      quantity: Number(quantity),
+      quality,
+      costPrice: Number(costPrice),
+      totalPrice: totalPrice + transportFee,
+      transportFee: transportCheck ? true : false,
+      paymentMethod,
+      Attendant: req.user._id,
+      date: new Date()
+    });
+
+    await newSale.save();
+    res.redirect("/saleslist");
+  } catch (err) {
+    console.error("Error adding sale:", err);
+    res.status(500).send("Error adding sale");
   }
 });
 
-// ===== Edit Sale (POST) =====
-router.post("/editsales/:id", isAuthenticated, async (req, res) => {
+// ================= Sales List =================
+router.get("/saleslist", isAuthenticated, async (req, res) => {
   try {
-    const { id } = req.params;
-    if (!mongoose.Types.ObjectId.isValid(id)) return res.status(400).send("Invalid sale ID");
+    const items = await salesModel.find().populate("Attendant").lean();
+    res.render("salestable", { items, currentUser: req.user });
+  } catch (err) {
+    console.error("Error fetching sales list:", err);
+    res.status(500).send("Error fetching sales list");
+  }
+});
 
-    const sale = await salesModel.findById(id);
+// ================= Receipt =================
+router.get("/receipt/:id", isAuthenticated, async (req, res) => {
+  try {
+    const sale = await salesModel.findById(req.params.id).populate("Attendant").lean();
     if (!sale) return res.status(404).send("Sale not found");
 
-    if (req.user.role.toLowerCase() === "attendant" &&
-        sale.Attendant.toString() !== req.user._id.toString()) {
-      return res.status(403).send("Access denied");
-    }
-
-    await salesModel.findByIdAndUpdate(id, req.body, { new: true, runValidators: true });
-    res.redirect("/saleslist"); // redirect to sales list after editing
+    // Pass moment to Pug for date formatting
+    res.render("receipt", { sale, currentUser: req.user, moment });
   } catch (err) {
-    console.error("Error updating sale:", err.message);
-    res.status(500).send("Error updating sale");
+    console.error("Error generating receipt:", err);
+    res.status(500).send("Error generating receipt");
   }
 });
 
-// ===== Delete Sale (Manager only) =====
-router.post("/deletesales/:id", isAuthenticated, async (req, res) => {
+// ================= Optional: Sale Report (JSON) =================
+router.get("/api/report/:id", isAuthenticated, async (req, res) => {
   try {
-    if (req.user.role.toLowerCase() !== "manager") return res.status(403).send("Access denied");
+    const sale = await salesModel.findById(req.params.id).populate("Attendant").lean();
+    if (!sale) return res.status(404).json({ error: "Sale not found" });
 
-    const { id } = req.params;
-    if (!mongoose.Types.ObjectId.isValid(id)) return res.status(400).send("Invalid sale ID");
-
-    await salesModel.findByIdAndDelete(id);
-    res.redirect("/saleslist"); // redirect to sales list after deletion
+    res.json(sale); // Can later be used for PDF or other formats
   } catch (err) {
-    console.error("Error deleting sale:", err.message);
-    res.status(500).send("Error deleting sale");
+    console.error("Error generating sale report:", err);
+    res.status(500).json({ error: "Error generating sale report" });
   }
 });
 

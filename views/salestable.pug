@@ -7,7 +7,6 @@ html(lang="en")
     link(rel="stylesheet", href="/css/salestable.css")
 
   body
-    // ===== Navbar =====
     nav.navbar
       ul
         li: a(href="/dashboard") Dashboard 
@@ -19,10 +18,10 @@ html(lang="en")
         li: a(href="/saleslist") Saleslist
         li: a(href="/delivery") Delivery
         li: a(href="/deliverylist") Deliverylist
+        li: a(href="/logout") Log out
 
     .container
       h1 Sales Table
-
       .action-buttons
         a.btn.btn-black(href="/sales") Add More Sales
         button#generateAllReport.btn.btn-report(type="button", onclick="generateFullSalesReport()") Generate Full Report
@@ -39,15 +38,13 @@ html(lang="en")
             th Transport
             th Agent
             th Total (shs)
-            if currentUser && (currentUser.role === 'Manager' || currentUser.role === 'Attendant')
+            if currentUser && ['Manager','Attendant'].includes(currentUser.role)
               th Actions
 
         tbody
           - var totalQuantity = 0
           - var totalCostPrice = 0
           - var totalTotalPrice = 0
-
-          //  Ensure items is always an array
           - var safeItems = Array.isArray(items) ? items : []
 
           if safeItems.length
@@ -78,7 +75,8 @@ html(lang="en")
 
                 else if currentUser && currentUser.role === 'Attendant'
                   td.action-cell
-                    a.btn.btn-receipt(href=`/salesreceipt/${item._id}`, title="Receipt") 🧾
+                    // ✅ FIXED: changed href from /salesreceipt/ to /receipt/
+                    a.btn.btn-receipt(href=`/receipt/${item._id}`, title="Receipt") 🧾
                     button.btn.btn-info(type='button', onclick=`generateSaleReport(event, '${item._id}', '${item.customerName || ''}')`, title="Generate Report") 📄
 
           else
@@ -94,8 +92,7 @@ html(lang="en")
             td
             td
             td#totalTotalPrice #{totalTotalPrice.toFixed(2)}
-            if currentUser && (currentUser.role === 'Manager' || currentUser.role === 'Attendant')
+            if currentUser && ['Manager','Attendant'].includes(currentUser.role)
               td
 
-    // ===== External JS =====
     script(src="/js/salestable.js")

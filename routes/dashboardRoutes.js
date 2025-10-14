@@ -53,7 +53,7 @@ router.get("/dashboard", isAuthenticated, isManager, async (req, res) => {
     const endOfMonth = moment().endOf("month").toDate();
 
     const dailySales = await salesModel.aggregate([
-      { $match: { date: { $gte: startOfMonth, $lte: endOfMonth } } }, // uses your existing `date` field
+      { $match: { date: { $gte: startOfMonth, $lte: endOfMonth } } },
       {
         $group: {
           _id: { $dateToString: { format: "%Y-%m-%d", date: "$date" } },

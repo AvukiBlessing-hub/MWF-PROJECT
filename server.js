@@ -7,23 +7,23 @@ const expressSession = require("express-session");
 const MongoStore = require("connect-mongo");
 const methodOverride = require("method-override");
 const moment = require("moment");
-const flash = require("connect-flash"); // ✅ added flash
+const flash = require("connect-flash");
 
-// Import routes
 const authRoutes = require("./routes/authRoutes");
 const stockRoutes = require("./routes/stockRoutes");
 const salesRoutes = require("./routes/salesRoutes");
 const deliveryRoutes = require("./routes/deliveryRoutes");
-const dashboardRoutes = require("./routes/dashboardRoutes"); // ✅ NEW
+const dashboardRoutes = require("./routes/dashboardRoutes");
 const userModel = require("./models/userModel");
 
 const app = express();
 const port = 5000;
 
-// Mongoose config
+// Make moment available in all templates
 app.locals.moment = moment;
 
-mongoose.connect(process.env.MONGODB_URI); // ✅ Removed deprecated options
+// Mongoose config
+mongoose.connect(process.env.MONGODB_URI);
 mongoose.connection
   .on("open", () => console.log("Mongoose connection open"))
   .on("error", (err) => console.log(`Connection error: ${err.message}`));
@@ -60,8 +60,8 @@ passport.deserializeUser(userModel.deserializeUser());
 
 // Make flash messages available in all templates
 app.use((req, res, next) => {
-  res.locals.error = req.flash("error");   // for signin errors
-  res.locals.success = req.flash("success"); // optional
+  res.locals.error = req.flash("error");
+  res.locals.success = req.flash("success");
   next();
 });
 
@@ -71,13 +71,12 @@ app.use((req, res, next) => {
   next();
 });
 
-
-// Mount routes
-app.use("/", authRoutes);       // /signup, /signin, etc.
-app.use("/", stockRoutes);      // /stock, /stocklist, etc.
-app.use("/", salesRoutes);      // /sales, /saleslist, etc.
-app.use("/", deliveryRoutes);   // /delivery, /deliverylist, etc.
-app.use("/", dashboardRoutes);  //  NEW /dashboard route
+// ================= Mount Routes =================
+app.use("/", authRoutes);      // /signup, /signin, etc.
+app.use("/", stockRoutes);     // /stock, /stocklist, etc.
+app.use("/", salesRoutes);     // /sales, /saleslist, /salesreceipt/:id, etc.
+app.use("/", deliveryRoutes);  // /delivery, /deliverylist, etc.
+app.use("/", dashboardRoutes); // /dashboard
 
 // 404 handler (keep it last)
 app.use((req, res) => {

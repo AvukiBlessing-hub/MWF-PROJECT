@@ -7,52 +7,38 @@ html(lang="en")
     link(rel="stylesheet", href="/CSS/sales.css")
 
   body
-    // ===== Navbar =====
     nav.navbar
       ul
-        li
-          a(href="/dashboard") Dashboard 
-        li
-          a(href="/signup") Register users
-        li
-          a(href="/userlist") Registered users 
-        li
-          a(href="/stock") Stock
-        li
-          a(href="/stocklist") Stocklist
-        li
-          a(href="/sales") Sales 
-        li
-          a(href="/saleslist") Saleslist
-        li
-          a(href="/delivery") Delivery
-        li
-          a(href="/deliverylist") Deliverylist
+        li: a(href="/dashboard") Dashboard 
+        li: a(href="/signup") Register users
+        li: a(href="/userlist") Registered users 
+        li: a(href="/stock") Stock
+        li: a(href="/stocklist") Stocklist
+        li: a(href="/sales") Sales 
+        li: a(href="/saleslist") Saleslist
+        li: a(href="/delivery") Delivery
+        li: a(href="/deliverylist") Deliverylist
+         li: a(href="/logout") log out
 
     .container
       h1 Record a Sale
       form(action="/sales", method="POST")
-        // Customer Name
         label(for="customerName") Customer Name
         input#customerName(type="text", name="customerName", required)
 
-        // Product Type
         label(for="productType") Product Type
         select#productType(name="productType", required)
           option(value="") -- Select Type --
           option(value="wood") Wood
           option(value="furniture") Furniture
 
-        // Product Name (populated dynamically)
         label(for="stockId") Product
-        select#stockId(name="stockId", required) 
+        select#stockId(name="stockId", required)
           option(value="") -- Select Product --
 
-        // Quantity
         label(for="quantity") Quantity
         input#quantity(type="number", name="quantity", min="1", required)
 
-        // Quality
         label(for="quality") Quality
         select#quality(name="quality", required)
           option(value="") -- Select Quality --
@@ -60,16 +46,13 @@ html(lang="en")
           option(value="medium") Medium
           option(value="low") Low
 
-        // Cost Price
         label(for="costPrice") Cost Price (per unit)
         input#costPrice(type="number", name="costPrice", min="0", step="0.01", required)
 
-        // Transport Fee
         .checkbox
           input#transportCheck(type="checkbox", name="transportCheck")
           label(for="transportCheck") Add 5% Transport Fee
 
-        // Payment Method
         label(for="paymentMethod") Payment Method
         select#paymentMethod(name="paymentMethod", required)
           option(value="") -- Select Payment Method --
@@ -77,12 +60,8 @@ html(lang="en")
           option(value="cheque") Cheque
           option(value="bank-overdraft") Bank Overdraft
 
-        // Submit
         button.btn(type="submit") Add Sale
 
-    // ===== Pass grouped stock data for JS =====
     script.
       window.groupedStocks = !{JSON.stringify(stocks)};
-
-    // ===== Include main JS =====
     script(src="/js/sales.js")

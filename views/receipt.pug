@@ -3,33 +3,33 @@ html(lang="en")
   head
     meta(charset="UTF-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
-    title Sales Receipt
+    title MWF Receipt
     link(rel="stylesheet", href="/CSS/Receipt.css")
-    
+
   body
     .receipt-container
       h1 MWF Sales Receipt
 
       .company-info
         p MWF Wood & Furniture Ltd.
-        p Address: po box 12345, kampala, uganda 
-        p Phone: +256 90 254276/ +256 8963 8498
+        p Address: P.O. Box 12345, Kampala, Uganda
+        p Phone: +256 90 254276 / +256 8963 8498
 
       hr
 
       .receipt-info
         p
-          strong Customer Name: 
-          | #{sale.customerName}
+          strong Customer Name:
+          |  #{sale.customerName}
         p
-          strong Attendant: 
-          | #{sale.Attendant.fullname}
+          strong Attendant:
+          |  #{sale.Attendant.fullname}
         p
-          strong Sale Date: 
-          | #{moment(sale.date).format('DD/MM/YYYY')}
+          strong Sale Date:
+          |  #{moment(sale.date).format('DD/MM/YYYY')}
         p
-          strong Payment Method: 
-          | #{sale.paymentMethod}
+          strong Payment Method:
+          |  #{sale.paymentMethod}
 
       hr
 
@@ -58,14 +58,18 @@ html(lang="en")
       .footer
         p Thank you for your purchase!
 
-      //  Print button
-      button.print-btn(onclick="window.print()")  Print 
+      // Print & Back buttons
+      .buttons
+        button.print-btn(onclick="window.print()") Print
+        button.back-btn(onclick="window.location.href='/saleslist'") Back to Sales List
 
     script.
-      // Optional: Hide print button when printing
+      // Hide print button while printing
       window.addEventListener("beforeprint", () => {
         document.querySelector(".print-btn").style.display = "none";
+        document.querySelector(".back-btn").style.display = "none";
       });
       window.addEventListener("afterprint", () => {
         document.querySelector(".print-btn").style.display = "inline-block";
+        document.querySelector(".back-btn").style.display = "inline-block";
       });
