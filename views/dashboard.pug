@@ -50,14 +50,14 @@ html(lang="en")
         h3 Stock Available
         p #{(stockAvailable || 0).toLocaleString()}
 
-      .card.alert-card
-        h3 Stock Alerts
-        if stockAlerts && stockAlerts.length
-          ul
-            each item in stockAlerts
-              li #{item.productName} - Only #{item.alertMessage}
-        else
-          p No low stock alerts
+      //- .card.alert-card
+      //-   h3 Stock Alerts
+      //-   if stockAlerts && stockAlerts.length
+      //-     ul
+      //-       each item in stockAlerts
+      //-         li #{item.productName} - Only #{item.alertMessage}
+      //-   else
+      //-     p No low stock alerts
 
       .card(onclick="location.href='/deliverylist'")
         h3 Pending Deliveries

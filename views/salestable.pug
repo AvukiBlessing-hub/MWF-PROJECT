@@ -75,7 +75,6 @@ html(lang="en")
 
                 else if currentUser && currentUser.role === 'Attendant'
                   td.action-cell
-                    // ✅ FIXED: changed href from /salesreceipt/ to /receipt/
                     a.btn.btn-receipt(href=`/receipt/${item._id}`, title="Receipt") 🧾
                     button.btn.btn-info(type='button', onclick=`generateSaleReport(event, '${item._id}', '${item.customerName || ''}')`, title="Generate Report") 📄
 
@@ -94,5 +93,14 @@ html(lang="en")
             td#totalTotalPrice #{totalTotalPrice.toFixed(2)}
             if currentUser && ['Manager','Attendant'].includes(currentUser.role)
               td
+
+    // ===== Footer =====
+    footer.footer
+      .footer-container
+        p © 2025 MWF Company.Designed by Blessing .
+        p
+          //- a(href="/privacy") Privacy Policy
+          //- |  |  
+          //- a(href="/terms") Terms of Service
 
     script(src="/js/salestable.js")

@@ -3,7 +3,7 @@ const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
 const passport = require("passport");
-const expressSession = require("express-session");
+const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const methodOverride = require("method-override");
 const moment = require("moment");
@@ -11,77 +11,100 @@ const flash = require("connect-flash");
 
 const authRoutes = require("./routes/authRoutes");
 const stockRoutes = require("./routes/stockRoutes");
-const salesRoutes = require("./routes/salesRoutes");
+const salesRoutes = require("./routes/salesRoutes");  // ✅ make sure file is named salesRoutes.js
 const deliveryRoutes = require("./routes/deliveryRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
 const userModel = require("./models/userModel");
 
 const app = express();
-const port = 5000;
+const PORT = process.env.PORT || 5000;
 
-// Make moment available in all templates
-app.locals.moment = moment;
+/* ------------------------------
+    DATABASE CONNECTION
+--------------------------------*/
+mongoose
+  .connect(process.env.MONGODB_URI)
+  .then(() => console.log(" MongoDB connected"))
+  .catch((err) => console.error(" MongoDB connection error:", err));
 
-// Mongoose config
-mongoose.connect(process.env.MONGODB_URI);
-mongoose.connection
-  .on("open", () => console.log("Mongoose connection open"))
-  .on("error", (err) => console.log(`Connection error: ${err.message}`));
-
-// View engine
+/* ------------------------------
+    APP CONFIGURATION
+--------------------------------*/
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 
-// Middleware
+// Make moment globally available to templates
+app.locals.moment = moment;
+
+/* ------------------------------
+    MIDDLEWARE
+--------------------------------*/
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(methodOverride("_method"));
 
-// Session
+// Session configuration
 app.use(
-  expressSession({
-    secret: process.env.SESSION_SECRET,
+  session({
+    secret: process.env.SESSION_SECRET || "defaultsecret",
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI }),
-    cookie: { maxAge: 24 * 60 * 60 * 1000 },
+    cookie: { maxAge: 24 * 60 * 60 * 1000 }, // 1 day
   })
 );
 
 // Flash messages
 app.use(flash());
 
-// Passport
+/* ------------------------------
+    PASSPORT AUTHENTICATION
+--------------------------------*/
 app.use(passport.initialize());
 app.use(passport.session());
+
 passport.use(userModel.createStrategy());
 passport.serializeUser(userModel.serializeUser());
 passport.deserializeUser(userModel.deserializeUser());
 
-// Make flash messages available in all templates
+/* ------------------------------
+    GLOBAL VARIABLES (FLASH + USER)
+--------------------------------*/
 app.use((req, res, next) => {
+  res.locals.currentUser = req.user || null;
   res.locals.error = req.flash("error");
   res.locals.success = req.flash("success");
   next();
 });
 
-// Debug middleware
+/* ------------------------------
+    DEBUG LOGGER
+--------------------------------*/
 app.use((req, res, next) => {
-  console.log("Request URL:", req.url, "at", new Date().toISOString());
+  console.log(`[${new Date().toLocaleTimeString()}] ${req.method} ${req.url}`);
   next();
 });
 
-// ================= Mount Routes =================
-app.use("/", authRoutes);      // /signup, /signin, etc.
-app.use("/", stockRoutes);     // /stock, /stocklist, etc.
-app.use("/", salesRoutes);     // /sales, /saleslist, /salesreceipt/:id, etc.
-app.use("/", deliveryRoutes);  // /delivery, /deliverylist, etc.
-app.use("/", dashboardRoutes); // /dashboard
+/* ------------------------------
+    ROUTES
+--------------------------------*/
+app.use("/", authRoutes);       // /login, /signup, /logout, etc.
+app.use("/", stockRoutes);      // /stock, /stocklist, etc.
+app.use("/", salesRoutes);      // /sales, /saleslist, /editsales/:id, /receipt/:id
+app.use("/", deliveryRoutes);   // /delivery, /deliverylist, etc.
+app.use("/", dashboardRoutes);  // /dashboard
 
-// 404 handler (keep it last)
+/* ------------------------------
+    404 HANDLER (KEEP LAST)
+--------------------------------*/
 app.use((req, res) => {
   res.status(404).send("Oops! Route not found");
 });
 
-// Start server
-app.listen(port, () => console.log(`Server running on http://localhost:${port}`));
+/* ------------------------------
+    START SERVER
+--------------------------------*/
+app.listen(PORT, () => {
+  console.log(` Server running at http://localhost:${PORT}`);
+});

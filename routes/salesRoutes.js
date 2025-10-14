@@ -3,7 +3,7 @@ const router = express.Router();
 const { isAuthenticated, isManager } = require("../middleware/auth");
 const stockModel = require("../models/stockModel");
 const salesModel = require("../models/salesModel");
-const moment = require("moment"); // <-- needed for formatting dates in Pug
+const moment = require("moment");
 
 // ================= Sales Page =================
 router.get("/sales", isAuthenticated, async (req, res) => {
@@ -39,10 +39,10 @@ router.post("/sales", isAuthenticated, async (req, res) => {
       quality,
       costPrice: Number(costPrice),
       totalPrice: totalPrice + transportFee,
-      transportFee: transportCheck ? true : false,
+      transportFee: !!transportCheck,
       paymentMethod,
       Attendant: req.user._id,
-      date: new Date()
+      date: new Date(),
     });
 
     await newSale.save();
@@ -64,13 +64,62 @@ router.get("/saleslist", isAuthenticated, async (req, res) => {
   }
 });
 
+// ================= Edit Sale =================
+router.get("/editsales/:id", isAuthenticated, async (req, res) => {
+  try {
+    const item = await salesModel.findById(req.params.id).populate("Attendant").lean();
+    if (!item) return res.status(404).send("Sale not found");
+
+    res.render("editsales", { item, currentUser: req.user });
+  } catch (err) {
+    console.error("Error loading edit sale form:", err);
+    res.status(500).send("Error loading edit sale form");
+  }
+});
+
+router.post("/editsales/:id", isAuthenticated, async (req, res) => {
+  try {
+    const { customerName, productType, productName, quantity, quality, costPrice, paymentMethod, transportCheck } = req.body;
+
+    const totalPrice = Number(costPrice) * Number(quantity);
+    const transportFee = transportCheck ? totalPrice * 0.05 : 0;
+
+    await salesModel.findByIdAndUpdate(req.params.id, {
+      customerName,
+      productType,
+      productName,
+      quantity: Number(quantity),
+      quality,
+      costPrice: Number(costPrice),
+      totalPrice: totalPrice + transportFee,
+      transportFee: !!transportCheck,
+      paymentMethod,
+    });
+
+    res.redirect("/saleslist");
+  } catch (err) {
+    console.error("Error updating sale:", err);
+    res.status(500).send("Error updating sale");
+  }
+});
+
+// ================= Delete Sale =================
+router.post("/deletesales/:id", isAuthenticated, isManager, async (req, res) => {
+  try {
+    await salesModel.findByIdAndDelete(req.params.id);
+    res.redirect("/saleslist");
+  } catch (err) {
+    console.error("Error deleting sale:", err);
+    res.status(500).send("Error deleting sale");
+  }
+});
+
 // ================= Receipt =================
 router.get("/receipt/:id", isAuthenticated, async (req, res) => {
   try {
     const sale = await salesModel.findById(req.params.id).populate("Attendant").lean();
     if (!sale) return res.status(404).send("Sale not found");
 
-    // Pass moment to Pug for date formatting
     res.render("receipt", { sale, currentUser: req.user, moment });
   } catch (err) {
     console.error("Error generating receipt:", err);
@@ -78,16 +127,16 @@ router.get("/receipt/:id", isAuthenticated, async (req, res) => {
   }
 });
 
-// ================= Optional: Sale Report (JSON) =================
-router.get("/api/report/:id", isAuthenticated, async (req, res) => {
+// ================= Sale Report =================
+router.get("/report/:id", isAuthenticated, async (req, res) => {
   try {
     const sale = await salesModel.findById(req.params.id).populate("Attendant").lean();
-    if (!sale) return res.status(404).json({ error: "Sale not found" });
+    if (!sale) return res.status(404).send("Sale not found");
 
-    res.json(sale); // Can later be used for PDF or other formats
+    res.render("report", { sale, currentUser: req.user, moment });
   } catch (err) {
-    console.error("Error generating sale report:", err);
-    res.status(500).json({ error: "Error generating sale report" });
+    console.error("Error generating report:", err);
+    res.status(500).send("Error generating report");
   }
 });
 

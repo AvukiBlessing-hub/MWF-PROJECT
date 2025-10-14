@@ -63,9 +63,7 @@ router.post("/stock", isAuthenticated, isManager, async (req, res) => {
 router.get("/stocklist", isAuthenticated, async (req, res) => {
   try {
     const items = await stockModel.find().sort({ date: -1 }).lean(); // sort by actual stock date
-
     console.log("Fetched items from DB:", items.length);
-
     res.render("stocklist", { items, moment });
   } catch (error) {
     console.error("Error fetching stock:", error);
@@ -151,13 +149,11 @@ router.get('/api/stocklist', async function(req, res) {
   try {
     console.log('API: Fetching stock list...');
     
-    // Fetch all stock items from database
     const stockItems = await stockModel.find({})
       .select('productName productType totalQuantity availableQuantity costPrice sellingPrice quality supplierName date')
       .lean();
     
     console.log('API: Found ' + stockItems.length + ' stock items');
-    
     res.json(stockItems);
     
   } catch (error) {
@@ -169,17 +165,20 @@ router.get('/api/stocklist', async function(req, res) {
   }
 });
 
-// API Route: Get aggregated stock overview (original MongoDB aggregation)
+//  API Route: Aggregated Stock Overview (for Sales Form)
 router.get('/api/stockoverview', async function(req, res) {
   try {
     console.log('API: Generating stock overview...');
     
-    // Use MongoDB aggregation for server-side grouping
+    // Use MongoDB aggregation for server-side grouping by productName + productType
     const stockAggregation = await stockModel.aggregate([
       {
         $group: {
           _id: { productName: "$productName", productType: "$productType" },
-          totalAvailable: { $sum: "$totalQuantity" }
+          totalAvailable: { $sum: "$availableQuantity" },
+          totalQuantity: { $sum: "$totalQuantity" },
+          averageCostPrice: { $avg: "$costPrice" },
+          averageSellingPrice: { $avg: "$sellingPrice" }
         }
       },
       { $match: { totalAvailable: { $gt: 0 } } },

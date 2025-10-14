@@ -11,23 +11,25 @@ html
     nav.navbar
       ul
         li
-          a(href="/dashboard") Dashboard 
+          a(href="/dashboard") Dashboard
         li
           a(href="/signup") Register users
         li
-          a(href="/userlist") Registered users 
+          a(href="/userlist") Registered users
         li
           a(href="/stock") Stock
         li
           a(href="/stocklist") Stocklist
         li
-          a(href="/sales") Sales 
+          a(href="/sales") Sales
         li
           a(href="/saleslist") Saleslist
         li
           a(href="/delivery") Delivery
         li
           a(href="/deliverylist") Deliverylist
+        li
+          a(href="/logout") Log out
 
     .container
       h1 Delivery Management
@@ -59,3 +61,12 @@ html
                 a.btn.btn-warning(href=`/delivery/${delivery._id}/edit`) Edit
                 form(action=`/delivery/${delivery._id}/delete`, method="post", style="display:inline")
                   button.btn.btn-danger(type="submit") Delete
+
+    // ===== Footer =====
+    footer.footer
+      .footer-container
+        p © 2025 MWF Company. Designed by Blessing .
+        p
+          //- a(href="/privacy") Privacy Policy
+          //- |  |  
+          //- a(href="/terms") Terms of Service
